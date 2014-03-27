@@ -1,4 +1,4 @@
-<?php echo head(array('title' => 'Library of Congress Suggest')); ?>
+<?php echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
 <?php echo flash(); ?>
 <form>
@@ -25,6 +25,7 @@
 <button type="submit">Replace now</button>
 </div>
 </form>
+
 <?php
 if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
   {
@@ -32,17 +33,16 @@ if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
       $toFind = $_REQUEST['sedmeta-find'];
       $toReplace = $_REQUEST['sedmeta-replace'];
 
-      $items = get_records("Item",array());
+    $items = get_records("Item",array(),0);
       //$items = array(get_record_by_id("Item",2));
  
       foreach($items as $item)
 	{
-	  
-	  $newElementText=array();
 	  $newElementTexts=array();
 	  $elementTexts = $item->getAllElementTexts();
 	  foreach($elementTexts as $elementText)
 	    {
+	      echo "<br>elementtext:<br>";
 	      $newElementTexts[] = array(
 				      'element_id' => $elementText->element_id,
 				      'text' => str_replace($toFind,$toReplace,$elementText->text),
@@ -50,12 +50,12 @@ if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
 				      );
 	    }
 
-	$item->deleteElementTexts();
-	$item->addElementTextsByArray($newElementTexts);
+	  $item->deleteElementTexts();
+	  $item->addElementTextsByArray($newElementTexts);
+	  $item->saveElementTexts();
 
 	}
 
-	$item->saveElementTexts();
        	echo('<div class="happybox"><h2>Metadata successfully edited!</h2></div>');
   }
 ?>

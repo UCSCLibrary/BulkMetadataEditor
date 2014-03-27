@@ -73,8 +73,8 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
       $toFind = $_POST['sedmeta-find'];
       $toReplace = $_POST['sedmeta-replace'];
 
-      $items = get_records("Item",array());
-      //$items = array(get_record_by_id("Item",2));
+      //$items = get_records("Item",array());
+      $items = array(get_record_by_id("Item",2));
  
       foreach($items as $item)
 	{
