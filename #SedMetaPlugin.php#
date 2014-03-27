@@ -103,7 +103,7 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
         //      'html' => false)
 	//)
 	
-	$item->__call("saveElementTexts",array());
+	$item->saveElementTexts();
        	//echo(all_element_texts($item));
        
     }
