@@ -17,7 +17,7 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
      * @var array Hooks for the plugin.
      */
     protected $_hooks = array('install', 'uninstall', 'initialize',
-			      'config_form', 'config','define_acl');
+			      'config_form', 'config','define_acl','admin_head');
 
     /**
      * @var array Filters for the plugin.
@@ -50,7 +50,14 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
      */
     public function hookInitialize()
     {
-        
+      //$view = get_view();
+      //$view->addAssetPath(dirname(__FILE__),absolute_url("plugins/SedMeta"));
+      //die("physical: ".dirname(__FILE__)."  web: ".absolute_url("plugins/SedMeta"));
+    }
+
+    public function hookAdminHead()
+    {
+      queue_js_file('SedMeta');
     }
 
    
