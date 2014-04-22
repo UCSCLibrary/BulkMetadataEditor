@@ -32,7 +32,13 @@ jQuery(document).ready(function() {
        }
    });
 
-   jQuery("#field-select-all").on("click",function(){
+    jQuery("#add-rule").on("click",function(event){
+	event.preventDefault();
+	var newbox = "<h2>hello world</h2>";
+	jQuery("#item-rule-box").clone().appendTo("#item-rule-boxes");
+    });
+
+    jQuery("#field-select-all").on("click",function(){
        jQuery("#field-select-list").hide(300);
    });
 
