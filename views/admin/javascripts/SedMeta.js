@@ -78,7 +78,10 @@ jQuery(document).ready(function() {
             success: function(data)
             {   
 		dataObj = jQuery.parseJSON(data);
-		var r = new Array(), j=-1;
+		var r = new Array(), j=0;
+
+		r[0] ='<tr><td class="prevcol1"><strong>Title</strong></td><td class="prevcol2"><strong>Description</strong></td><td class="prevcol3"><strong>Item Type</strong></td</tr>';
+
 		for (var key=0, size=dataObj.length; key<size; key++){
 		    r[++j] ='<tr><td>';
 		    r[++j] = dataObj[key]['title'];
@@ -99,7 +102,7 @@ jQuery(document).ready(function() {
 
     jQuery("#hide-item-preview").click(function(){
 	jQuery('#item-preview').html("<br>");	
-	jQuery("#hide-item-preview").hide(300);
+	jQuery("#hide-item-preview").hide();
     });
 
     jQuery("#preview-fields-button").click(function(event){
@@ -112,14 +115,20 @@ jQuery(document).ready(function() {
             {   
 		dataObj = jQuery.parseJSON(data);
 		var r = new Array(), j=-1;
+
 		jQuery.each(dataObj,function(key,value) {
-		    r[++j] ='<tr><td>';
-		    r[++j] = key;
-		    r[++j] = '</td></tr>';
+		    var title = value['title'];
+		    delete value['title'];
+		    r[++j] ='<tr><td><strong>';
+		    if(key.indexOf("and corresponding fields") == -1)
+			r[++j]="<strong>"+title+"</strong>";
+		    else
+			r[++j] = title;
+		    r[++j] = '</strong></td></tr>';
 		    jQuery.each(value,function(keyInner,valueInner){
-			r[++j] ='<tr><td class="whatever1">';
+			r[++j] ='<tr><td class="prevcol1">';
 			r[++j] = valueInner['field'];
-			r[++j] = '</td><td class="whatever2">';
+			r[++j] = '</td><td class="prevcol2">';
 			r[++j] = valueInner['value'];
 			r[++j] = '</td></tr>';
 		    });
@@ -135,7 +144,7 @@ jQuery(document).ready(function() {
 
     jQuery("#hide-field-preview").click(function(){
 	jQuery('#field-preview').html("<br>");	
-	jQuery("#hide-field-preview").hide(300);
+	jQuery("#hide-field-preview").hide();
     });
 
     jQuery("#preview-changes-button").click(function(event){
@@ -146,30 +155,34 @@ jQuery(document).ready(function() {
             url: document.URL.split('?')[0]+"/index/changes",
             success: function(data)
             {   
-		//jQuery('#changes-preview').html(data);
 		dataObj = jQuery.parseJSON(data);
-		var r = new Array(), j=-1;
+		console.log(dataObj);
+		var r = new Array(), j=0;
+
+		r[0] ='<tr><td class="prevcol1"><strong>Item</strong></td><td class="prevcol2"><strong>Field</strong></td><td class="prevcol3"><strong>Old Value</strong></td><td class="prevcol4"><strong>New Value</strong></td></tr>';
+
 		for (var key=0, size=dataObj.length; key<size; key++){
-		    r[++j] ='<tr><td>';
+		    r[++j] ='<tr><td class = "prevcol1">';
 		    r[++j] = dataObj[key]['item'];
-		    r[++j] = '</td><td class="whatever1">';
+		    r[++j] = '</td><td class="prevcol2">';
 		    r[++j] = dataObj[key]['field'];
-		    r[++j] = '</td><td class="whatever2">';
+		    r[++j] = '</td><td class="prevcol3">';
 		    r[++j] = dataObj[key]['old'];
-		    r[++j] = '</td><td class="whatever3">';
+		    r[++j] = '</td><td class="prevcol4">';
 		    r[++j] = dataObj[key]['new'];
 		    r[++j] = '</td></tr>';
 		}
-
 		jQuery('#changes-preview').html(r.join(""));
+		jQuery('#waiting').hide();
+		jQuery("#hide-changes-preview").show(300);
             }
 	});
-	jQuery("#hide-changes-preview").show(300);
+	jQuery('#waiting').show();
     });
 
     jQuery("#hide-changes-preview").click(function(){
 	jQuery('#changes-preview').html("<br>");	
-	jQuery("#hide-changes-preview").hide(300);
+	jQuery("#hide-changes-preview").hide();
     });
 
 });

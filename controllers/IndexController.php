@@ -23,7 +23,8 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
     public function itemsAction()
     {
-      $this->view->items = $this->_getItems();
+      $max = 15;
+      $this->view->items = $this->_getItems($max);
     }
 
     public function countitemsAction()
@@ -33,20 +34,16 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
     public function fieldsAction()
     {
-      $this->view->fields = $this->_getFields($this->_getItems());
+      $max=7; //make this settable
+      $this->view->fields = $this->_getFields($this->_getItems(),$max);
     }
 
     public function changesAction()
     {
+      $max = 20;
       $items=$this->_getItems();
       $fields=$this->_getFields($items);
-      /*
-      print_r($items);
-      echo("<br>break<br>");
-      print_r($fields);
-      die();
-      */
-      $this->view->changes = $this->_getChanges($items,$fields);
+      $this->view->changes = $this->_getChanges($items,$fields,$max);
     }
 
     /**
@@ -104,11 +101,12 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       $options = array('0'=>'All Collections');
       foreach ($collections as $collection)
 	{
-	  $title = $collection->getElementTexts('Dublin Core','Title')[0];
+	  $titles = $collection->getElementTexts('Dublin Core','Title');
+	  if(isset($titles[0]))
+	    $title = $titles[0];
 	  $options[$collection->id]=$title;
-
-
 	}
+
       return $options;
     }
 
@@ -129,107 +127,143 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
         return $options;
     }
 
-    private function _getChanges($items,$fields)
+    private function _getChanges($items,$fields,$max=0)
     {
       if(!isset($_REQUEST['changes-radio']))
 	die("Please select an action to perform");//TODO:proper error handling
       $changes=array();
+
+      $j=1;
+      $i=0;
+
       foreach($items as $item)
 	{
+	  $i++;
+	  if($item['id']==0)
+	    break;
 	  $made=array();
-	  if(empty($item))
+	  if(empty($item) || !isset($fields[$item['id']]) )
 	    continue;
 	  $itemObj=get_record_by_id('Item',$item['id']);
 
-	  foreach($fields as $fieldItem)
+	  $fieldItem = $fields[$item['id']];
+	  
+	  unset($fieldItem['title']);
+	  
+	  if($max>0 and $j>$max) break;
+	  foreach($fieldItem as $field)
 	    {
-	      foreach($fieldItem as $field)
+	      $replaceType="normal";
+	      switch($_REQUEST['changes-radio'])
 		{
-		  $replaceType="normal";
-		  switch($_REQUEST['changes-radio'])
+		case 'preg':
+		  $replaceType="preg";
+
+		case 'replace':
+
+		  //expect a 'find' and 'replace' variable
+		  if(!isset($_REQUEST['sedmeta-find'])||!isset($_REQUEST['sedmeta-replace']))
+		    die("ERROR! variables not set or something!");//TODO:proper error handling
+
+		  $element=$itemObj->getElementById($field['elementID']);
+		  //$eText = $itemObj->getElementTextsByRecord($element);
+		  $eText = get_record_by_id('ElementText',$field['id']);
+		      
+		  $count=0;
+
+		  if($replaceType=="normal")
+		    $new=str_replace($_REQUEST['sedmeta-find'],$_REQUEST['sedmeta-replace'],$eText->text,$count);
+		  elseif($replaceType=="regexp")
+		    $new=preg_replace($_REQUEST['sedmeta-find'],$_REQUEST['sedmeta-replace'],$eText->text,-1,$count);
+
+		  //if str_replace matches anything,
+		  //update the return array
+		  if($count>0)
 		    {
-		    case 'preg':
-		      $replaceType="preg";
-		    case 'replace':
-		      //expect a 'find' and 'replace' variable
-		      if(!isset($_REQUEST['sedmeta-find'])||!isset($_REQUEST['sedmeta-replace']))
-			die("ERROR! variables not set or something!");//TODO:proper error handling
-		      $element=$itemObj->getElementById($field['elementID']);
-		      $eText = get_record_by_id('ElementText',$field['id']);
-		      
-		      $count=0;
-		      if($replaceType=="normal")
-			$new=str_replace($_REQUEST['sedmeta-find'],$_REQUEST['sedmeta-replace'],$eText->text,$count);
-		      elseif($replaceType=="regexp")
-			$new=preg_replace($_REQUEST['sedmeta-find'],$_REQUEST['sedmeta-replace'],$eText->text,-1,$count);
-		      //if str_replace matches anything,
-		      //update the return array
-		      if($count>0)
-			$changes[]=array(
-					 'item'=>$item['title'],
-					 'field'=>$element->name,
-					 'old'=>$eText->text,
-					 'new'=>$new
-					 );
-		      
-		
-		      break;
-
-
-		    case 'delete':
-		      //update the return array
-		  
-		      $element=$itemObj->getElementById($field['elementID']);
-		      $eText = get_record_by_id('ElementText',$field['id']);
-		      
 		      $changes[]=array(
 				       'item'=>$item['title'],
 				       'field'=>$element->name,
 				       'old'=>$eText->text,
-				       'new'=>'null'
+				       'new'=>$new
 				       );
-		      
-			
-		      break;
-	      
-		    case 'append':
-		      if(!isset($_REQUEST['sedmeta-append']))
-			die('ERRORZ! WRONG SET VARS AND JUNK!');//todo error handling
-		      if(!isset($_REQUEST['delimiter']))
-			$_REQUEST['delimiter']=' ';
-		      $element=$itemObj->getElementById($field['elementID']);
-		      $eText = get_record_by_id('ElementText',$field['id']);
-		      
-		      $changes[]=array(
-				       'item'=>$item['title'],
-				       'field'=>$element->name,
-				       'old'=>$eText->text,
-				       'new'=>$eText->text.$_REQUEST['delimiter'].$_REQUEST['sedmeta-append']
-				       );
-		      
-			
-		      break;
-
-		    case 'add':
-		      if(!isset($_REQUEST['sedmeta-add']))
-			die('ERRORZ! WRONG SET VARS AND JUNK!');//todo error handling
-		      $element=$itemObj->getElementById($field['elementID']);
-		      if(!in_array($field['elementID'],$made))
-			$changes[]=array(
-					 'item'=>$item['title'],
-					 'field'=>$element->name,
-					 'old'=>'null',
-					 'new'=>$_REQUEST['sedmeta-add']
-					 );
-		      $made[]=$field['elementID'];
-		      break;
+		      $j++;
 		    }
+		  break;
 
-		}
-	    }
+
+		case 'delete':
+		  //update the return array
+		  
+		  $element=$itemObj->getElementById($field['elementID']);
+		  $eText = get_record_by_id('ElementText',$field['id']);
+		      
+		  $changes[]=array(
+				   'item'=>$item['title'],
+				   'field'=>$element->name,
+				   'old'=>$eText->text,
+				   'new'=>'null'
+				   );
+		  $j++;
+		  break;
+	      
+		case 'append':
+		  if(!isset($_REQUEST['sedmeta-append']))
+		    die('ERRORZ! WRONG SET VARS AND JUNK!');//todo error handling
+		  if(!isset($_REQUEST['delimiter']))
+		    $_REQUEST['delimiter']=' ';
+		  $element=$itemObj->getElementById($field['elementID']);
+		  $eText = get_record_by_id('ElementText',$field['id']);
+		      
+		  $changes[]=array(
+				   'item'=>$item['title'],
+				   'field'=>$element->name,
+				   'old'=>$eText->text,
+				   'new'=>$eText->text.$_REQUEST['delimiter'].$_REQUEST['sedmeta-append']
+				   );
+		  $j++;
+		      
+			
+		  break;
+
+		case 'add':
+		  if(!isset($_REQUEST['sedmeta-add']))
+		    die('ERRORZ! WRONG SET VARS AND JUNK!');//todo error handling
+		  $element=$itemObj->getElementById($field['elementID']);
+		  if(!in_array($field['elementID'],$made))
+		    {
+		      $changes[]=array(
+				       'item'=>$item['title'],
+				       'field'=>$element->name,
+				       'old'=>'null',
+				       'new'=>$_REQUEST['sedmeta-add']
+				       );
+		      $j++;
+		    }
+		      
+		  $made[]=$field['elementID'];
+		  break;
+		} //end switch
+
+	    } //end field item loop
+	    
 	  //delete all item metadata
 	  //repopulate the item metadata with the new array
+
+	}//end item loop
+
+      if($max>0 && $j>$max)
+	{
+	  $leftover = count($items)-$i;
+	  $j++;
+	  if ($leftover>0)
+	    $changes[]=array(
+			     'item'=>'plus changes for '.$leftover.' more items',
+			     'field'=>'',
+			     'old'=>'',
+			     'new'=>''
+			     );
 	}
+
       /*$changes = array (
 			array(
 			      'item'=>1,
@@ -249,13 +283,13 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 			      'old'=>'The old Title of item 2',
 			      'new'=>'The new Title of item 2'
 			      )
-			);
+			      );
       */
       return $changes;
       
     }
 
-    private function _getItems()
+    private function _getItems($max = 0)
     {
 
       $rules=array();
@@ -275,6 +309,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	}
 
       $params=array();
+
       if( isset($_REQUEST['sedmeta-collection-id']) && $_REQUEST['sedmeta-collection-id'] != 0)
 	$params['collection']=$_REQUEST['sedmeta-collection-id'];
 
@@ -283,8 +318,11 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       if(count($rules)>0)
 	{
 	  $newitems=array();
+	  $j=0;
 	  foreach($items as $item)
 	    {
+	      if($max > 0 && ++$j>$max) break;
+	     
 	      //by default, select all items. 
 	      //Each rule can eliminate items 
 	      //by setting this variable to false
@@ -324,6 +362,9 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		    {
 		      //then this item will not be selected
 		      $matched=false;
+
+		      //so we decrement our item counter
+		      $j--;
 		      
 		      //and we do not have to check the other rules
 		      continue;
@@ -341,11 +382,26 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	{
 	  //generate the return array from all of the items
 	  $newitems=array();
+	  $j=0;
 	  foreach($items as $item)
 	    {
+	      if($max > 0 && ++$j>$max) break;
 	      $newitems[]=$this->_pullItemData($item);       
 	    }
 	}
+
+      if($j>$max)
+	{
+	  $leftover = count($items)-$max;
+	  if ($leftover>0)
+	    $newitems[]=array(
+			      'title'=>'plus '.$leftover.' more items',
+			      'description'=>'',
+			      'type'=>'',
+			      'id'=>0
+			    );
+	}
+
       return $newitems;
     }
 
@@ -376,7 +432,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
     }
     
-    private function _getFields($items)
+    private function _getFields($items,$max=0)
     {
       $fields = array();
 
@@ -403,16 +459,20 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	  die("error");
 
 	}
-  
 
-      //if(
-      //populate $fields with array of element IDs (or elements, if that's easier)
-      
       $newfields = array();
+
+      $j=1;
+      $i=0;
       foreach ($items as $item)
 	{
+	  $i++;
+	  if($item['id']==0)
+	    break;
+	  if($max>0 && $j>$max)
+	    break;
 	  $itemObj=get_record_by_id('Item',$item['id']);
-	  $newfields[$item['title']]=array();
+	  $flag = false;
 	  foreach($fields as $field)
 	    {
 	      $element = $itemObj->getElementById($field);
@@ -420,16 +480,30 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	      $elementTexts =  $itemObj->getElementTextsByRecord($itemObj->getElementById($field));
 	      foreach($elementTexts as $elementText)
 		{
-		  $newfields[$item['title']][] = array(
+		  $newfields[$item['id']][] = array(
 						       'field'=>$fieldname,
 						       'value'=>$elementText->text,
 						       'elementID'=>$element->id,
 						       'id'=>$elementText->id
 						       );
+		  $flag=true;
 		}
+	    }
+	  if($flag)
+	    {
+	      $newfields[$item['id']]['title']=$item['title'];
+	      $j++;
 	    }
 	  
 	}
+
+      if($max > 0 && $j > $max)
+	{
+	  $leftover = count($items)-$i;
+	  if ($leftover>0)
+	    $newfields[]=array('title'=>'...and corresponding fields from '.$leftover.' more items');
+	}
+
        return $newfields;
 
     }

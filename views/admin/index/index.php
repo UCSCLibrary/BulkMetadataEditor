@@ -145,6 +145,7 @@
 
 </form>
 <?php
+   
 if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
   {
     //TODO check nonce
@@ -157,7 +158,7 @@ if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
       $selectElementID = $_REQUEST['sedmeta-element-id'];
       $compareType = $_REQUEST['sedmeta-compare'];
       $selector = $_REQUEST['sedmeta-selector'];
-	  
+/*
       if(isset($selectElementID)&&isset($compareType)&&isset($selector)&&$selector!=="Input search term here")
 	{
 	  $compare=true;
@@ -196,7 +197,7 @@ if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
         $replaceElements = $_REQUEST['sedmeta-replace-fields'];
 
       $items = get_records("Item",$params,0);
-      echo("<br>Items:  ".count($items));
+      //echo("<br>Items:  ".count($items));
 
       foreach($items as $item)
 	{
@@ -249,7 +250,7 @@ if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
 	      }
 	    }
 	  //print_r($newElementTexts);
-	  echo "<br> Element Texts: ".count($newElementTexts)."</br>";
+	  //echo "<br> Element Texts: ".count($newElementTexts)."</br>";
 
 	  $item->deleteElementTexts();
 	  $item->addElementTextsByArray($newElementTexts);
@@ -257,7 +258,8 @@ if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
 
 	}
 
-       	echo('<div class="happybox"><h2>Metadata successfully edited!</h2></div>');
+      //echo('<div class="happybox"><h2>Metadata successfully edited!</h2></div>');
+      */
   }
 ?>
 
