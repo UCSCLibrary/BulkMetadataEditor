@@ -7,12 +7,9 @@ jQuery(document).ready(function() {
 	   jQuery("#item-select-meta").attr("checked",false);
 	   jQuery("#item-collection-select").hide(300);
 	   jQuery("#item-meta-selects").hide(300);
-	   jQuery("#item-select-collection").attr('disabled','disabled');
-	   jQuery("#item-select-meta").attr('disabled','disabled');
-       } else {
-	   jQuery("#item-select-collection").removeAttr('disabled');
-	   jQuery("#item-select-meta").removeAttr('disabled');
-       }
+	   //jQuery("#item-select-collection").attr('disabled','disabled');
+	   //jQuery("#item-select-meta").attr('disabled','disabled');
+       } 
    });
 
     jQuery("#item-select-collection").change(function(){
@@ -26,6 +23,7 @@ jQuery(document).ready(function() {
 
    jQuery("#item-select-meta").change(function(){
        if(this.checked){
+	   jQuery("#item-select-all").attr("checked",false);
 	   jQuery("#item-meta-selects").show(300);
        } else {
 	   jQuery("#item-meta-selects").hide(300);
@@ -77,6 +75,7 @@ jQuery(document).ready(function() {
 
     jQuery("#preview-items-button").click(function(event){
 	event.preventDefault();
+	processItemRules();
 	jQuery.ajax({
 	    type: "POST",
             data: jQuery("#sedmeta-form").serialize(),
@@ -162,7 +161,7 @@ jQuery(document).ready(function() {
             success: function(data)
             {   
 		dataObj = jQuery.parseJSON(data);
-		console.log(dataObj);
+		//console.log(dataObj);
 		var r = new Array(), j=0;
 
 		r[0] ='<tr><td class="prevcol1"><strong>Item</strong></td><td class="prevcol2"><strong>Field</strong></td><td class="prevcol3"><strong>Old Value</strong></td><td class="prevcol4"><strong>New Value</strong></td></tr>';
@@ -192,3 +191,29 @@ jQuery(document).ready(function() {
     });
 
 });
+
+function processItemRules(){
+
+    jQuery(".hiddenField").remove();
+
+    jQuery(".sedmeta-element-id").each(function(index){
+	var html = '<input class="hiddenField" type=hidden name="item-rule-elements[]" value='+jQuery(this).val()+' />';
+	jQuery('form').append(html);
+    });
+
+    jQuery(".sedmeta-compare").each(function(index){
+	var html = '<input class="hiddenField" type=hidden name="item-compare-types[]" value='+jQuery(this).val()+' />';
+	jQuery('form').append(html);
+    });
+
+    jQuery(".sedmeta-case").each(function(index){
+	var html = '<input class="hiddenField" type=hidden name="item-cases[]" value='+jQuery(this).prop('checked')+' />';
+	jQuery('form').append(html);
+    });
+
+    jQuery(".sedmeta-selector").each(function(index){
+	var html = '<input class="hiddenField" type=hidden name="item-selectors[]" value='+jQuery(this).val()+' />';
+	jQuery('form').append(html);
+    });
+
+}

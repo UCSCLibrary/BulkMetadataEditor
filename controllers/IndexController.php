@@ -16,6 +16,14 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
     
     public function indexAction()
     {
+      if(isset($_REQUEST['perform-button']))
+	{
+	  $this->_perform();
+
+	  $flashMessenger = $this->_helper->FlashMessenger;
+	  $flashMessenger->addMessage('The requested changes have been applied to the database',"success");
+	}
+      
       $this->view->form_element_options = $this->_getFormElementOptions();
       $this->view->form_compare_options = $this->_getFormCompareOptions();
       $this->view->form_collection_options = $this->_getFormCollectionOptions();
@@ -43,7 +51,15 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       $max = 20;
       $items=$this->_getItems();
       $fields=$this->_getFields($items);
-      $this->view->changes = $this->_getChanges($items,$fields,$max);
+      $this->view->changes = $this->_getChanges($items,$fields,$max,false);
+    }
+
+    private function _perform()
+    {
+      $max = 0;
+      $items=$this->_getItems();
+      $fields=$this->_getFields($items);
+      $this->_getChanges($items,$fields,$max,true);
     }
 
     /**
@@ -122,12 +138,13 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		       'exact' => 'is exactly',
 		       'contains' => 'contains',
 		       '!exact' => 'is not exactly',
-		       '!contains' => 'does not contain'
+		       '!contains' => 'does not contain',
+		       'regexp'=>'matches regular expression'
 		       );
         return $options;
     }
 
-    private function _getChanges($items,$fields,$max=0)
+    private function _getChanges($items,$fields,$max,$perform)
     {
       if(!isset($_REQUEST['changes-radio']))
 	die("Please select an action to perform");//TODO:proper error handling
@@ -186,8 +203,18 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 				       'old'=>$eText->text,
 				       'new'=>$new
 				       );
+		      if($perform)
+			{
+			  $html=false;
+			  if($new != strip_tags($new))
+			    $html = true;
+			  $eText->delete();
+			  $itemObj->addTextForElement($element,$new,$html);
+			}
 		      $j++;
 		    }
+
+
 		  break;
 
 
@@ -196,13 +223,16 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  
 		  $element=$itemObj->getElementById($field['elementID']);
 		  $eText = get_record_by_id('ElementText',$field['id']);
-		      
+		  $new = '';
 		  $changes[]=array(
 				   'item'=>$item['title'],
 				   'field'=>$element->name,
 				   'old'=>$eText->text,
 				   'new'=>'null'
 				   );
+		  if($perform)
+		    $eText->delete();
+		  
 		  $j++;
 		  break;
 	      
@@ -213,16 +243,27 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		    $_REQUEST['delimiter']=' ';
 		  $element=$itemObj->getElementById($field['elementID']);
 		  $eText = get_record_by_id('ElementText',$field['id']);
+
+		  $new = $eText->text.$_REQUEST['delimiter'].$_REQUEST['sedmeta-append'];
 		      
 		  $changes[]=array(
 				   'item'=>$item['title'],
 				   'field'=>$element->name,
 				   'old'=>$eText->text,
-				   'new'=>$eText->text.$_REQUEST['delimiter'].$_REQUEST['sedmeta-append']
+				   'new'=>$new
 				   );
+
+		  if($perform)
+		    {
+		      $html=false;
+		      if($new != strip_tags($new))
+			$html = true;
+		      $eText->delete();
+		      $itemObj->addTextForElement($element,$new,$html);
+		    }
 		  $j++;
 		      
-			
+		  
 		  break;
 
 		case 'add':
@@ -231,12 +272,20 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  $element=$itemObj->getElementById($field['elementID']);
 		  if(!in_array($field['elementID'],$made))
 		    {
+		      $new = $_REQUEST['sedmeta-add'];
 		      $changes[]=array(
 				       'item'=>$item['title'],
 				       'field'=>$element->name,
 				       'old'=>'null',
-				       'new'=>$_REQUEST['sedmeta-add']
+				       'new'=>$new
 				       );
+		      if($perform)
+			{
+			  $html=false;
+			  if($new != strip_tags($new))
+			    $html = true;
+			  $itemObj->addTextForElement($element,$new,$html);
+			}
 		      $j++;
 		    }
 		      
@@ -245,9 +294,8 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		} //end switch
 
 	    } //end field item loop
-	    
-	  //delete all item metadata
-	  //repopulate the item metadata with the new array
+	  
+	  $itemObj->saveElementTexts();
 
 	}//end item loop
 
@@ -293,19 +341,49 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
     {
 
       $rules=array();
-      $i=1;
-      while (isset($_REQUEST['field'.$i]) && isset($_REQUEST['srch'.$i]))
+      
+      //the section below processes some form data, but would work better
+      //as javascript. Replacing that now (I hope).
+      return
+
+      if(isset($_REQUEST['item-selections']))
 	{
-	  $search=urldecode($_REQUEST['srch'.$i]);
-	  $neg=false;
-	  if(isset($_REQUEST['neg'.$i])&&$_REQUEST['neg'.$i]=="true")
-	    $neg='true';
-	  $rules[] = array(
-			   'field'=> $_REQUEST['field'.$i],
-			   'search'=>$_REQUEST['srch'.$i],
-			   'neg'=>$neg
-			   );
-	  $i++;
+	  for($i=0;$i < count($_REQUEST['item-rule-elements']); $i++)
+	    {
+
+	      $search=urldecode($_REQUEST['item-select-meta'][$i]);
+
+	      $neg=false;
+	      $exact = true;
+	      $case = true;
+
+	      if(isset($_REQUEST['item-case'][$i]))
+		{
+		  $case = false;
+		  $search = strtolower($search);
+		}
+	      
+	      switch($_REQUEST['item-compare-types'][$i])
+		{
+		case '!exact':
+		  $neg = true;
+		case 'exact':
+		  $search = "/^".$search."$/";
+		  break;
+		case '!contains':
+		  $neg = true;
+		case 'contains':
+		  $search = '/'.$search.'/';
+		  break;
+		}
+
+	      $rules[] = array(
+			       'field'=>$_REQUEST['item-rule-elements'][$i],
+			       'search'=>$search,
+			       'case'=>$case,
+			       'neg'=>$neg
+			       );
+	    }
 	}
 
       $params=array();
@@ -338,13 +416,21 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  //of the element texts matches the rule
 		  $matched2=false;
 
-		  //loop through the rules
+		  //loop through the element texts
 		  foreach ($compareTexts as $compareText)
 		    {
+		      if(!$rule['case'])
+			$compareText->text = strtolower($compareText->text);
+
 		      //perform the search
 		      $match = preg_match($rule['search'],$compareText->text);
+		      /*
+		      $rv= "Match: ".$match;
+		      $rv.= " <br>search: ".$rule['search'];
+		      $rv.= " <br> compare: ".$compareText->text;
+		      return $rv;
+		      */
 
-		      
 		      if ($match===false)
 			die('regular expression error!');//TODO proper error handling
 
@@ -382,10 +468,10 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	{
 	  //generate the return array from all of the items
 	  $newitems=array();
-	  $j=0;
+	  $j=1;
 	  foreach($items as $item)
 	    {
-	      if($max > 0 && ++$j>$max) break;
+	      if($max > 0 && ++$j > $max) break;
 	      $newitems[]=$this->_pullItemData($item);       
 	    }
 	}
