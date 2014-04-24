@@ -97,8 +97,12 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
     {
       $db = $this->_helper->db->getDb();
         $sql = "
-        SELECT  id 
-        FROM {$db->Element} ";
+        SELECT DISTINCT(e.id) as id 
+        FROM {$db->ElementSet} es 
+        JOIN {$db->Element} e ON es.id = e.element_set_id 
+        LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id 
+        LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id 
+        WHERE es.record_type IS NULL OR es.record_type = 'Item' ";
         $ids = $db->fetchAll($sql);
 	$rv=array();
 	foreach($ids as $id)
@@ -305,7 +309,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	  $j++;
 	  if ($leftover>0)
 	    $changes[]=array(
-			     'item'=>'plus changes for '.$leftover.' more items',
+			     'item'=>'<strong>...and changes for '.$leftover.' more items</strong>',
 			     'field'=>'',
 			     'old'=>'',
 			     'new'=>''
@@ -341,17 +345,13 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
     {
 
       $rules=array();
-      
-      //the section below processes some form data, but would work better
-      //as javascript. Replacing that now (I hope).
-      return
 
-      if(isset($_REQUEST['item-selections']))
+      if(isset( $_REQUEST['item-select-meta'] ))
 	{
-	  for($i=0;$i < count($_REQUEST['item-rule-elements']); $i++)
+	  for( $i=0; $i < count($_REQUEST['item-rule-elements']); $i++)
 	    {
 
-	      $search=urldecode($_REQUEST['item-select-meta'][$i]);
+	      $search=urldecode($_REQUEST['item-selectors'][$i]);
 
 	      $neg=false;
 	      $exact = true;
@@ -559,11 +559,16 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	    break;
 	  $itemObj=get_record_by_id('Item',$item['id']);
 	  $flag = false;
+
+	  //print_r($fields);
+	  //die();
+
 	  foreach($fields as $field)
 	    {
-	      $element = $itemObj->getElementById($field);
+	      $element = get_record_by_id('Element',$field);
+	      //$element = $itemObj->getElementById($field);
 	      $fieldname = $element->name;
-	      $elementTexts =  $itemObj->getElementTextsByRecord($itemObj->getElementById($field));
+	      $elementTexts =  $itemObj->getElementTextsByRecord($element);
 	      foreach($elementTexts as $elementText)
 		{
 		  $newfields[$item['id']][] = array(
