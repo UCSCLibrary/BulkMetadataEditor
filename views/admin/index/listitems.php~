@@ -1,5 +1,0 @@
-<?php
-echo "testing:<br>";
-echo $test_var;
-
-?>

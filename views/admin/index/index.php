@@ -1,4 +1,18 @@
-<?php echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
+<?php 
+/**
+ * Sedmeta control panel view
+ *
+ * This view delivers a form to be displayed on the Omeka Curator Dashboard
+ * collecting input from curators to define bulk edits to perform on the
+ * omeka database.
+ *
+ * @copyright Copyright 2014 UCSC Library Digital Initiatives
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
+ */
+
+
+
+echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
 <?php echo flash(); ?>
 <form id='sedmeta-form'>
@@ -48,8 +62,10 @@
    </div>
    </div>
 
-<button id="preview-items-button">Preview Selected Items</button>
+<div class="field">
+<button class="preview-button" id="preview-items-button">Preview Selected Items</button>
 <button style="display:none" id="hide-item-preview">Hide Item Preview</button>
+</div>
 
 <div class="field" id="item-preview">
 </div>
@@ -68,9 +84,11 @@
    </div> 
    </div>
 
-<button id="preview-fields-button">Preview Selected Fields</button>
-<button style="display:none" id="hide-field-preview">Hide Field Preview</button>
-   
+<div class="field">
+<button class="preview-button" id="preview-fields-button">Preview Selected Fields</button>
+<button style="display:none" id="hide-field-preview">Hide Field Preview</button>   
+</div>
+
 <div class="field" id="field-preview">
 </div>
 
@@ -121,8 +139,6 @@
    </div>
    </div>
 </div>
-
-
    <div class="field">
    <input type="radio" name="changes-radio" value="append" id="changes-append-radio" />Append text to existing metadata in the selected fields
    </div>
@@ -139,139 +155,27 @@
    </div>
    </div>
 
-
    <div class="field">
    <input type="radio" name="changes-radio" value="delete" id="changes-delete-radio">Delete all existing metadata in the selected fields
    </div>
-
-<button id="preview-changes-button">Preview Changes</button>
+<div class="field">
+<button class="preview-button" id="preview-changes-button">Preview Changes</button>
 <button style="display:none" id="hide-changes-preview">Hide Preview of Changes</button>
+</div>
  
 <div class="field" id="changes-preview">
 </div>
 
+
+
 </fieldset>
+<div class="field">
 <button type="submit" name="perform-button">Apply edits now</button>
+</div>
 
-</form>
 <?php
-   
-if(isset($_REQUEST['sedmeta-find'])&&isset($_REQUEST['sedmeta-replace']))
-  {
-    //TODO check nonce
-      $toFind = $_REQUEST['sedmeta-find'];
-      $toReplace = $_REQUEST['sedmeta-replace'];
-
-      $params = array();
-      $matchText = '/.*/';
-      $compare=false;
-      $selectElementID = $_REQUEST['sedmeta-element-id'];
-      $compareType = $_REQUEST['sedmeta-compare'];
-      $selector = $_REQUEST['sedmeta-selector'];
-/*
-      if(isset($selectElementID)&&isset($compareType)&&isset($selector)&&$selector!=="Input search term here")
-	{
-	  $compare=true;
-	  //TODO escape special characters in compare string
-	  $negsearch = false;
-	    
-	  switch($compare)
-	    {
-	    case "exact":
-	      $matchText='/^'.$compareType.'$/';
-	      break;
-
-	    case "contains":
-	      $matchText='/'.$compareType.'/';
-	      break;
-
-	    case "!exact":
-	      $negsearch = true;
-	      $matchText='/^'.$compareType.'$/';
-	      break;
-
-	    case "!contains":
-	      $negsearch = true;
-	      $matchText='/'.$compareType.'/';
-	      break;
-
-	    }
-	}
-
-      $cid=$_REQUEST['sedmeta-collection-id'];
-      if( isset($cid) && $cid != 0)
-	$params['collection']=$_REQUEST['sedmeta-collection-id'];
-
-      $replaceElements = -1;
-      if(isset($_REQUEST['sedmeta-replace-fields']))
-        $replaceElements = $_REQUEST['sedmeta-replace-fields'];
-
-      $items = get_records("Item",$params,0);
-      //echo("<br>Items:  ".count($items));
-
-      foreach($items as $item)
-	{
-	  $matched = false;
-	  if($compare)
-	    {
-	      $compareTexts = $item->getElementTextsByRecord($item->getElementById($selectElementID));
-	      foreach($compareTexts as $compareText)
-		{
-		  $match = preg_match($matchText,$compareText->text);
-		  if ($match===false)
-		    die('regular expression error!');//TODO proper error handling
-
-		  if($negsearch)
-		    $match = !(boolean)$match;
-	      
-		  if($match)
-		    {
-		      $matched=true;
-		      break;
-		    }
-		}
-	      if(!$matched)
-		continue;
-	    }
-
-	  $newElementTexts=array();
-	  $elementTexts = $item->getAllElementTexts();
-
-	  foreach($elementTexts as $elementText)
-	    {
-	      
-	      if($replaceElements == -1 || in_array($elementText->element_id,$replaceElements))
-		{
-		  $newElementTexts[] = array(
-					     'element_id' => $elementText->element_id,
-					     'text' => str_replace($toFind,$toReplace,$elementText->text),
-					     'html' =>  str_replace($toFind,$toReplace,$elementText->html)
-					     );
-
-		  
-		  
-		} else {
-	        $newElementTexts[] = array(
-					   'element_id' => $elementText->element_id,
-					   'text' => $elementText->text,
-					   'html' => $elementText->html
-					   );
-	      
-	      }
-	    }
-	  //print_r($newElementTexts);
-	  //echo "<br> Element Texts: ".count($newElementTexts)."</br>";
-
-	  $item->deleteElementTexts();
-	  $item->addElementTextsByArray($newElementTexts);
-	  $item->saveElementTexts();
-
-	}
-
-      //echo('<div class="happybox"><h2>Metadata successfully edited!</h2></div>');
-      */
-  }
+   $nonce = new Zend_Form_Element_Hash('sedmeta-admin-nonce'); 
+echo $nonce->render();
 ?>
-
 </form>
 <?php echo foot(); ?>

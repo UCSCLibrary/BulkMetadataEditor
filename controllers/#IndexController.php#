@@ -1,10 +1,18 @@
 <?php
 /**
- * SedMeta
+ * SedMeta Index Controller class file
+ *
+ * This controller enforces selection rules on items and metadata 
+ * elements, and performs various builk editing operations
+ * on the database of element texts associated with Omeka items.
+ * This class contains the bulk of the functionality of the
+ * Sedmeta plugin.
  *
  * @copyright Copyright 2014 UCSC Library Digital Initiatives
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
  */
+
+
 
 /**
  * The Sedmeta index controller class.
@@ -13,39 +21,111 @@
  */
 class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 {    
-    
+
+
+
+  /**
+   * Process form data in and prepare to display the main SedMeta form.
+   *
+   * If the form has been submitted, it performs the relevant changes.
+   * Regardless, it populates the arrays of options for the view's
+   * dropdown menus.
+   *
+   * @param void
+   * @return void
+   */
     public function indexAction()
     {
+      //if the submit button was pushed
       if(isset($_REQUEST['perform-button']))
 	{
-	  $this->_perform();
+	  
 
 	  $flashMessenger = $this->_helper->FlashMessenger;
-	  $flashMessenger->addMessage('The requested changes have been applied to the database',"success");
+	  $message = 'The requested changes have been applied to the database';
+	  $status = 'success';
+
+	  try
+	    {
+	      //this will edit the database, so we should validate 
+	      //our form input carefully
+	      $this->_validateForm();
+	      $this->_perform();
+
+	    } catch (Exception $e) 
+		{
+		  $message = $e->getMessage();
+		  $status = 'error';
+		}
+	  
+	  $flashMessenger->addMessage($message,$status);
+	  
 	}
       
+      //prepare options arrays for the view's dropdown menus
       $this->view->form_element_options = $this->_getFormElementOptions();
       $this->view->form_compare_options = $this->_getFormCompareOptions();
       $this->view->form_collection_options = $this->_getFormCollectionOptions();
     }
 
+    /**
+     * Retrieves selected items for preview.
+     *
+     * Retrieves the first few items matching the selection rules
+     * and sends them to the view to be served to a browser preview script
+     *
+     * @param void
+     * @return void
+     */
     public function itemsAction()
     {
-      $max = 15;
+      $max = 15;  //todo make this settable
       $this->view->items = $this->_getItems($max);
     }
 
+
+
+    /**
+     * Retrieves number of selected items for preview.
+     *
+     * Retrieves the number of items matching the selection rules
+     * and sends them to the view to be served to a browser preview script
+     *
+     * param void
+     * return void
+     */
     public function countitemsAction()
     {
       $this->view->count = count($this->_getItems());
     }
 
+
+
+    /**
+     * Retrieves the selected metadata elements for preview.
+     *
+     * Retrieves the number of items matching the selection rules
+     * and sends them to the view to be served to a browser preview script
+     *
+     * param void
+     * return void
+     *
+     */
     public function fieldsAction()
     {
-      $max=7; //make this settable
+      $max=7; //todo make this settable
       $this->view->fields = $this->_getFields($this->_getItems(),$max);
     }
 
+    /**
+     * Retrieves the first few edits defined by the form input.
+     *
+     * Retrieves the first few changes defined by the form input
+     * and sends them to the view to be served to a browser preview script
+     *
+     * param void
+     * return void
+     */
     public function changesAction()
     {
       $max = 20;
@@ -54,6 +134,16 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       $this->view->changes = $this->_getChanges($items,$fields,$max,false);
     }
 
+
+
+    /**
+     * Perform the edits specified by the form input.
+     *
+     * This function calls the matching subroutines
+     * with no maximum number of results, and 
+     * alerts the changes subroutine to perform the 
+     * changes rather than just displaying them. 
+     */
     private function _perform()
     {
       $max = 0;
@@ -65,7 +155,9 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
     /**
      * Get an array to be used in formSelect() containing all elements.
      * 
-     * @return array
+     * @param void
+     * @return array $elementOptions Array of options for a dropdown
+     * menu containing all elements applicable to records of type Item
      */
     private function _getFormElementOptions()
     {
@@ -93,6 +185,16 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
         return $options;
     }
 
+    /**
+     *Retrieve Element Ids.
+     *
+     *Retrieve from the database the IDs of all elements applicable
+     *to records of type Item
+     *
+     *@param void
+     *@return array $elementIds Array of all element IDs applicable to 
+     *records of type Item.
+     */
     private function _getElementIds()
     {
       $db = $this->_helper->db->getDb();
@@ -110,10 +212,14 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
         return $rv;
     }
 
+
+
     /**
      * Get an array to be used in formSelect() containing all collections.
      * 
-     * @return array
+     * @param void
+     * @return array $collectionOptions Array of all collections and their
+     * IDs, which will be used to populate a dropdown menu on the main view
      */
     private function _getFormCollectionOptions()
     {
@@ -130,11 +236,16 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       return $options;
     }
 
+
+
     /**
-     * Get an array to be used in formSelect() containing all 
+     * Populate array for comparison operator dropdown
+     *
+     * Retrieve  an array to be used in formSelect() containing all 
      *  comparison operators supported by this plugin.
      * 
-     * @return array
+     * @param void
+     * @return array $compareOptions Array of supported comparison operators
      */
     private function _getFormCompareOptions()
     {
@@ -148,6 +259,37 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
         return $options;
     }
 
+
+
+    /**
+     * Retrieve and/or perform bulk edits.
+     *
+     * Retrieve and optionally perform edits to metadata element
+     * texts according to the rules in the POST variables set 
+     * by the input form.
+     *
+     * @param array $items Array of items on which to perform the
+     * edits. Each element of this array is an array containing 
+     * a single item's identifying information. Only items in this
+     * array will be selected for editing.
+     *
+     * @param array $fields Array of metadata elements on which to 
+     * perform the edits. Each element of this array is an array 
+     * containing a single elements's identifying information.
+     * Only elements included in this array with be selected for
+     * editing.
+     *
+     * @param int $max The maximum number of changes to return.
+     * If set to zero, all changes will be returned.
+     *
+     * @param bool $perform If true, the edits will be performed.
+     * Otherwise, the changes defined by the form input will be 
+     * returned but the database will remain unchanged.
+     * 
+     * @return array $changes An array containing the old and new 
+     * values of element text records which will be updated
+     * in the database.
+     */
     private function _getChanges($items,$fields,$max,$perform)
     {
       if(!isset($_REQUEST['changes-radio']))
@@ -316,31 +458,25 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 			     );
 	}
 
-      /*$changes = array (
-			array(
-			      'item'=>1,
-			      'field'=>'Title',
-			      'old'=>'The old Title',
-			      'new'=>'The new Title'
-			      ),
-			array(
-			      'item'=>1,
-			      'field'=>'Description',
-			      'old'=>'The old Description',
-			      'new'=>'The new Description'
-			      ),
-			array(
-			      'item'=>2,
-			      'field'=>'Title',
-			      'old'=>'The old Title of item 2',
-			      'new'=>'The new Title of item 2'
-			      )
-			      );
-      */
       return $changes;
       
     }
 
+
+
+    /**
+     * Retrieve Items matching selection rules.
+     *
+     * Retrieve items matching the rules contained in the POST
+     * data from the user input form.
+     * 
+     * @param int $max Maximum number of items to return. If 
+     * set to zero, all matching items will be returned.
+     *
+     * @param array $items Array of items matching the selection
+     * rules. Each element of this array is itself an array 
+     * containing identifying information for a single matched item.
+     */
     private function _getItems($max = 0)
     {
 
@@ -357,7 +493,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	      $exact = true;
 	      $case = true;
 
-	      if(isset($_REQUEST['item-case'][$i]))
+	      if(isset($_REQUEST['item-cases'][$i])&& $_REQUEST['item-cases'][$i]=="false")
 		{
 		  $case = false;
 		  $search = strtolower($search);
@@ -388,15 +524,20 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
       $params=array();
 
+      //set up query parameters to select items from a given collection
       if( isset($_REQUEST['sedmeta-collection-id']) && $_REQUEST['sedmeta-collection-id'] != 0)
 	$params['collection']=$_REQUEST['sedmeta-collection-id'];
 
+      //retrieve all potentially matching items
       $items = get_records("Item",$params,0);
 
+      //if there are any metadata selection rules set
       if(count($rules)>0)
 	{
 	  $newitems=array();
 	  $j=0;
+	  
+	  //loop through all of the items 
 	  foreach($items as $item)
 	    {
 	      if($max > 0 && ++$j>$max) break;
@@ -419,17 +560,12 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  //loop through the element texts
 		  foreach ($compareTexts as $compareText)
 		    {
+		      $comparator = $compareText->text;
 		      if(!$rule['case'])
-			$compareText->text = strtolower($compareText->text);
-
+			$comparator = strtolower($compareText->text);
+			
 		      //perform the search
-		      $match = preg_match($rule['search'],$compareText->text);
-		      /*
-		      $rv= "Match: ".$match;
-		      $rv.= " <br>search: ".$rule['search'];
-		      $rv.= " <br> compare: ".$compareText->text;
-		      return $rv;
-		      */
+		      $match = preg_match($rule['search'],$comparator);
 
 		      if ($match===false)
 			die('regular expression error!');//TODO proper error handling
@@ -491,6 +627,10 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       return $newitems;
     }
 
+    /**
+     *
+     *
+     */
     private function _pullItemData($item)
     {
       $title = 'untitled';
@@ -518,6 +658,26 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
     }
     
+    /**
+     *
+     * Retrieve metadata elements matching selection rules.
+     *
+     * Retrieve metadata elements from the items provided 
+     * which match the rules contained 
+     * in the POST data from the user input form.
+     * 
+     * @param array $items Array of items from whose
+     * metadata elements the fields will be selected.
+     * 
+     * @param int $max Maximum number of items to return. If 
+     * set to zero, all matching items will be returned.
+     *
+     * @param array $elements Array of elements matching the selection
+     * rules. Each element of this array is itself an array 
+     * containing identifying information for a single matched 
+     * metadata element.
+     *
+     */
     private function _getFields($items,$max=0)
     {
       $fields = array();
@@ -529,7 +689,10 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	{
 	case "select":
 	  if(!isset($_REQUEST['selectfields']))
-	    die('errorz');
+	    {
+	      $fields = $this->_getElementIds();
+	      break;
+	    }
 	  $fields = $_REQUEST['selectfields'];
 	  break;
 
@@ -599,9 +762,24 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
     }
 
-    private function _execute($items,$changes)
+    /**
+     * Validate form input
+     *
+     * Check hash nonce from the user input form and check
+     * user input for illegal characters or suspicious
+     * sequences
+     *
+     * @param void
+     * @return void
+     */
+
+    private function _validateForm()
     {
+      
+
 
     }
+
+
     
 }

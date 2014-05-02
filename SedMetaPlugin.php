@@ -2,6 +2,11 @@
 /**
  * SedMeta Bulk Metadata Search and Replace
  *
+ * This Omeka 2.1+ plugin is intended to expedite the 
+ * process of editing metadata in Omeka collections of 
+ * digital objects by providing tools for administrators 
+ * to edit many items at once based on prespecified rules.
+ *
  * @copyright Copyright 2014 UCSC Library Digital Initiatives
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
  */
@@ -9,114 +14,34 @@
 //require_once dirname(__FILE__) . '/helpers/SedMetaFunctions.php';
 
 /**
- * SedMeta plugin.
+ * SedMeta plugin class.
+ *
+ * The main class of the SedMeta bulk search and replace 
+ * plugin for Omeka 2.1+
  */
 class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
 {
     /**
      * @var array Hooks for the plugin.
      */
-    protected $_hooks = array('install', 'uninstall', 'initialize',
-			      'config_form', 'config','define_acl','admin_head');
+    protected $_hooks = array('define_acl','admin_head');
 
     /**
      * @var array Filters for the plugin.
      */
     protected $_filters = array('admin_navigation_main');
 
-    /**
-     * @var array Options and their default values.
-     */
-    protected $_options = array();
-
-    /**
-     * Install the plugin.
-     */
-    public function hookInstall()
-    {
-        
-    }
-
-    /**
-     * Uninstall the plugin.
-     */
-    public function hookUninstall()
-    {        
-    }
-
-
-    /**
-     *
-     */
-    public function hookInitialize()
-    {
-      //$view = get_view();
-      //$view->addAssetPath(dirname(__FILE__),absolute_url("plugins/SedMeta"));
-      //die("physical: ".dirname(__FILE__)."  web: ".absolute_url("plugins/SedMeta"));
-    }
-
     public function hookAdminHead()
     {
       queue_js_file('SedMeta');
-    }
-
-   
-    /**
-     * Display the plugin config form.
-     */
-    public function hookConfigForm()
-    {
-        require dirname(__FILE__) . '/config_form.php';
-    }
-
-    /**
-     * Set the options from the config form input.
-     */
-    public function hookConfig()
-    {
-      if(!isset($_POST['sedmeta-find'])||!isset($_POST['sedmeta-replace']))
-	return;
-      
-      $toFind = $_POST['sedmeta-find'];
-      $toReplace = $_POST['sedmeta-replace'];
-
-      //$items = get_records("Item",array());
-      $items = array(get_record_by_id("Item",2));
- 
-      foreach($items as $item)
-	{
-	  $newElementText=array();
-	  $newElementTexts=array();
-	  $elementTexts = $item->getAllElementTexts();
-	  foreach($elementTexts as $elementText)
-	    {
-	      $newElementTexts[] = array(
-				      'element_id' => $elementText->element_id,
-				      'text' => str_replace($toFind,$toReplace,$elementText->text),
-				      'html' =>  str_replace($toFind,$toReplace,$elementText->html)
-				      );
-	    }
-
-	$item->deleteElementTexts();
-	$item->addElementTextsByArray($newElementTexts);
-
-	}
-
-	//formatted thusLY:
-	//
-	//array(
-	//    array('element_id' => 1,
-         //     'text' => 'foo',
-        //      'html' => false)
-	//)
-	
-	$item->__call("saveElementTexts",array());
-       	//echo(all_element_texts($item));
-       
+      queue_css_file('SedMeta');
     }
 
     /**
      * Define the plugin's access control list.
+     *
+     * Add a new resource to the access control list
+     * corresponding the the metadata editing page
      */
     public function hookDefineAcl($args)
     {
