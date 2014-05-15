@@ -21,25 +21,22 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
    <h2>Step 1: Select Items to Edit </h2>
 
    <div class="field">
-   <input type="checkbox" name="item-selections" value="all" id="item-select-all" checked="checked">Apply edits to all items
+  <p>Edit items from the following collection:</p>
    </div>
-   <div class="field">
-   <input type="checkbox" name="item-selections" value="all" id="item-select-collection" >Select items to edit based on their collection
-   </div>
-   <div class="field" id="item-collection-select" style="display:none;">
+   <div class="field" id="item-collection-select">
    <div class="inputs three columns omega">
    <?php echo $this->formSelect('sedmeta-collection-id',null,array('id' => 'sedmeta-collection-id'),$this->form_collection_options); ?>
    </div>
    </div>
 
    <div class="field">
-   <input type="checkbox" name="item-select-meta" value="all" id="item-select-meta" >Select items to edit based on their metadata
+   <input type="checkbox" name="item-select-meta" id="item-select-meta" >Select items to edit based on their metadata
    </div>
    <div id="item-meta-selects" style="display:none;">
    <div class="field" id="item-meta-select">
    <p>Which also meet the following criteria: (use * as a wildcard character)</p>
    <div id="item-rule-boxes">
-   <div id="item-rule-box" style="clear:left;">
+   <div id="item-rule-box" class="item-rule-box" style="clear:left;">
    <div class="inputs three columns alpha">
    <?php echo $this->formSelect('sedmeta-element-id', '50', array('class' => 'sedmeta-element-id'), $this->form_element_options) ?>
    </div>
@@ -49,6 +46,7 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
    <div class="inputs three columns omega">
    <?php echo $this->formText('sedmeta-selector',"Input search term here",array('class'=>'sedmeta-selector')) ?>
    </div>
+  <div class="removeRule">[x]</div>
    <div class="field">
    <div class="inputs two columns omega">
   <?php echo $this->formCheckbox('sedmeta-case',"Match Case",array('class'=>'sedmeta-case','checked'=>'checked')) ?><label for="sedmeta-case"> Match Case </label>
@@ -73,12 +71,9 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 </fieldset>
 
 <fieldset class="sedmeta-fieldset" id='sedmeta-fields-set' style="border: 1px solid black; padding:15px; margin:10px;">
-   <h2>Step 3: Select Fields to Edit </h2>
+   <h2>Step 2: Select Fields to Edit </h2>
 
-   <input type="radio" name="field-selections" value="all" id="field-select-all" checked="checked">Apply edits to all fields<br>
-   <input type="radio" name="field-selections" value="select" id="field-select-some" >Select fields to edit from a list<br>
-
-   <div class="field" id="field-select-list" style="display:none;">
+   <div class="field" id="field-select-list" >
    <div class="inputs four columns omega">
    <?php echo $this->formSelect('selectfields[]',null,array('id' => 'sedmeta-select-fields','size' => '10'),$this->form_element_options); ?>
    </div> 

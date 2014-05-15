@@ -79,7 +79,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
      */
     public function itemsAction()
     {
-      $max = 15;  //todo make this settable
+      $max= $this->_getParam('max');
       $this->view->items = $this->_getItems($max);
     }
 
@@ -113,7 +113,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
      */
     public function fieldsAction()
     {
-      $max=7; //todo make this settable
+      $max=$this->_getParam('max');
       $this->view->fields = $this->_getFields($this->_getItems(),$max);
     }
 
@@ -128,7 +128,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
      */
     public function changesAction()
     {
-      $max = 20;
+      $max=$this->_getParam('max');
       $items=$this->_getItems();
       $fields=$this->_getFields($items);
       $this->view->changes = $this->_getChanges($items,$fields,$max,false);
@@ -450,12 +450,17 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	  $leftover = count($items)-$i;
 	  $j++;
 	  if ($leftover>0)
-	    $changes[]=array(
-			     'item'=>'<strong>...and changes for '.$leftover.' more items</strong>',
-			     'field'=>'',
-			     'old'=>'',
-			     'new'=>''
-			     );
+	    {
+	      $title='<strong>...and changes for '.$leftover.' more items</strong>   ';
+	      if($max<50)
+		$title.='<a id="show-more-changes" href="">Show More</a>';
+	      $changes[]=array(
+			       'item'=>$title,
+			       'field'=>'',
+			       'old'=>'',
+			       'new'=>''
+			       );
+	    }
 	}
 
       return $changes;
@@ -488,10 +493,12 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	    {
 
 	      $search=urldecode($_REQUEST['item-selectors'][$i]);
-
+	      
 	      $neg=false;
 	      $exact = true;
 	      $case = true;
+
+	      $search = str_replace('*','.*',$search);
 
 	      if(isset($_REQUEST['item-cases'][$i])&& $_REQUEST['item-cases'][$i]=="false")
 		{
@@ -616,12 +623,17 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	{
 	  $leftover = count($items)-$max;
 	  if ($leftover>0)
-	    $newitems[]=array(
-			      'title'=>'plus '.$leftover.' more items',
-			      'description'=>'',
-			      'type'=>'',
-			      'id'=>0
-			    );
+	    {
+	      $title = 'plus '.$leftover.' more items. ';
+	      if($max<90)
+		$title.=' <a id="show-more-items" href="">Show More</a>';
+	      $newitems[]=array(
+				'title'=>$title,
+				'description'=>'',
+				'type'=>'',
+				'id'=>0
+				);
+	    }
 	}
 
       return $newitems;
@@ -682,31 +694,13 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
     {
       $fields = array();
 
-      if(!isset($_REQUEST['field-selections']))
-	$_REQUEST['field-selections']="all";
 
-      switch ($_REQUEST['field-selections'])
+      if(!isset($_REQUEST['selectfields']))
 	{
-	case "select":
-	  if(!isset($_REQUEST['selectfields']))
-	    {
-	      $fields = $this->_getElementIds();
-	      break;
-	    }
-	  $fields = $_REQUEST['selectfields'];
-	  break;
-
-	case "search":
-	  //not yet implemented
-	  break;
-
-	case "all":
 	  $fields = $this->_getElementIds();
-	  break;
-
-	default:
-	  die("error");
-
+	} else 
+	{
+	  $fields = $_REQUEST['selectfields'];
 	}
 
       $newfields = array();
@@ -753,9 +747,15 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
       if($max > 0 && $j > $max)
 	{
+	  
 	  $leftover = count($items)-$i;
 	  if ($leftover>0)
-	    $newfields[]=array('title'=>'...and corresponding fields from '.$leftover.' more items');
+	    {
+	      $title = '...and corresponding fields from '.$leftover.' more items.  ';
+		if($max<40)
+		  $title.='<a id="show-more-items" href="">Show More</a>';
+	      $newfields[]=array('title'=>$title);
+	    }
 	}
 
        return $newfields;
