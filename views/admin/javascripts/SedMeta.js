@@ -20,12 +20,12 @@ jQuery(document).ready(function() {
 	   jQuery("#item-meta-selects").show(300);
        } else {
 	   jQuery("#item-meta-selects").hide(300);
+	   jQuery(".sedmeta-selector").val("Input search term here");
        }
    });
 
     jQuery("#add-rule").on("click",function(event){
 	event.preventDefault();
-	var newbox = "<h2>hello world</h2>";
 	jQuery("#item-rule-box").clone(true).appendTo("#item-rule-boxes");
     });
 
@@ -221,10 +221,6 @@ function processItemRules(){
     jQuery(".sedmeta-selector").each(function(index){
 	var html = '<input class="hiddenField" type=hidden name="item-selectors[]" value='+jQuery(this).val()+' />';
 	jQuery('form').append(html);
-    });
-
-    jQuery("input:text").keypress(function(){
-	alert('clicked');
     });
 
 }

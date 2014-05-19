@@ -311,14 +311,34 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	  if($item['id']==0)
 	    break;
 	  $made=array();
-	  if(empty($item) || !isset($fields[$item['id']]) )
+	  if(empty($item))
 	    continue;
-	  $itemObj=get_record_by_id('Item',$item['id']);
+	  if(!isset($fields[$item['id']]) && $_REQUEST['changes-radio']!='add')
+	    continue;
 
-	  $fieldItem = $fields[$item['id']];
+	  $itemObj=get_record_by_id('Item',$item['id']);
 	  
-	  unset($fieldItem['title']);
-	  
+	  if($_REQUEST['changes-radio']=='add')
+	    {
+	      $fieldItem = array();
+
+	      if(!isset($_REQUEST['selectfields']))
+		{
+		  $fields = $this->_getElementIds();
+		} else 
+		{
+		  $fields = $_REQUEST['selectfields'];
+		}
+	      foreach($fields as $elementID)
+		{
+		  $fieldItem[]=array('elementID'=>$elementID);
+		}
+	    } else
+	    {
+	      $fieldItem = $fields[$item['id']];
+	      unset($fieldItem['title']);
+	    }
+
 	  if($max>0 and $j>$max) break;
 	  foreach($fieldItem as $field)
 	    {
@@ -440,7 +460,6 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 			}
 		      $j++;
 		    }
-		      
 		  $made[]=$field['elementID'];
 		  break;
 		} //end switch
@@ -642,6 +661,14 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	    }
 	}
 
+      if(count($newitems)==0)
+	$newitems = array(array(
+				'title'=>'No matching items found',
+				'description'=>'',
+				'type'=>'',
+				'id'=>''
+				));
+
       return $newitems;
     }
 
@@ -759,7 +786,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	    {
 	      $title = '...and corresponding fields from '.$leftover.' more items.  ';
 		if($max<40)
-		  $title.='<a id="show-more-items" href="">Show More</a>';
+		  $title.='<a id="show-more-fields" href="">Show More</a>';
 	      $newfields[]=array('title'=>$title);
 	    }
 	}
