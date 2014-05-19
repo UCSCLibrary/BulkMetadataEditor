@@ -167,6 +167,7 @@ class SedMeta_Form_Main extends Omeka_Form
 			);
 
       //The following elements will be re-ordered in javascript
+      //gotta create a new element that can be hidden and shown and junk?
 
       $this->addElement('text','sedmeta-search', array(
 	        'label'=>'Search for:',

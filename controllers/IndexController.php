@@ -68,6 +68,12 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       $this->view->form_collection_options = $this->_getFormCollectionOptions();
     }
 
+    public function testAction()
+    {
+      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
+      $this->view->form = new SedMeta_Form_Main();
+    }
+
     /**
      * Retrieves selected items for preview.
      *
@@ -140,7 +146,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
      * Perform the edits specified by the form input.
      *
      * This function calls the matching subroutines
-     * with no maximum number of results, and 
++     * with no maximum number of results, and 
      * alerts the changes subroutine to perform the 
      * changes rather than just displaying them. 
      */
