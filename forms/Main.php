@@ -25,17 +25,20 @@ class SedMeta_Form_Main extends Omeka_Form
 {
    /**
      * Initialize the form.
+     *
+     *
+     *@return void
      */
     public function init()
     {
-        parent::init();
+      //require_once(dirname(dirname(__FILE__)).'/views/scripts/FormRadio.php');
 
-        $this->setAttrib('id', 'sedmeta-form');
-        $this->setMethod('post');
+      parent::init();
 
-        $this->_registerElements();
+      $this->setAttrib('id', 'sedmeta-form');
+      $this->setMethod('post');
 
-
+      $this->_registerElements();
 	
     }
 
@@ -43,8 +46,8 @@ class SedMeta_Form_Main extends Omeka_Form
     {
       $this->addElement('hidden',"callback",array("value"=>""));
 
-      $this->addElement('select','sedmeta-collection-id',array(
-            'label'         => __('Choose Collection'),
+      $this->addElement('select','sedmetaCollectionId',array(
+            'label'         => __('Collection'),
             'description'   => __('Edit items from this collection'),
             'value'         => '0',
 	    'order'         => 1,
@@ -54,96 +57,117 @@ class SedMeta_Form_Main extends Omeka_Form
 		       );
 
 
-      $this->addElement('checkbox', 'item-select-meta', array(
+      $this->addElement('checkbox', 'itemSelectMeta', array(
             'label'         => __('Select Items by Metadata'),
 	    'id' => 'item-select-meta',
             'description'   => __('Select items to edit based on their associated metadata elements'),
 	    'order'         => 2
 							      )
 			  );
-      //todo: add custom zend form element for my fancy shmancy thingy
-      /*
-<div id="item-meta-selects" style="display:none;">
-   <div class="field" id="item-meta-select">
-   <p>Which also meet the following criteria: (use * as a wildcard character)</p>
-   <div id="item-rule-boxes">
-   <div id="item-rule-box" class="item-rule-box" style="clear:left;">
-   <div class="inputs three columns alpha">
-   <?php echo $this->formSelect('sedmeta-element-id', '50', array('class' => 'sedmeta-element-id'), $this->form_element_options) ?>
-   </div>
-   <div class="inputs two columns beta">
-   <?php echo $this->formSelect('sedmeta-compare', null, array('class' => 'sedmeta-compare'), $this->form_compare_options) ?>
-   </div>
-   <div class="inputs three columns omega">
-   <?php echo $this->formText('sedmeta-selector',"Input search term here",array('class'=>'sedmeta-selector')) ?>
-   </div>
-  <div class="removeRule">[x]</div>
-   <div class="field">
-   <div class="inputs two columns omega">
-  <?php echo $this->formCheckbox('sedmeta-case',"Match Case",array('class'=>'sedmeta-case','checked'=>'checked')) ?><label for="sedmeta-case"> Match Case </label>
-   </div>
-   </div>
-   </div>	     
-   </div>
-   </div> 
-   <div class="field">
-   <button id="add-rule">Add Another Rule</button>
-   </div>
-   </div>
 
-       */
+      //not actually a text element, but 
+      //rendered with its own viewscript so it doesn't matter
+      $this->addElement('text', 'rulebox', array(
+						 'order'=>3,
+						 'decorators' => array(
+					array(
+					      'ViewScript', 
+					      array(
+						    'viewScript' => 'FormRulebox.php',
+						    'class'      => 'field'
+						    )
+					      )
+					)
+						 )
+			  );
       
 
 
-      $this->addElement('button', 'preview-items-button', array(
+      $this->addElement('button', 'previewItemsButton', array(
 	    'label'=>'Preview Selected Items',
+	    'class' => 'preview-button',
 	    'id' => 'preview-items-button',
-	    'order'         => 3
-							      )
-			);
-
-      $this->addElement('button', 'hide-item-preview', array(
-	    'label'=>'Hide Item Preview',
-	    'id' => 'hide-item-preview',
 	    'order'         => 4
 							      )
 			);
 
+      $this->addElement('button', 'hideItemPreview', array(
+	    'label'=>'Hide Item Preview',
+	    'id' => 'hide-item-preview',
+	    'class' => 'hide-preview',
+	    'order'         => 5
+							      )
+			);
 
-      //todo: add custom zend form element for empty div here
+      //not actually a text element, but 
+      //rendered with its own viewscript so it doesn't matter
+      $this->addElement('text', 'itemPreviewDiv', array(
+						 'order'=>6,
+						 'decorators' => array(array(
+					      'ViewScript', 
+					      array(
+						    'viewScript' => 'FormPreviewDiv.php',
+						    'class'      => 'field'
+						    )
+									     ))
+					)
+			  );
 
-      $this->addElement('select', 'selectfields[]', array(
-							'label'         => __('Select elements to edit'),
-							'description'   => __('Select the metadata elements you would like to edit. (default: all)'),
+      $this->addElement('select', 'selectFields[]', array(
+							'label'         => __('Metadata elements'),
+							'description'   => __('Select the metadata elements you would like to edit. You can select multiple values. (default: all)'),
 							'size'=>10,
-							'order'         => 5,
+							'order'         => 7,
+							'multiple' =>  'multiple',
 							'multiOptions'       => $this->_getElementOptions()
 							)
 			);
       
-      $this->addElement('button', 'preview-fields-button', array(
+      $this->addElement('button', 'previewFieldsButton', array(
 	    'label'=>'Preview Selected Fields',
-	    'id' => 'preview-items-button',
-	    'order'         => 6
+	    'class' => 'preview-button',
+	    'id' => 'preview-fields-button',
+	    'order'         => 8
 							      )
 			);
 
-      $this->addElement('button', 'hide-field-preview', array(
+      $this->addElement('button', 'hideFieldPreview', array(
 	    'label'=>'Hide Field Preview',
+	    'class' => 'hide-preview',
 	    'id' => 'hide-field-preview',
-	    'order'         => 7
+	    'order'         => 9
 							      )
 			);
 
+      //not actually a text element, but 
+      //rendered with its own viewscript so it doesn't matter
+      $this->addElement('text', 'fieldPreviewDiv', array(
+						 'order'=>10,
+						 'decorators' => array(array(
+					      'ViewScript', 
+					      array(
+						    'viewScript' => 'FormPreviewDiv.php',
+						    'class'      => 'field'
+						    )
+									     ))
+					)
+			);
 
-      //todo: add custom zend form element for empty div here
-
- $this->addElement('radio', 'changes-radio', array(
-            'label'         => __('Define Edits'),
+ $this->addElement('radio', 'changesRadio', array(
+            'label'         => __('Edit Type'),
             'description'   => __('Choose the type of edit you would like to perform'),
-	    'order'         => 8,
+	    'order'         => 11,
+	    'decorators'    => array(
+					array(
+					      'ViewScript', 
+					      array(
+						    'viewScript' => 'FormRadio.php',
+						    'class'      => 'field'
+						    )
+					      )
+				     ),
 	    'multiOptions'       => array(
-					  'replace'=>'Search and replace text (within any metadata in the selected fields on the selected items)',
+					  'replace'=>'Search and replace text',
 					  'add'=>'Add a new metadatum in the selected field',
 					  'append'=>'Append text to existing metadata in the selected fields',
 					  'delete'=>'Delete all existing metadata in the selected fields'	  
@@ -152,54 +176,73 @@ class SedMeta_Form_Main extends Omeka_Form
 			  );
 
  
-      $this->addElement('button', 'preview-changes-button', array(
+      $this->addElement('button', 'previewChangesButton', array(
 	    'label'=>'Preview Changes',
 	    'id' => 'preview-changes-button',
-	    'order'         => 9
+	    'class' => 'preview-button',
+	    'order'         => 12
 							      )
 			);
 
-      $this->addElement('button', 'hide-changes-preview', array(
+      $this->addElement('button', 'hideChangesPreview', array(
 	    'label'=>'Hide Change Preview',
+	    'class' => 'hide-preview',
 	    'id' => 'hide-changes-preview',
-	    'order'         => 10
+	    'order'         => 13
 							      )
+			);
+
+      //not actually a text element, but 
+      //rendered with its own viewscript so it doesn't matter
+      $this->addElement('text', 'changesPreviewDiv', array(
+						 'order'=>14,
+						 'decorators' => array(
+					array(
+					      'ViewScript', 
+					      array(
+						    'viewScript' => 'FormPreviewDiv.php',
+						    'class'      => 'field'
+						    )
+					      )
+					)
+						 )
 			);
 
       //The following elements will be re-ordered in javascript
+      //gotta create a new element that can be hidden and shown and junk?
 
-      $this->addElement('text','sedmeta-search', array(
+      $this->addElement('text','sedmetaSearch', array(
 	        'label'=>'Search for:',
 		'id'=>'sedmeta-search',
-		'class'=>'sedmeta-hidden',
+		'class'=>'elementHidden',
 		'description'=>'Input text you want to search for '
 						       )
 			);
-      $this->addElement('text','sedmeta-replace', array(
+      $this->addElement('text','sedmetaReplace', array(
 	        'label'=>'Replace with:',
 		'id'=>'sedmeta-replace',
-		'class'=>'sedmeta-hidden',
+		'class'=>'elementHidden',
 		'description'=>'Input text you want to replace with '
 						       )
 			);
       $this->addElement('checkbox','regexp', array(
 	        'description'=>'Use regular expressions',
 		'id'=>'regexp',
-		'class'=>'sedmeta-hidden',
+		'class'=>'elementHidden',
 		'value'=>'true'
 						       )
 			);
-      $this->addElement('text','sedmeta-add', array(
+      $this->addElement('text','sedmetaAdd', array(
 	        'label'=>'Text to Add',
 		'id'=>'sedmeta-add',
-		'class'=>'sedmeta-hidden',
+		'class'=>'elementHidden',
 		'description'=>'Input text you want to add as metadata'
 						       )
 			);
-      $this->addElement('text','sedmeta-append', array(
+      $this->addElement('text','sedmetaAppend', array(
 	        'label'=>'Text to Append',
 		'id'=>'sedmeta-append',
-		'class'=>'sedmeta-hidden',
+		'class'=>'elementHidden',
 		'description'=>'Input text you want to append to metadata'
 						       )
 			);
@@ -208,30 +251,95 @@ class SedMeta_Form_Main extends Omeka_Form
 
       
       $this->addDisplayGroup(array(
-				   'sedmeta-collection-id', 
-				   'item-select-meta',
-				   'preview-items-button',
-				   'hide-item-preview'
-				   ), 'sedmeta-items-set');
+				   'sedmetaCollectionId', 
+				   'itemSelectMeta',
+				   'rulebox',
+				   'previewItemsButton',
+				   'hideItemPreview',
+				   'itemPreviewDiv'
+				   ), 
+			     'sedmetaItemsSet',
+			     array(
+				   'legend'=>'Step 1: Select Items',
+				   'class'=>'sedmetaFieldset'
+				   ));
       
       $this->addDisplayGroup(array( 
-				   'selectfields[]',
-				   'preview-fields-button',
-				   'hide-field-preview'
-				   ), 'sedmeta-fields-set');
+				   'selectFields[]',
+				   'previewFieldsButton',
+				   'hideFieldPreview',
+				   'fieldPreviewDiv'
+				   ), 'sedmetaFieldsSet',
+			     array(
+				   'legend'=>'Step 2: Select Fields',
+				   'class'=>'sedmetaFieldset'
+				   ));
       
       $this->addDisplayGroup(array( 
-				   'changes-radio',
-				   'preview-changes-button',
-				   'hide-changes-preview'
-				   ), 'sedmeta-fields-set');
+				   'changesRadio',
+				   'previewChangesButton',
+				   'sedmetaAppend',
+				   'regexp',
+				   'sedmetaAdd',
+				   'sedmetaSearch',
+				   'sedmetaReplace',
+				   'hideChangesPreview',
+				   'changesPreviewDiv'
+				    ), 'sedmetaChangesSet',
+			     array(
+				   'legend'=>'Step 3: Define Changes',
+				   'description'=>'Define Edits to Apply',
+				   'class'=>'sedmetaFieldset'
+				   ));
+
+
+      
+      $this->addElement('button', 'performButton', array(
+	    'label'=>'Apply Edits Now',
+	    'order'         => 99
+							      )
+			);
 
     }
+
+
+    /**
+     * Overrides standard omeka form behavior to tweak display 
+     *and fix radio display eccentricity
+     * 
+     * @return void
+     */
+    public function applyOmekaStyles()
+    {
+      foreach ($this->getElements() as $element) {
+
+	if ($element instanceof Zend_Form_Element_Submit) {
+	  // All submit form elements should be wrapped in a div with 
+	  // class "field".
+	  $element->setDecorators(array(
+					'ViewHelper', 
+					array('HtmlTag', array('tag' => 'div'))
+					)
+				  );
+
+	} else if($element->getAttrib('class')=='elementHidden') {
+	  $element->getDecorator('FieldTag')->setOption('class','field sedmetaHidden');
+	  $id = $element->getAttrib('id');
+	  
+	  $element->getDecorator('FieldTag')->setOption('id',$id.'-field');
+							
+
+	} else if ($element instanceof Zend_Form_Element_Hidden 
+		   || $element instanceof Zend_Form_Element_Hash) {
+	  $element->setDecorators(array('ViewHelper'));
+	}
+      }
+    }
+
 
     /**
      * Get an array to be used in 'select' elements containing all collections.
      * 
-     * @param void
      * @return array $collectionOptions Array of all collections and their
      * IDs, which will be used to populate a dropdown menu on the main view
      */
@@ -250,11 +358,10 @@ class SedMeta_Form_Main extends Omeka_Form
       return $options;
     }
 
-/**
+    /**
      * Get an array to be used in html select input
  containing all elements.
      * 
-     * @param void
      * @return array $elementOptions Array of options for a dropdown
      * menu containing all elements applicable to records of type Item
      */

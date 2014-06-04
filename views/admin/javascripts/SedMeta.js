@@ -1,5 +1,14 @@
 jQuery(document).ready(function() {
 
+    //new code
+    jQuery("#changesRadio-replace-field").after(jQuery('#regexp-field'));
+    jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-replace-field'));
+    jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-search-field'));
+    jQuery("#changesRadio-add-field").after(jQuery('#sedmeta-add-field'));
+    jQuery("#changesRadio-append-field").after(jQuery('#sedmeta-append-field'));
+
+
+    //old code
     jQuery(".sedmeta-selector").keypress(function(evt) {
 	var key = evt.which;
 	if(key == 13)  // the enter key code
@@ -29,32 +38,40 @@ jQuery(document).ready(function() {
 	jQuery("#item-rule-box").clone(true).appendTo("#item-rule-boxes");
     });
 
-    jQuery("#changes-replace-radio").change(function(){
+    jQuery("#changesRadio-replace").change(function(){
 	if(this.checked) {
-	    jQuery("#changes-replace").show(300);
-	    jQuery("#changes-append").hide(300);
-	    jQuery("#changes-add").hide(300);
+	    jQuery('#sedmeta-search-field').show(300);
+	    jQuery('#sedmeta-replace-field').show(300);
+	    jQuery('#regexp-field').show(300);
+	    jQuery("#sedmeta-append-field").hide(300);
+	    jQuery("#sedmeta-add-field").hide(300);
 	}
     });
-    jQuery("#changes-add-radio").change(function(){
+    jQuery("#changesRadio-add").change(function(){
 	if(this.checked) {
-	    jQuery("#changes-replace").hide(300);
-	    jQuery("#changes-append").hide(300);
-	    jQuery("#changes-add").show(300);
+	    jQuery('#sedmeta-search-field').hide(300);
+	    jQuery('#sedmeta-replace-field').hide(300);
+	    jQuery('#regexp-field').hide(300);
+	    jQuery("#sedmeta-append-field").hide(300);
+	    jQuery("#sedmeta-add-field").show(300);
 	}
     });
-    jQuery("#changes-append-radio").change(function(){
+    jQuery("#changesRadio-append").change(function(){
 	if(this.checked) {
-	    jQuery("#changes-replace").hide(300);
-	    jQuery("#changes-append").show(300);
-	    jQuery("#changes-add").hide(300);
+	    jQuery('#sedmeta-search-field').hide(300);
+	    jQuery('#sedmeta-replace-field').hide(300);
+	    jQuery('#regexp-field').hide(300);
+	    jQuery("#sedmeta-append-field").show(300);
+	    jQuery("#sedmeta-add-field").hide(300);
 	}
     });
-    jQuery("#changes-delete-radio").change(function(){
+    jQuery("#changesRadio-delete").change(function(){
 	if(this.checked) {
-	    jQuery("#changes-replace").hide(300);
-	    jQuery("#changes-append").hide(300);
-	    jQuery("#changes-add").hide(300);
+	    jQuery('#sedmeta-search-field').hide(300);
+	    jQuery('#sedmeta-replace-field').hide(300);
+	    jQuery('#regexp-field').hide(300);
+	    jQuery("#sedmeta-append-field").hide(300);
+	    jQuery("#sedmeta-add-field").hide(300);
 	}
     });
 
@@ -64,8 +81,8 @@ jQuery(document).ready(function() {
 	jQuery.ajax({
 	    type: "POST",
             data: jQuery("#sedmeta-form").serialize(),
-            url: document.URL.split('?')[0]+"/index/items/max/15",
-            success: function(data)
+	    url: document.URL.split('?')[0]+"/index/items/max/15",
+	    success: function(data)
             {   
 		dataObj = jQuery.parseJSON(data);
 		var r = new Array(), j=0;
@@ -82,7 +99,7 @@ jQuery(document).ready(function() {
 		    r[++j] = '</td></tr>';
 		}
 
-		jQuery('#item-preview').html(r.join(""));
+		jQuery('#itemPreviewDiv').html(r.join(""));
 
 		jQuery("#show-more-items").click(showMoreItems);
 		
@@ -95,12 +112,13 @@ jQuery(document).ready(function() {
 
     jQuery("#hide-item-preview").click(function(event){
 	event.preventDefault();
-	jQuery('#item-preview').html("<br>");	
+	jQuery('#itemPreviewDiv').html("<br>");	
 	jQuery("#hide-item-preview").hide();
     });
 
     jQuery("#preview-fields-button").click(function(event){
 	event.preventDefault();
+	processItemRules();
 	jQuery.ajax({
 	    type: "POST",
             data: jQuery("#sedmeta-form").serialize(),
@@ -128,7 +146,7 @@ jQuery(document).ready(function() {
 		    });
 		});
 
-		jQuery('#field-preview').html(r.join(""));
+		jQuery('#fieldPreviewDiv').html(r.join(""));
 
 		jQuery("#show-more-fields").click(showMoreFields);
 		
@@ -141,12 +159,13 @@ jQuery(document).ready(function() {
 
     jQuery("#hide-field-preview").click(function(event){
 	event.preventDefault();
-	jQuery('#field-preview').html("<br>");	
+	jQuery('#fieldPreviewDiv').html("<br>");	
 	jQuery("#hide-field-preview").hide();
     });
 
     jQuery("#preview-changes-button").click(function(event){
 	event.preventDefault();
+	processItemRules();
 	jQuery.ajax({
 	    type: "POST",
             data: jQuery("#sedmeta-form").serialize(),
@@ -170,7 +189,7 @@ jQuery(document).ready(function() {
 		    r[++j] = dataObj[key]['new'];
 		    r[++j] = '</td></tr>';
 		}
-		jQuery('#changes-preview').html(r.join(""));
+		jQuery('#changesPreviewDiv').html(r.join(""));
 
 		jQuery("#show-more-changes").click(showMoreChanges);
 
@@ -185,7 +204,7 @@ jQuery(document).ready(function() {
 
     jQuery("#hide-changes-preview").click(function(event){
 	event.preventDefault();
-	jQuery('#changes-preview').html("<br>");	
+	jQuery('#changesPreviewDiv').html("<br>");	
 	jQuery("#hide-changes-preview").hide();
     });
 
@@ -259,6 +278,7 @@ function showMoreItems(event){
 
 function showMoreFields(event){
     event.preventDefault();
+    processItemRules();
     jQuery.ajax({
 	type: "POST",
         data: jQuery("#sedmeta-form").serialize(),
@@ -297,6 +317,7 @@ function showMoreFields(event){
 
 function showMoreChanges(event){
     event.preventDefault();
+    processItemRules();
     jQuery.ajax({
 	type: "POST",
         data: jQuery("#sedmeta-form").serialize(),

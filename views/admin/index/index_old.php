@@ -137,7 +137,6 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
    </div>
    </div>
 </div>
-
    <div class="field">
    <input type="radio" name="changes-radio" value="append" id="changes-append-radio" />Append text to existing metadata in the selected fields
    </div>
@@ -157,8 +156,6 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
    <div class="field">
    <input type="radio" name="changes-radio" value="delete" id="changes-delete-radio">Delete all existing metadata in the selected fields
    </div>
-
-
 <div class="field">
 <button class="preview-button" id="preview-changes-button">Preview Changes</button>
 <button style="display:none" id="hide-changes-preview">Hide Preview of Changes</button>
