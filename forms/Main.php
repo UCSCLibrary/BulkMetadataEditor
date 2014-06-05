@@ -26,7 +26,6 @@ class SedMeta_Form_Main extends Omeka_Form
    /**
      * Initialize the form.
      *
-     *
      *@return void
      */
     public function init()
@@ -294,10 +293,10 @@ class SedMeta_Form_Main extends Omeka_Form
 
 
       
-      $this->addElement('button', 'performButton', array(
+      $this->addElement('submit', 'performButton', array(
 	    'label'=>'Apply Edits Now',
 	    'order'         => 99
-							      )
+							 )
 			);
 
     }

@@ -1,8 +1,10 @@
 .preview-button {
+    margin:10px;
+}
+
+.previewButtonDiv{
     display:block;
     clear:left;
-    margin:10px;
-
 }
 
 .hide-preview {
@@ -35,4 +37,17 @@
     font-size: 1.3em;
     margin-left: 35px;
     margin-top: 15px;
+}
+
+.sedmeta-waiting {
+    display:none;
+}
+
+.removeRule {
+    color: #FF0000;
+    float: left;
+    margin-left: 10px;
+    padding-top: 5px;
+    vertical-align: middle;
+    cursor:pointer;
 }

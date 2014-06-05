@@ -24,3 +24,15 @@
     display:block;
     clear:left;
 }
+
+#sedmeta-form legend {
+    padding: 0 10px;
+    position: relative;
+    top: 5px;
+}
+
+#performButton {    
+    font-size: 1.3em;
+    margin-left: 35px;
+    margin-top: 15px;
+}

@@ -34,33 +34,36 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
    */
     public function indexAction()
     {
+      $flashMessenger = $this->_helper->FlashMessenger;
+      $message = 'The requested changes have been applied to the database';
+      $status = 'success';
+
+      $this->view->form_compare_options = $this->_getFormCompareOptions();
+
       include_once(dirname(dirname(__FILE__))."/forms/Main.php");
-      $this->view->form = new SedMeta_Form_Main();
+      try{
+	$this->view->form = new SedMeta_Form_Main();
+      }catch(Exception $e) {
+	$flashMessenger->addMessage('Error loading metadata editing form: '.$e->getMessage(),'error');
+      }
 
-      //if the submit button was pushed
-      if(isset($_REQUEST['performButton']))
-	{
+      //if the form was submitted
+      if ($this->getRequest()->isPost()
+	&& $this->view->form->isValid($this->getRequest()->getPost())) {
 
-	  $flashMessenger = $this->_helper->FlashMessenger;
-	  $message = 'The requested changes have been applied to the database';
-	  $status = 'success';
+	try
+	  {
+	    $this->_perform();
 
-	  try
-	    {
-	      //this will edit the database, so we should validate 
-	      //our form input carefully
-	      //$this->_validateForm();
-	      $this->_perform();
-
-	    } catch (Exception $e) 
-		{
-		  $message = $e->getMessage();
-		  $status = 'error';
-		}
+	  } catch (Exception $e) 
+	      {
+		$message = $e->getMessage();
+		$status = 'error';
+	      }
 	  
-	  $flashMessenger->addMessage($message,$status);
+	$flashMessenger->addMessage($message,$status);
 	  
-	}
+      }
       
     }
 
@@ -79,7 +82,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       try{
 	$this->view->items = $this->_getItems($max);
       }catch(Exception $e) {
-	$this->view->items = array(array("Error",$e->getMessage(),"","")));
+	$this->view->items = array(array("Error",$e->getMessage(),"",""));
       }
     }
 
@@ -100,7 +103,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	$this->view->items = $this->_getItems($max);
 	$this->view->count = count($this->_getItems());
       }catch(Exception $e) {
-	$this->view->items = array(array("Error",$e->getMessage(),"","")));
+	$this->view->items = array(array("Error",$e->getMessage(),"",""));
       }
     }
 
@@ -145,7 +148,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	$fields=$this->_getFields($items);
 	$this->view->changes = $this->_getChanges($items,$fields,$max,false);
       }catch(Exception $e) {
-	$this->view->items = array(array("Error",$e->getMessage(),"","")));
+	$this->view->items = array(array("Error",$e->getMessage(),"",""));
       }
     }
 
@@ -312,7 +315,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
      */
     private function _getChanges($items,$fields,$max,$perform)
     {
-      if(!set($_REQUEST['changesRadio']))
+      if(!isset($_REQUEST['changesRadio']))
 	throw new Exception("Please select an action to perform");
       $changes=array();
 
@@ -417,7 +420,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		    throw $e;
 		  }
 
-		  if(empty($item['title'] || empty($element->name) || empty($eText->text))) {
+		  if(empty($item['title']) || empty($element->name) || empty($eText->text) ) {
 		    throw new Exception("Error retrieving item data for deletion.");
 		  }
 
@@ -573,12 +576,13 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	    {
 
 	      $search=urldecode($_REQUEST['item-selectors'][$i]);
-	      
+
 	      $neg=false;
 	      $exact = true;
 	      $case = true;
 
-	      $search = str_replace('*','.*',$search);
+	      $search = preg_quote($search);
+	      $search = str_replace('\*','.*',$search);
 
 	      if(isset($_REQUEST['item-cases'][$i])&& $_REQUEST['item-cases'][$i]=="false")
 		{
@@ -661,7 +665,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 			
 		      //perform the search
 		      $match = preg_match($rule['search'],$comparator);
-
+		      
 		      if ($match===false)
 			throw new Exception('Unable to parse regular expression');//TODO proper error handling
 
@@ -699,6 +703,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 	      }
 
 	    } //end item loop
+
 	} //endif (if there are any rules)
       else //if we had no rules to enforce, and skipped the above loops
 	{
@@ -753,7 +758,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
      */
     private function _pullItemData($item)
     {
-      if(! $item instanceOf )
+      if(! $item instanceOf Item)
 	throw new Exception("Cannot pull item data from a non-item");
       $title = 'untitled';
       $description = 'no description given';

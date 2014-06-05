@@ -1,6 +1,5 @@
 jQuery(document).ready(function() {
 
-    //new code
     jQuery("#changesRadio-replace-field").after(jQuery('#regexp-field'));
     jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-replace-field'));
     jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-search-field'));
@@ -8,7 +7,19 @@ jQuery(document).ready(function() {
     jQuery("#changesRadio-append-field").after(jQuery('#sedmeta-append-field'));
 
 
-    //old code
+    jQuery("#preview-items-button").wrap('<div class = "previewButtonDiv"></div>');
+    jQuery("#preview-fields-button").wrap('<div class = "previewButtonDiv"></div>');
+    jQuery("#preview-changes-button").wrap('<div class = "previewButtonDiv"></div>');
+
+    jQuery("#preview-items-button").after('<div class="sedmeta-waiting" id="items-waiting">Please wait...</div>');
+    jQuery("#preview-fields-button").after('<div class="sedmeta-waiting" id="fields-waiting">Please wait...</div>');
+    jQuery("#preview-changes-button").after('<div class="sedmeta-waiting" id="changes-waiting">Please wait...</div>');
+
+    jQuery("#preview-items-button").after(jQuery('#hide-item-preview'));
+    jQuery("#preview-fields-button").after(jQuery('#hide-field-preview'));
+    jQuery("#preview-changes-button").after(jQuery('#hide-changes-preview'));
+
+
     jQuery(".sedmeta-selector").keypress(function(evt) {
 	var key = evt.which;
 	if(key == 13)  // the enter key code
@@ -16,6 +27,7 @@ jQuery(document).ready(function() {
 	    evt.preventDefault();
 	}
     });
+
 
     jQuery(".sedmeta-selector").focus(function(e) {
 	var value = jQuery(this).val();
@@ -26,9 +38,9 @@ jQuery(document).ready(function() {
 
    jQuery("#item-select-meta").change(function(){
        if(this.checked){
-	   jQuery("#item-meta-selects").show(300);
+	   jQuery("#item-meta-selects").show();
        } else {
-	   jQuery("#item-meta-selects").hide(300);
+	   jQuery("#item-meta-selects").hide();
 	   jQuery(".sedmeta-selector").val("Input search term here");
        }
    });
@@ -84,7 +96,12 @@ jQuery(document).ready(function() {
 	    url: document.URL.split('?')[0]+"/index/items/max/15",
 	    success: function(data)
             {   
-		dataObj = jQuery.parseJSON(data);
+		dataObj=[];
+		if(data)
+		    dataObj = jQuery.parseJSON(data);
+		else
+		    alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+
 		var r = new Array(), j=0;
 
 		r[0] ='<tr><td class="prevcol1"><strong>Title</strong></td><td class="prevcol2"><strong>Description</strong></td><td class="prevcol3"><strong>Item Type</strong></td</tr>';
@@ -103,10 +120,20 @@ jQuery(document).ready(function() {
 
 		jQuery("#show-more-items").click(showMoreItems);
 		
-            }
-	});
-	jQuery("#hide-item-preview").show(300);
+            },
+	    error: function(data,errorString,error) {
+		if(errorstring=="timeout")
+		    alert('The items preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can\'t preview them all for you.');
+		else
+		    alert('Error generating preview! :(')
 
+	    },
+	    complete: function(data,status) {
+		jQuery("#hide-item-preview").show();
+		jQuery('#items-waiting').hide();
+	    }
+	});
+	jQuery('#items-waiting').css('display:inline;');
     });
 
 
@@ -121,11 +148,17 @@ jQuery(document).ready(function() {
 	processItemRules();
 	jQuery.ajax({
 	    type: "POST",
+	    timeout: 30000,
             data: jQuery("#sedmeta-form").serialize(),
             url: document.URL.split('?')[0]+"/index/fields/max/7",
             success: function(data)
             {   
-		dataObj = jQuery.parseJSON(data);
+		dataObj=[];
+		if(data)
+		    dataObj = jQuery.parseJSON(data);
+		else
+		    alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+
 		var r = new Array(), j=-1;
 
 		jQuery.each(dataObj,function(key,value) {
@@ -150,10 +183,20 @@ jQuery(document).ready(function() {
 
 		jQuery("#show-more-fields").click(showMoreFields);
 		
-            }
+            },
+	    error: function(data,errorString,error) {
+		if(errorstring=="timeout")
+		    alert('The fields preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can\'t preview them all for you.');
+		else
+		    alert('Error generating preview! :(')
+
+	    },
+	    complete: function(data,status) {
+		jQuery("#hide-field-preview").show();
+		jQuery('#fields-waiting').hide();
+	    }
 	});
-	
-	jQuery("#hide-field-preview").show(300);
+	jQuery('#fields-waiting').css('display:inline;');
     });
 
 
@@ -168,12 +211,17 @@ jQuery(document).ready(function() {
 	processItemRules();
 	jQuery.ajax({
 	    type: "POST",
+	    timeout: 30000,
             data: jQuery("#sedmeta-form").serialize(),
             url: document.URL.split('?')[0]+"/index/changes/max/20",
             success: function(data)
             {   
-		dataObj = jQuery.parseJSON(data);
-		//console.log(dataObj);
+		dataObj=[];
+		if(data)
+		    dataObj = jQuery.parseJSON(data);
+		else
+		    alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+
 		var r = new Array(), j=0;
 
 		r[0] ='<tr><td class="prevcol1"><strong>Item</strong></td><td class="prevcol2"><strong>Field</strong></td><td class="prevcol3"><strong>Old Value</strong></td><td class="prevcol4"><strong>New Value</strong></td></tr>';
@@ -193,11 +241,20 @@ jQuery(document).ready(function() {
 
 		jQuery("#show-more-changes").click(showMoreChanges);
 
-		jQuery('#waiting').hide();
-		jQuery("#hide-changes-preview").show(300);
-            }
+            },
+	    error: function(data,errorString,error) {
+		if(errorstring=="timeout")
+		    alert('The changes preview request is taking too long! You must be trying to make a ton of changes at once. Sorry we can\'t preview them all for you.');
+		else
+		    alert('Error generating preview! :(')
+
+	    },
+	    complete: function(data,status) {
+		jQuery('#changes-waiting').hide();
+		jQuery("#hide-changes-preview").show();
+	    }
 	});
-	jQuery('#waiting').show();
+	jQuery('#changes-waiting').css('display','inline');
     });
 
 
@@ -238,7 +295,7 @@ function processItemRules(){
     });
 
     jQuery(".sedmeta-selector").each(function(index){
-	var html = '<input class="hiddenField" type=hidden name="item-selectors[]" value='+jQuery(this).val()+' />';
+	var html = '<input class="hiddenField" type=hidden name="item-selectors[]" value="'+jQuery(this).val()+'" />';
 	jQuery('form').append(html);
     });
 
@@ -249,11 +306,17 @@ function showMoreItems(event){
     processItemRules();
     jQuery.ajax({
 	type: "POST",
+	timeout: 30000,
         data: jQuery("#sedmeta-form").serialize(),
         url: document.URL.split('?')[0]+"/index/items/max/200",
         success: function(data)
         {   
-	    dataObj = jQuery.parseJSON(data);
+	    dataObj=[];
+	    if(data)
+		dataObj = jQuery.parseJSON(data);
+	    else
+		alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+
 	    var r = new Array(), j=0;
 
 	    r[0] ='<tr><td class="prevcol1"><strong>Title</strong></td><td class="prevcol2"><strong>Description</strong></td><td class="prevcol3"><strong>Item Type</strong></td</tr>';
@@ -267,8 +330,7 @@ function showMoreItems(event){
 		r[++j] = dataObj[key]['type'];
 		r[++j] = '</td></tr>';
 	    }
-
-	    jQuery('#item-preview').html(r.join(""));
+	    jQuery('#itemPreviewDiv').html(r.join(""));
 	    
         }
     });
@@ -281,11 +343,17 @@ function showMoreFields(event){
     processItemRules();
     jQuery.ajax({
 	type: "POST",
+	timeout: 30000,
         data: jQuery("#sedmeta-form").serialize(),
         url: document.URL.split('?')[0]+"/index/fields/max/100",
         success: function(data)
         {   
-	    dataObj = jQuery.parseJSON(data);
+	    dataObj=[];
+	    if(data)
+		dataObj = jQuery.parseJSON(data);
+	    else
+		alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+
 	    var r = new Array(), j=-1;
 
 	    jQuery.each(dataObj,function(key,value) {
@@ -306,7 +374,7 @@ function showMoreFields(event){
 		});
 	    });
 
-	    jQuery('#field-preview').html(r.join(""));
+	    jQuery('#fieldPreviewDiv').html(r.join(""));
 	    
         }
     });
@@ -320,12 +388,17 @@ function showMoreChanges(event){
     processItemRules();
     jQuery.ajax({
 	type: "POST",
+	timeout: 30000,
         data: jQuery("#sedmeta-form").serialize(),
         url: document.URL.split('?')[0]+"/index/changes/max/200",
         success: function(data)
         {   
-	    dataObj = jQuery.parseJSON(data);
-	    //console.log(dataObj);
+	    dataObj=[];
+	    if(data)
+		dataObj = jQuery.parseJSON(data);
+	    else
+		alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+
 	    var r = new Array(), j=0;
 
 	    r[0] ='<tr><td class="prevcol1"><strong>Item</strong></td><td class="prevcol2"><strong>Field</strong></td><td class="prevcol3"><strong>Old Value</strong></td><td class="prevcol4"><strong>New Value</strong></td></tr>';
@@ -341,7 +414,7 @@ function showMoreChanges(event){
 		r[++j] = dataObj[key]['new'];
 		r[++j] = '</td></tr>';
 	    }
-	    jQuery('#changes-preview').html(r.join(""));
+	    jQuery('#changesPreviewDiv').html(r.join(""));
 	    jQuery('#waiting').hide();
 	    jQuery("#hide-changes-preview").show(300);
         }
