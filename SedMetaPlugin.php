@@ -31,6 +31,11 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
      */
     protected $_filters = array('admin_navigation_main');
 
+    /**
+     * Queue css and javascript files when admin section loads
+     *
+     *@return void
+     */
     public function hookAdminHead()
     {
       queue_js_file('SedMeta');
@@ -42,6 +47,9 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
      *
      * Add a new resource to the access control list
      * corresponding the the metadata editing page
+     *
+     *@param array $args Parameters sent to the plugin hook
+     *@return void
      */
     public function hookDefineAcl($args)
     {
@@ -52,8 +60,8 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
     /**
      * Add the SedMeta link to the admin main navigation.
      * 
-     * @param array Navigation array.
-     * @return array Filtered navigation array.
+     * @param array $nav Navigation array.
+     * @return array $nav Filtered navigation array.
      */
     public function filterAdminNavigationMain($nav)
     {

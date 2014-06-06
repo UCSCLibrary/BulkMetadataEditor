@@ -41,6 +41,11 @@ class SedMeta_Form_Main extends Omeka_Form
 	
     }
 
+   /**
+     * Populate the form
+     *
+     *@return void
+     */
     private function _registerElements()
     {
       $this->addElement('hidden',"callback",array("value"=>""));

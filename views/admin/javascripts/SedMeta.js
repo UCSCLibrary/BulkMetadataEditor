@@ -1,7 +1,7 @@
 jQuery(document).ready(function() {
 
-    jQuery("#changesRadio-replace-field").after(jQuery('#regexp-field'));
     jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-replace-field'));
+    jQuery("#changesRadio-replace-field").after(jQuery('#regexp-field'));
     jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-search-field'));
     jQuery("#changesRadio-add-field").after(jQuery('#sedmeta-add-field'));
     jQuery("#changesRadio-append-field").after(jQuery('#sedmeta-append-field'));
