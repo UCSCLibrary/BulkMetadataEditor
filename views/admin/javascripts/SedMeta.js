@@ -1,26 +1,26 @@
 jQuery(document).ready(function() {
 
-    jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-replace-field'));
+    jQuery("#changesRadio-replace-field").after(jQuery('#bulk-metadata-editor-replace-field'));
     jQuery("#changesRadio-replace-field").after(jQuery('#regexp-field'));
-    jQuery("#changesRadio-replace-field").after(jQuery('#sedmeta-search-field'));
-    jQuery("#changesRadio-add-field").after(jQuery('#sedmeta-add-field'));
-    jQuery("#changesRadio-append-field").after(jQuery('#sedmeta-append-field'));
+    jQuery("#changesRadio-replace-field").after(jQuery('#bulk-metadata-editor-search-field'));
+    jQuery("#changesRadio-add-field").after(jQuery('#bulk-metadata-editor-add-field'));
+    jQuery("#changesRadio-append-field").after(jQuery('#bulk-metadata-editor-append-field'));
 
 
     jQuery("#preview-items-button").wrap('<div class = "previewButtonDiv"></div>');
     jQuery("#preview-fields-button").wrap('<div class = "previewButtonDiv"></div>');
     jQuery("#preview-changes-button").wrap('<div class = "previewButtonDiv"></div>');
 
-    jQuery("#preview-items-button").after('<div class="sedmeta-waiting" id="items-waiting">Please wait...</div>');
-    jQuery("#preview-fields-button").after('<div class="sedmeta-waiting" id="fields-waiting">Please wait...</div>');
-    jQuery("#preview-changes-button").after('<div class="sedmeta-waiting" id="changes-waiting">Please wait...</div>');
+    jQuery("#preview-items-button").after('<div class="bulk-metadata-editor-waiting" id="items-waiting">Please wait...</div>');
+    jQuery("#preview-fields-button").after('<div class="bulk-metadata-editor-waiting" id="fields-waiting">Please wait...</div>');
+    jQuery("#preview-changes-button").after('<div class="bulk-metadata-editor-waiting" id="changes-waiting">Please wait...</div>');
 
     jQuery("#preview-items-button").after(jQuery('#hide-item-preview'));
     jQuery("#preview-fields-button").after(jQuery('#hide-field-preview'));
     jQuery("#preview-changes-button").after(jQuery('#hide-changes-preview'));
 
 
-    jQuery(".sedmeta-selector").keypress(function(evt) {
+    jQuery(".bulk-metadata-editor-selector").keypress(function(evt) {
 	var key = evt.which;
 	if(key == 13)  // the enter key code
 	{
@@ -29,7 +29,7 @@ jQuery(document).ready(function() {
     });
 
 
-    jQuery(".sedmeta-selector").focus(function(e) {
+    jQuery(".bulk-metadata-editor-selector").focus(function(e) {
 	var value = jQuery(this).val();
 	if(value=="Input search term here") {
 	    jQuery(this).val("");
@@ -41,7 +41,7 @@ jQuery(document).ready(function() {
 	   jQuery("#item-meta-selects").show();
        } else {
 	   jQuery("#item-meta-selects").hide();
-	   jQuery(".sedmeta-selector").val("Input search term here");
+	   jQuery(".bulk-metadata-editor-selector").val("Input search term here");
        }
    });
 
@@ -52,38 +52,38 @@ jQuery(document).ready(function() {
 
     jQuery("#changesRadio-replace").change(function(){
 	if(this.checked) {
-	    jQuery('#sedmeta-search-field').show(300);
-	    jQuery('#sedmeta-replace-field').show(300);
+	    jQuery('#bulk-metadata-editor-search-field').show(300);
+	    jQuery('#bulk-metadata-editor-replace-field').show(300);
 	    jQuery('#regexp-field').show(300);
-	    jQuery("#sedmeta-append-field").hide(300);
-	    jQuery("#sedmeta-add-field").hide(300);
+	    jQuery("#bulk-metadata-editor-append-field").hide(300);
+	    jQuery("#bulk-metadata-editor-add-field").hide(300);
 	}
     });
     jQuery("#changesRadio-add").change(function(){
 	if(this.checked) {
-	    jQuery('#sedmeta-search-field').hide(300);
-	    jQuery('#sedmeta-replace-field').hide(300);
+	    jQuery('#bulk-metadata-editor-search-field').hide(300);
+	    jQuery('#bulk-metadata-editor-replace-field').hide(300);
 	    jQuery('#regexp-field').hide(300);
-	    jQuery("#sedmeta-append-field").hide(300);
-	    jQuery("#sedmeta-add-field").show(300);
+	    jQuery("#bulk-metadata-editor-append-field").hide(300);
+	    jQuery("#bulk-metadata-editor-add-field").show(300);
 	}
     });
     jQuery("#changesRadio-append").change(function(){
 	if(this.checked) {
-	    jQuery('#sedmeta-search-field').hide(300);
-	    jQuery('#sedmeta-replace-field').hide(300);
+	    jQuery('#bulk-metadata-editor-search-field').hide(300);
+	    jQuery('#bulk-metadata-editor-replace-field').hide(300);
 	    jQuery('#regexp-field').hide(300);
-	    jQuery("#sedmeta-append-field").show(300);
-	    jQuery("#sedmeta-add-field").hide(300);
+	    jQuery("#bulk-metadata-editor-append-field").show(300);
+	    jQuery("#bulk-metadata-editor-add-field").hide(300);
 	}
     });
     jQuery("#changesRadio-delete").change(function(){
 	if(this.checked) {
-	    jQuery('#sedmeta-search-field').hide(300);
-	    jQuery('#sedmeta-replace-field').hide(300);
+	    jQuery('#bulk-metadata-editor-search-field').hide(300);
+	    jQuery('#bulk-metadata-editor-replace-field').hide(300);
 	    jQuery('#regexp-field').hide(300);
-	    jQuery("#sedmeta-append-field").hide(300);
-	    jQuery("#sedmeta-add-field").hide(300);
+	    jQuery("#bulk-metadata-editor-append-field").hide(300);
+	    jQuery("#bulk-metadata-editor-add-field").hide(300);
 	}
     });
 
@@ -92,7 +92,7 @@ jQuery(document).ready(function() {
 	processItemRules();
 	jQuery.ajax({
 	    type: "POST",
-            data: jQuery("#sedmeta-form").serialize(),
+            data: jQuery("#bulk-metadata-editor-form").serialize(),
 	    url: document.URL.split('?')[0]+"/index/items/max/15",
 	    success: function(data)
             {   
@@ -149,7 +149,7 @@ jQuery(document).ready(function() {
 	jQuery.ajax({
 	    type: "POST",
 	    timeout: 30000,
-            data: jQuery("#sedmeta-form").serialize(),
+            data: jQuery("#bulk-metadata-editor-form").serialize(),
             url: document.URL.split('?')[0]+"/index/fields/max/7",
             success: function(data)
             {   
@@ -212,7 +212,7 @@ jQuery(document).ready(function() {
 	jQuery.ajax({
 	    type: "POST",
 	    timeout: 30000,
-            data: jQuery("#sedmeta-form").serialize(),
+            data: jQuery("#bulk-metadata-editor-form").serialize(),
             url: document.URL.split('?')[0]+"/index/changes/max/20",
             success: function(data)
             {   
@@ -279,22 +279,22 @@ function processItemRules(){
 
     jQuery(".hiddenField").remove();
 
-    jQuery(".sedmeta-element-id").each(function(index){
+    jQuery(".bulk-metadata-editor-element-id").each(function(index){
 	var html = '<input class="hiddenField" type=hidden name="item-rule-elements[]" value='+jQuery(this).val()+' />';
 	jQuery('form').append(html);
     });
 
-    jQuery(".sedmeta-compare").each(function(index){
+    jQuery(".bulk-metadata-editor-compare").each(function(index){
 	var html = '<input class="hiddenField" type=hidden name="item-compare-types[]" value='+jQuery(this).val()+' />';
 	jQuery('form').append(html);
     });
 
-    jQuery(".sedmeta-case").each(function(index){
+    jQuery(".bulk-metadata-editor-case").each(function(index){
 	var html = '<input class="hiddenField" type=hidden name="item-cases[]" value='+jQuery(this).prop('checked')+' />';
 	jQuery('form').append(html);
     });
 
-    jQuery(".sedmeta-selector").each(function(index){
+    jQuery(".bulk-metadata-editor-selector").each(function(index){
 	var html = '<input class="hiddenField" type=hidden name="item-selectors[]" value="'+jQuery(this).val()+'" />';
 	jQuery('form').append(html);
     });
@@ -307,7 +307,7 @@ function showMoreItems(event){
     jQuery.ajax({
 	type: "POST",
 	timeout: 30000,
-        data: jQuery("#sedmeta-form").serialize(),
+        data: jQuery("#bulk-metadata-editor-form").serialize(),
         url: document.URL.split('?')[0]+"/index/items/max/200",
         success: function(data)
         {   
@@ -344,7 +344,7 @@ function showMoreFields(event){
     jQuery.ajax({
 	type: "POST",
 	timeout: 30000,
-        data: jQuery("#sedmeta-form").serialize(),
+        data: jQuery("#bulk-metadata-editor-form").serialize(),
         url: document.URL.split('?')[0]+"/index/fields/max/100",
         success: function(data)
         {   
@@ -389,7 +389,7 @@ function showMoreChanges(event){
     jQuery.ajax({
 	type: "POST",
 	timeout: 30000,
-        data: jQuery("#sedmeta-form").serialize(),
+        data: jQuery("#bulk-metadata-editor-form").serialize(),
         url: document.URL.split('?')[0]+"/index/changes/max/200",
         success: function(data)
         {   

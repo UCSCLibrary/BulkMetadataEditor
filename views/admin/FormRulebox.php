@@ -44,18 +44,18 @@ $form_compare_options = array(
    <div id="item-rule-boxes">
    <div id="item-rule-box" class="item-rule-box" style="clear:left;">
    <div class="inputs three columns alpha">
-   <?php echo $this->formSelect('sedmeta-element-id', '50', array('class' => 'sedmeta-element-id'), $form_element_options) ?>
+   <?php echo $this->formSelect('bulk-metadata-editor-element-id', '50', array('class' => 'bulk-metadata-editor-element-id'), $form_element_options) ?>
    </div>
    <div class="inputs two columns beta">
-   <?php echo $this->formSelect('sedmeta-compare', null, array('class' => 'sedmeta-compare'), $form_compare_options) ?>
+   <?php echo $this->formSelect('bulk-metadata-editor-compare', null, array('class' => 'bulk-metadata-editor-compare'), $form_compare_options) ?>
    </div>
    <div class="inputs three columns omega">
-   <?php echo $this->formText('sedmeta-selector',"Input search term here",array('class'=>'sedmeta-selector')) ?>
+   <?php echo $this->formText('bulk-metadata-editor-selector',"Input search term here",array('class'=>'bulk-metadata-editor-selector')) ?>
    </div>
   <div class="removeRule">[x]</div>
    <div class="field">
    <div class="inputs two columns omega">
-  <?php echo $this->formCheckbox('sedmeta-case',"Match Case",array('class'=>'sedmeta-case')) ?><label for="sedmeta-case"> Match Case </label>
+  <?php echo $this->formCheckbox('bulk-metadata-editor-case',"Match Case",array('class'=>'bulk-metadata-editor-case')) ?><label for="bulk-metadata-editor-case"> Match Case </label>
    </div>
    </div>
    </div>	     

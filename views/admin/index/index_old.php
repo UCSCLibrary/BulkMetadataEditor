@@ -15,11 +15,11 @@
 echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
 <?php echo flash(); ?>
-<form id='sedmeta-form'>
+<form id='bulk-metadata-editor-form'>
 
 <input type="hidden" name="callback" value=""/>
 
-<fieldset class="sedmeta-fieldset" id='sedmeta-items-set' style="border: 1px solid black; padding:15px; margin:10px;">
+<fieldset class="bulk-metadata-editor-fieldset" id='bulk-metadata-editor-items-set' style="border: 1px solid black; padding:15px; margin:10px;">
    <h2>Step 1: Select Items to Edit </h2>
 
    <div class="field">
@@ -27,7 +27,7 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
    </div>
    <div class="field" id="item-collection-select">
    <div class="inputs three columns omega">
-   <?php echo $this->formSelect('sedmeta-collection-id',null,array('id' => 'sedmeta-collection-id'),$this->form_collection_options); ?>
+   <?php echo $this->formSelect('bulk-metadata-editor-collection-id',null,array('id' => 'bulk-metadata-editor-collection-id'),$this->form_collection_options); ?>
    </div>
    </div>
 
@@ -41,18 +41,18 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
    <div id="item-rule-boxes">
    <div id="item-rule-box" class="item-rule-box" style="clear:left;">
    <div class="inputs three columns alpha">
-   <?php echo $this->formSelect('sedmeta-element-id', '50', array('class' => 'sedmeta-element-id'), $this->form_element_options) ?>
+   <?php echo $this->formSelect('bulk-metadata-editor-element-id', '50', array('class' => 'bulk-metadata-editor-element-id'), $this->form_element_options) ?>
    </div>
    <div class="inputs two columns beta">
-   <?php echo $this->formSelect('sedmeta-compare', null, array('class' => 'sedmeta-compare'), $this->form_compare_options) ?>
+   <?php echo $this->formSelect('bulk-metadata-editor-compare', null, array('class' => 'bulk-metadata-editor-compare'), $this->form_compare_options) ?>
    </div>
    <div class="inputs three columns omega">
-   <?php echo $this->formText('sedmeta-selector',"Input search term here",array('class'=>'sedmeta-selector')) ?>
+   <?php echo $this->formText('bulk-metadata-editor-selector',"Input search term here",array('class'=>'bulk-metadata-editor-selector')) ?>
    </div>
   <div class="removeRule">[x]</div>
    <div class="field">
    <div class="inputs two columns omega">
-  <?php echo $this->formCheckbox('sedmeta-case',"Match Case",array('class'=>'sedmeta-case','checked'=>'checked')) ?><label for="sedmeta-case"> Match Case </label>
+  <?php echo $this->formCheckbox('bulk-metadata-editor-case',"Match Case",array('class'=>'bulk-metadata-editor-case','checked'=>'checked')) ?><label for="bulk-metadata-editor-case"> Match Case </label>
    </div>
    </div>
    </div>	     
@@ -73,12 +73,12 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
 </fieldset>
 
-<fieldset class="sedmeta-fieldset" id='sedmeta-fields-set' style="border: 1px solid black; padding:15px; margin:10px;">
+<fieldset class="bulk-metadata-editor-fieldset" id='bulk-metadata-editor-fields-set' style="border: 1px solid black; padding:15px; margin:10px;">
    <h2>Step 2: Select Fields to Edit </h2>
 
    <div class="field" id="field-select-list" >
    <div class="inputs four columns omega">
-   <?php echo $this->formSelect('selectfields[]',null,array('id' => 'sedmeta-select-fields','size' => '10'),$this->form_element_options); ?>
+   <?php echo $this->formSelect('selectfields[]',null,array('id' => 'bulk-metadata-editor-select-fields','size' => '10'),$this->form_element_options); ?>
    </div> 
    </div>
 
@@ -92,7 +92,7 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
 </fieldset>
 
-<fieldset class="sedmeta-fieldset" id='sedmeta-changes-set' style="border: 1px solid black; padding:15px; margin:10px;">
+<fieldset class="bulk-metadata-editor-fieldset" id='bulk-metadata-editor-changes-set' style="border: 1px solid black; padding:15px; margin:10px;">
    <h2>Step 3: Define Edits </h2>
 
    <div class="field">
@@ -101,20 +101,20 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
    <div id='changes-replace' style="display:none">
   <div class="field">
-   <div id="sedmeta-find-label" class="two columns alpha">
-   <label for="sedmeta-find"><?php echo __('Search for:'); ?></label>
+   <div id="bulk-metadata-editor-find-label" class="two columns alpha">
+   <label for="bulk-metadata-editor-find"><?php echo __('Search for:'); ?></label>
    </div>
    <div class="inputs four columns omega">
-   <?php echo $this->formText('sedmeta-find',"", array()); ?>
+   <?php echo $this->formText('bulk-metadata-editor-find',"", array()); ?>
    <p class="explanation"><?php echo __( 'Input text you want to search for ' ); ?></p>
    </div>
    </div>
    <div class="field">
-   <div id="sedmeta-replace-label" class="two columns alpha">
-   <label for="sedmeta-replace"><?php echo __('Replace with:'); ?></label>
+   <div id="bulk-metadata-editor-replace-label" class="two columns alpha">
+   <label for="bulk-metadata-editor-replace"><?php echo __('Replace with:'); ?></label>
    </div>
    <div class="inputs four columns omega">
-   <?php echo $this->formText('sedmeta-replace',"", array()); ?>
+   <?php echo $this->formText('bulk-metadata-editor-replace',"", array()); ?>
    <p class="explanation"><?php echo __( 'Input text you want to replace with ' ); ?></p>
    </div>
    </div>
@@ -128,11 +128,11 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
    <div id='changes-add' style="display:none">
   <div class="field">
-   <div id="sedmeta-add-label" class="two columns alpha">
-   <label for="sedmeta-add"><?php echo __('Text to Add:'); ?></label>
+   <div id="bulk-metadata-editor-add-label" class="two columns alpha">
+   <label for="bulk-metadata-editor-add"><?php echo __('Text to Add:'); ?></label>
    </div>
    <div class="inputs four columns omega">
-   <?php echo $this->formText('sedmeta-add',"", array()); ?>
+   <?php echo $this->formText('bulk-metadata-editor-add',"", array()); ?>
    <p class="explanation"><?php echo __( 'Input text you want to add as metadata' ); ?></p>
    </div>
    </div>
@@ -143,11 +143,11 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 
      <div id='changes-append' style="display:none">
   <div class="field">
-   <div id="sedmeta-append-label" class="two columns alpha">
-   <label for="sedmeta-append"><?php echo __('Text to Append:'); ?></label>
+   <div id="bulk-metadata-editor-append-label" class="two columns alpha">
+   <label for="bulk-metadata-editor-append"><?php echo __('Text to Append:'); ?></label>
    </div>
    <div class="inputs four columns omega">
-   <?php echo $this->formText('sedmeta-append',"", array()); ?>
+   <?php echo $this->formText('bulk-metadata-editor-append',"", array()); ?>
    <p class="explanation"><?php echo __( 'Input text you want to append to metadata' ); ?></p>
    </div>
    </div>
@@ -172,7 +172,7 @@ echo head(array('title' => 'Bulk Metadata Search and Replace')); ?>
 </div>
 
 <?php
-   $nonce = new Zend_Form_Element_Hash('sedmeta-admin-nonce'); 
+   $nonce = new Zend_Form_Element_Hash('bulk-metadata-editor-admin-nonce'); 
 echo $nonce->render();
 ?>
 </form>

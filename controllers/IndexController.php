@@ -368,7 +368,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		case 'replace':
 
 		  //expect a 'find' and 'replace' variable
-		  if(!isset($_REQUEST['sedmetaSearch'])||!isset($_REQUEST['sedmetaReplace']))
+		  if(!isset($_REQUEST['bmeSearch'])||!isset($_REQUEST['bmeReplace']))
 		    throw new Exception("Please define search and replace terms");//TODO:proper error handling
 
 		  $element=$itemObj->getElementById($field['elementID']);
@@ -378,9 +378,9 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  $count=0;
 
 		  if($replaceType=="normal")
-		    $new=str_replace($_REQUEST['sedmetaSearch'],$_REQUEST['sedmetaReplace'],$eText->text,$count);
+		    $new=str_replace($_REQUEST['bmeSearch'],$_REQUEST['bmeReplace'],$eText->text,$count);
 		  elseif($replaceType=="regexp")
-		    $new=preg_replace($_REQUEST['sedmetaSearch'],$_REQUEST['sedmetaReplace'],$eText->text,-1,$count);
+		    $new=preg_replace($_REQUEST['bmeSearch'],$_REQUEST['bmeReplace'],$eText->text,-1,$count);
 
 		  //if str_replace matches anything,
 		  //update the return array
@@ -443,7 +443,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  break;
 	      
 		case 'append':
-		  if(!isset($_REQUEST['sedmetaAppend']))
+		  if(!isset($_REQUEST['bmeAppend']))
 		    throw new Exception("Please input some text to append");
 
 		  if(!isset($_REQUEST['delimiter']))
@@ -453,7 +453,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		    $element=$itemObj->getElementById($field['elementID']);
 		    $eText = get_record_by_id('ElementText',$field['id']);
 
-		    $new = $eText->text.$_REQUEST['delimiter'].$_REQUEST['sedmetaAppend'];
+		    $new = $eText->text.$_REQUEST['delimiter'].$_REQUEST['bmeAppend'];
 
 		  }catch (Exception $e) {
 		    throw $e;
@@ -484,7 +484,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  break;
 
 		case 'add':
-		  if(!isset($_REQUEST['sedmetaAdd']))
+		  if(!isset($_REQUEST['bmeAdd']))
 		    throw new Exception('Please input some text to add.');
 
 		  try{
@@ -495,7 +495,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
 		  if(!in_array($field['elementID'],$made))
 		    {
-		      $new = $_REQUEST['sedmetaAdd'];
+		      $new = $_REQUEST['bmeAdd'];
 		      $changes[]=array(
 				       'item'=>$item['title'],
 				       'field'=>$element->name,
@@ -616,8 +616,8 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       $params=array();
 
       //set up query parameters to select items from a given collection
-      if( isset($_REQUEST['sedmetaCollectionId']) && $_REQUEST['sedmetaCollectionId'] != 0)
-	$params['collection']=$_REQUEST['sedmetaCollectionId'];
+      if( isset($_REQUEST['bmeCollectionId']) && $_REQUEST['bmeCollectionId'] != 0)
+	$params['collection']=$_REQUEST['bmeCollectionId'];
 
       //retrieve all potentially matching items
       try{

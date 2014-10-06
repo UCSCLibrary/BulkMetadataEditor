@@ -9,13 +9,13 @@
     display:none;
 }
 
-.sedmetaFieldset {
+.bmeFieldset {
     border:1px solid black;
     padding:15px;
     margin:7px;
 }
 
-.sedmetaHidden {
+.bmeHidden {
     display:none;
     margin:20px;
 }
@@ -25,7 +25,7 @@
     clear:left;
 }
 
-#sedmeta-form legend {
+#bulk-metadata-editor-form legend {
     padding: 0 10px;
     position: relative;
     top: 5px;

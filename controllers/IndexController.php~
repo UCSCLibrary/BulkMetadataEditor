@@ -325,7 +325,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		case 'replace':
 
 		  //expect a 'find' and 'replace' variable
-		  if(!isset($_REQUEST['sedmeta-find'])||!isset($_REQUEST['sedmeta-replace']))
+		  if(!isset($_REQUEST['bulk-metadata-editor-find'])||!isset($_REQUEST['bulk-metadata-editor-replace']))
 		    die("ERROR! variables not set or something!");//TODO:proper error handling
 
 		  $element=$itemObj->getElementById($field['elementID']);
@@ -335,9 +335,9 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  $count=0;
 
 		  if($replaceType=="normal")
-		    $new=str_replace($_REQUEST['sedmeta-find'],$_REQUEST['sedmeta-replace'],$eText->text,$count);
+		    $new=str_replace($_REQUEST['bulk-metadata-editor-find'],$_REQUEST['bulk-metadata-editor-replace'],$eText->text,$count);
 		  elseif($replaceType=="regexp")
-		    $new=preg_replace($_REQUEST['sedmeta-find'],$_REQUEST['sedmeta-replace'],$eText->text,-1,$count);
+		    $new=preg_replace($_REQUEST['bulk-metadata-editor-find'],$_REQUEST['bulk-metadata-editor-replace'],$eText->text,-1,$count);
 
 		  //if str_replace matches anything,
 		  //update the return array
@@ -383,14 +383,14 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  break;
 	      
 		case 'append':
-		  if(!isset($_REQUEST['sedmeta-append']))
+		  if(!isset($_REQUEST['bulk-metadata-editor-append']))
 		    die('ERRORZ! WRONG SET VARS AND JUNK!');//todo error handling
 		  if(!isset($_REQUEST['delimiter']))
 		    $_REQUEST['delimiter']=' ';
 		  $element=$itemObj->getElementById($field['elementID']);
 		  $eText = get_record_by_id('ElementText',$field['id']);
 
-		  $new = $eText->text.$_REQUEST['delimiter'].$_REQUEST['sedmeta-append'];
+		  $new = $eText->text.$_REQUEST['delimiter'].$_REQUEST['bulk-metadata-editor-append'];
 		      
 		  $changes[]=array(
 				   'item'=>$item['title'],
@@ -413,12 +413,12 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 		  break;
 
 		case 'add':
-		  if(!isset($_REQUEST['sedmeta-add']))
+		  if(!isset($_REQUEST['bulk-metadata-editor-add']))
 		    die('ERRORZ! WRONG SET VARS AND JUNK!');//todo error handling
 		  $element=$itemObj->getElementById($field['elementID']);
 		  if(!in_array($field['elementID'],$made))
 		    {
-		      $new = $_REQUEST['sedmeta-add'];
+		      $new = $_REQUEST['bulk-metadata-editor-add'];
 		      $changes[]=array(
 				       'item'=>$item['title'],
 				       'field'=>$element->name,
@@ -525,8 +525,8 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
       $params=array();
 
       //set up query parameters to select items from a given collection
-      if( isset($_REQUEST['sedmeta-collection-id']) && $_REQUEST['sedmeta-collection-id'] != 0)
-	$params['collection']=$_REQUEST['sedmeta-collection-id'];
+      if( isset($_REQUEST['bulk-metadata-editor-collection-id']) && $_REQUEST['bulk-metadata-editor-collection-id'] != 0)
+	$params['collection']=$_REQUEST['bulk-metadata-editor-collection-id'];
 
       //retrieve all potentially matching items
       $items = get_records("Item",$params,0);

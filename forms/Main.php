@@ -34,7 +34,7 @@ class SedMeta_Form_Main extends Omeka_Form
 
       parent::init();
 
-      $this->setAttrib('id', 'sedmeta-form');
+      $this->setAttrib('id', 'bulk-metadata-editor-form');
       $this->setMethod('post');
 
       $this->_registerElements();
@@ -50,7 +50,7 @@ class SedMeta_Form_Main extends Omeka_Form
     {
       $this->addElement('hidden',"callback",array("value"=>""));
 
-      $this->addElement('select','sedmetaCollectionId',array(
+      $this->addElement('select','bmeCollectionId',array(
             'label'         => __('Collection'),
             'description'   => __('Edit items from this collection'),
             'value'         => '0',
@@ -215,16 +215,16 @@ class SedMeta_Form_Main extends Omeka_Form
       //The following elements will be re-ordered in javascript
       //gotta create a new element that can be hidden and shown and junk?
 
-      $this->addElement('text','sedmetaSearch', array(
+      $this->addElement('text','bmeSearch', array(
 	        'label'=>'Search for:',
-		'id'=>'sedmeta-search',
+		'id'=>'bulk-metadata-editor-search',
 		'class'=>'elementHidden',
 		'description'=>'Input text you want to search for '
 						       )
 			);
-      $this->addElement('text','sedmetaReplace', array(
+      $this->addElement('text','bmeReplace', array(
 	        'label'=>'Replace with:',
-		'id'=>'sedmeta-replace',
+		'id'=>'bulk-metadata-editor-replace',
 		'class'=>'elementHidden',
 		'description'=>'Input text you want to replace with '
 						       )
@@ -236,16 +236,16 @@ class SedMeta_Form_Main extends Omeka_Form
 		'value'=>'true'
 						       )
 			);
-      $this->addElement('text','sedmetaAdd', array(
+      $this->addElement('text','bmeAdd', array(
 	        'label'=>'Text to Add',
-		'id'=>'sedmeta-add',
+		'id'=>'bulk-metadata-editor-add',
 		'class'=>'elementHidden',
 		'description'=>'Input text you want to add as metadata'
 						       )
 			);
-      $this->addElement('text','sedmetaAppend', array(
+      $this->addElement('text','bmeAppend', array(
 	        'label'=>'Text to Append',
-		'id'=>'sedmeta-append',
+		'id'=>'bulk-metadata-editor-append',
 		'class'=>'elementHidden',
 		'description'=>'Input text you want to append to metadata'
 						       )
@@ -255,17 +255,17 @@ class SedMeta_Form_Main extends Omeka_Form
 
       
       $this->addDisplayGroup(array(
-				   'sedmetaCollectionId', 
+				   'bmeCollectionId', 
 				   'itemSelectMeta',
 				   'rulebox',
 				   'previewItemsButton',
 				   'hideItemPreview',
 				   'itemPreviewDiv'
 				   ), 
-			     'sedmetaItemsSet',
+			     'bmeItemsSet',
 			     array(
 				   'legend'=>'Step 1: Select Items',
-				   'class'=>'sedmetaFieldset'
+				   'class'=>'bmeFieldset'
 				   ));
       
       $this->addDisplayGroup(array( 
@@ -273,27 +273,27 @@ class SedMeta_Form_Main extends Omeka_Form
 				   'previewFieldsButton',
 				   'hideFieldPreview',
 				   'fieldPreviewDiv'
-				   ), 'sedmetaFieldsSet',
+				   ), 'bmeFieldsSet',
 			     array(
 				   'legend'=>'Step 2: Select Fields',
-				   'class'=>'sedmetaFieldset'
+				   'class'=>'bmeFieldset'
 				   ));
       
       $this->addDisplayGroup(array( 
 				   'changesRadio',
 				   'previewChangesButton',
-				   'sedmetaAppend',
+				   'bmeAppend',
 				   'regexp',
-				   'sedmetaAdd',
-				   'sedmetaSearch',
-				   'sedmetaReplace',
+				   'bmeAdd',
+				   'bmeSearch',
+				   'bmeReplace',
 				   'hideChangesPreview',
 				   'changesPreviewDiv'
-				    ), 'sedmetaChangesSet',
+				    ), 'bmeChangesSet',
 			     array(
 				   'legend'=>'Step 3: Define Changes',
 				   'description'=>'Define Edits to Apply',
-				   'class'=>'sedmetaFieldset'
+				   'class'=>'bmeFieldset'
 				   ));
 
 
@@ -327,7 +327,7 @@ class SedMeta_Form_Main extends Omeka_Form
 				  );
 
 	} else if($element->getAttrib('class')=='elementHidden') {
-	  $element->getDecorator('FieldTag')->setOption('class','field sedmetaHidden');
+	  $element->getDecorator('FieldTag')->setOption('class','field bmeHidden');
 	  $id = $element->getAttrib('id');
 	  
 	  $element->getDecorator('FieldTag')->setOption('id',$id.'-field');
