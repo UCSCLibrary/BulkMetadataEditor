@@ -1,6 +1,6 @@
 <?php
 /**
- * Sedmeta selected item preview Ajax callback 
+ * BulkMetadataEditor selected item preview Ajax callback 
  * 
  * This view encodes the items matched by the
  * search criteria in JSON format to be 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Sedmeta changes preview Ajax callback 
+ * BulkMetadataEditor changes preview Ajax callback 
  * 
  * This view encodes in JSON format all changes 
  * to be performed by form settings, and echoes 

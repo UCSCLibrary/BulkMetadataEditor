@@ -1,6 +1,6 @@
 <?php 
 /**
- * Sedmeta main admin form
+ * BulkMetadataEditor main admin form
  *
  * This Omeka curator form collects information defining a set of 
  * bulk edits to perform on the omeka database. It includes 
@@ -12,7 +12,7 @@
  */
 
 /**
- * Sedmeta main admin form class
+ * BulkMetadataEditor main admin form class
  *
  * This Omeka curator form collects information defining a set of 
  * bulk edits to perform on the omeka database. It includes 
@@ -21,7 +21,7 @@
  *
  */
 
-class SedMeta_Form_Main extends Omeka_Form
+class BulkMetadataEditor_Form_Main extends Omeka_Form
 {
    /**
      * Initialize the form.

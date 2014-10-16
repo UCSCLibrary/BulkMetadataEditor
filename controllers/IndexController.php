@@ -1,12 +1,12 @@
 <?php
 /**
- * SedMeta Index Controller class file
+ * BulkMetadataEditor Index Controller class file
  *
  * This controller enforces selection rules on items and metadata 
  * elements, and performs various builk editing operations
  * on the database of element texts associated with Omeka items.
  * This class contains the bulk of the functionality of the
- * Sedmeta plugin.
+ * BulkMetadataEditor plugin.
  *
  * @copyright Copyright 2014 UCSC Library Digital Initiatives
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
@@ -15,16 +15,16 @@
 
 
 /**
- * The Sedmeta index controller class.
+ * The BulkMetadataEditor index controller class.
  *
- * @package SedMeta
+ * @package BulkMetadataEditor
  */
-class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
+class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractActionController
 {    
 
 
   /**
-   * Process form data and prepare to display the main SedMeta form.
+   * Process form data and prepare to display the main BulkMetadataEditor form.
    *
    * If the form has been submitted, it performs the relevant changes.
    * Regardless, it populates the arrays of options for the view's
@@ -42,7 +42,7 @@ class SedMeta_IndexController extends Omeka_Controller_AbstractActionController
 
       include_once(dirname(dirname(__FILE__))."/forms/Main.php");
       try{
-	$this->view->form = new SedMeta_Form_Main();
+	$this->view->form = new BulkMetadataEditor_Form_Main();
       }catch(Exception $e) {
 	$flashMessenger->addMessage('Error loading metadata editing form: '.$e->getMessage(),'error');
       }

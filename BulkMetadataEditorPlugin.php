@@ -1,6 +1,6 @@
 <?php
 /**
- * SedMeta Bulk Metadata Search and Replace
+ * BulkMetadataEditor Bulk Metadata Search and Replace
  *
  * This Omeka 2.1+ plugin is intended to expedite the 
  * process of editing metadata in Omeka collections of 
@@ -11,15 +11,15 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
  */
 
-//require_once dirname(__FILE__) . '/helpers/SedMetaFunctions.php';
+//require_once dirname(__FILE__) . '/helpers/BulkMetadataEditorFunctions.php';
 
 /**
- * SedMeta plugin class.
+ * BulkMetadataEditor plugin class.
  *
- * The main class of the SedMeta bulk search and replace 
+ * The main class of the BulkMetadataEditor bulk search and replace 
  * plugin for Omeka 2.1+
  */
-class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
+class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
 {
     /**
      * @var array Hooks for the plugin.
@@ -38,8 +38,8 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
      */
     public function hookAdminHead()
     {
-      queue_js_file('SedMeta');
-      queue_css_file('SedMeta');
+      queue_js_file('BulkMetadataEditor');
+      queue_css_file('BulkMetadataEditor');
     }
 
     /**
@@ -53,12 +53,12 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
      */
     public function hookDefineAcl($args)
     {
-        $args['acl']->addResource('Sedmeta_Index');
+        $args['acl']->addResource('BulkMetadataEditor_Index');
     }
 
    
     /**
-     * Add the SedMeta link to the admin main navigation.
+     * Add the BulkMetadataEditor link to the admin main navigation.
      * 
      * @param array $nav Navigation array.
      * @return array $nav Filtered navigation array.
@@ -67,8 +67,8 @@ class SedMetaPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $nav[] = array(
             'label' => __('Bulk Editor'),
-            'uri' => url('sed-meta'),
-            'resource' => 'Sedmeta_Index',
+            'uri' => url('bulk-metadata-editor'),
+            'resource' => 'BulkMetadataEditor_Index',
             'privilege' => 'index'
         );
         return $nav;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Sedmeta count items Ajax callback 
+ * BulkMetadataEditor count items Ajax callback 
  * 
  * This view encodes in JSON format the number 
  * of items matched by the search parameters

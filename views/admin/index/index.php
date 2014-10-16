@@ -1,6 +1,6 @@
 <?php
 
-$head = array('bodyclass' => 'sed-meta primary', 
+$head = array('bodyclass' => 'bulk-metadata-editor primary', 
               'title' => html_escape(__('Bulk Metadata Editor')));
 echo head($head);
 ?>

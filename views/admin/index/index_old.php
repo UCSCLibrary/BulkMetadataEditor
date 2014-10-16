@@ -1,6 +1,6 @@
 <?php 
 /**
- * Sedmeta control panel view
+ * BulkMetadataEditor control panel view
  *
  * This view delivers a form to be displayed on the Omeka Curator Dashboard
  * collecting input from curators to define bulk edits to perform on the
