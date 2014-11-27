@@ -72,18 +72,18 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
       //not actually a text element, but 
       //rendered with its own viewscript so it doesn't matter
       $this->addElement('text', 'rulebox', array(
-						 'order'=>3,
-						 'decorators' => array(
-					array(
-					      'ViewScript', 
-					      array(
-						    'viewScript' => 'FormRulebox.php',
-						    'class'      => 'field'
-						    )
-					      )
-					)
-						 )
-			  );
+          'order'=>3,
+          'decorators' => array(
+              array(
+                  'ViewScript', 
+                  array(
+                      'viewScript' => 'FormRulebox.php',
+                      'class'      => 'field'
+                  )
+              )
+          )
+      )
+      );
       
 
 
