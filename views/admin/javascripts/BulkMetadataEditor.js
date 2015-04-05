@@ -5,6 +5,7 @@ jQuery(document).ready(function() {
     jQuery("#changesRadio-replace-field").after(jQuery('#bulk-metadata-editor-search-field'));
     jQuery("#changesRadio-add-field").after(jQuery('#bulk-metadata-editor-add-field'));
     jQuery("#changesRadio-append-field").after(jQuery('#bulk-metadata-editor-append-field'));
+    jQuery("#changesRadio-deduplicate-field").after(jQuery('#bulk-metadata-editor-deduplicate-field'));
 
 
     jQuery("#preview-items-button").wrap('<div class = "previewButtonDiv"></div>');
@@ -55,8 +56,9 @@ jQuery(document).ready(function() {
 	    jQuery('#bulk-metadata-editor-search-field').show(300);
 	    jQuery('#bulk-metadata-editor-replace-field').show(300);
 	    jQuery('#regexp-field').show(300);
-	    jQuery("#bulk-metadata-editor-append-field").hide(300);
 	    jQuery("#bulk-metadata-editor-add-field").hide(300);
+	    jQuery("#bulk-metadata-editor-append-field").hide(300);
+	    jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
 	}
     });
     jQuery("#changesRadio-add").change(function(){
@@ -64,8 +66,9 @@ jQuery(document).ready(function() {
 	    jQuery('#bulk-metadata-editor-search-field').hide(300);
 	    jQuery('#bulk-metadata-editor-replace-field').hide(300);
 	    jQuery('#regexp-field').hide(300);
-	    jQuery("#bulk-metadata-editor-append-field").hide(300);
 	    jQuery("#bulk-metadata-editor-add-field").show(300);
+	    jQuery("#bulk-metadata-editor-append-field").hide(300);
+	    jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
 	}
     });
     jQuery("#changesRadio-append").change(function(){
@@ -73,9 +76,20 @@ jQuery(document).ready(function() {
 	    jQuery('#bulk-metadata-editor-search-field').hide(300);
 	    jQuery('#bulk-metadata-editor-replace-field').hide(300);
 	    jQuery('#regexp-field').hide(300);
-	    jQuery("#bulk-metadata-editor-append-field").show(300);
 	    jQuery("#bulk-metadata-editor-add-field").hide(300);
+	    jQuery("#bulk-metadata-editor-append-field").show(300);
+	    jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
 	}
+    });
+    jQuery("#changesRadio-deduplicate").change(function(){
+        if(this.checked) {
+            jQuery('#bulk-metadata-editor-search-field').hide(300);
+            jQuery('#bulk-metadata-editor-replace-field').hide(300);
+            jQuery('#regexp-field').hide(300);
+            jQuery("#bulk-metadata-editor-add-field").hide(300);
+            jQuery("#bulk-metadata-editor-append-field").hide(300);
+            jQuery("#bulk-metadata-editor-deduplicate-field").show(300);
+        }
     });
     jQuery("#changesRadio-delete").change(function(){
 	if(this.checked) {
@@ -84,6 +98,7 @@ jQuery(document).ready(function() {
 	    jQuery('#regexp-field').hide(300);
 	    jQuery("#bulk-metadata-editor-append-field").hide(300);
 	    jQuery("#bulk-metadata-editor-add-field").hide(300);
+	    jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
 	}
     });
 
@@ -119,13 +134,13 @@ jQuery(document).ready(function() {
 		jQuery('#itemPreviewDiv').html(r.join(""));
 
 		jQuery("#show-more-items").click(showMoreItems);
-		
+
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
 		    alert('The items preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can\'t preview them all for you.');
 		else
-		    alert('Error generating preview! :(')
+		    alert('Error generating preview! :(');
 
 	    },
 	    complete: function(data,status) {
@@ -182,13 +197,13 @@ jQuery(document).ready(function() {
 		jQuery('#fieldPreviewDiv').html(r.join(""));
 
 		jQuery("#show-more-fields").click(showMoreFields);
-		
+
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
 		    alert('The fields preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can\'t preview them all for you.');
 		else
-		    alert('Error generating preview! :(')
+		    alert('Error generating preview! :(');
 
 	    },
 	    complete: function(data,status) {
@@ -246,7 +261,7 @@ jQuery(document).ready(function() {
 		if(errorstring=="timeout")
 		    alert('The changes preview request is taking too long! You must be trying to make a ton of changes at once. Sorry we can\'t preview them all for you.');
 		else
-		    alert('Error generating preview! :(')
+		    alert('Error generating preview! :(');
 
 	    },
 	    complete: function(data,status) {

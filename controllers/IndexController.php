@@ -158,9 +158,9 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
      * Perform the edits specified by the form input.
      *
      * This function calls the matching subroutines
-+     * with no maximum number of results, and 
-     * alerts the changes subroutine to perform the 
-     * changes rather than just displaying them. 
+     * with no maximum number of results, and
+     * alerts the changes subroutine to perform the
+     * changes rather than just displaying them.
      */
     private function _perform()
     {
@@ -357,6 +357,19 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	    }
 
 	  if($max>0 and $j>$max) break;
+
+        // Regroup fields by element and deduplicate them before processing.
+        if ($_REQUEST['changesRadio'] == 'deduplicate') {
+            $fieldsByElement = array();
+            foreach ($fieldItem as $field) {
+                $fieldsByElement[$field['elementID']][$field['id']] = $field['value'];
+            }
+            $deduplicatedFieldsByElement = array();
+            foreach ($fieldsByElement  as $key => $element) {
+                $deduplicatedFieldsByElement[$key] = array_unique(array_filter(array_map('trim', $element)));
+            }
+        }
+
 	  foreach($fieldItem as $field)
 	    {
 	      $replaceType="normal";
@@ -517,6 +530,39 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 		    }
 		  $made[]=$field['elementID'];
 		  break;
+
+        case 'deduplicate':
+            try {
+                $element = $itemObj->getElementById($field['elementID']);
+                $eText = get_record_by_id('ElementText',$field['id']);
+            } catch (Exception $e) {
+                throw $e;
+            }
+
+            if (empty($item['title']) || empty($element) || empty($eText)) {
+                throw new Exception('Error retrieving item data for deduplication.');
+            }
+
+            if (!isset($deduplicatedFieldsByElement[$element->id][$field['id']])) {
+                $new = '';
+                $changes[] = array(
+                    'item' => $item['title'],
+                    'field' => $element->name,
+                    'old' => $eText->text,
+                    'new' => 'null',
+                );
+                if ($perform) {
+                    try {
+                        $eText->delete();
+                    } catch (Exception $e) {
+                        throw $e;
+                    }
+                }
+            }
+
+            $j++;
+            break;
+
 		} //end switch
 
 	    } //end field item loop

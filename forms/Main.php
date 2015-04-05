@@ -174,8 +174,9 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 					  'replace'=>'Search and replace text',
 					  'add'=>'Add a new metadatum in the selected field',
 					  'append'=>'Append text to existing metadata in the selected fields',
-					  'delete'=>'Delete all existing metadata in the selected fields'	  
-					  )
+					  'deduplicate' => 'Deduplicate and remove empty metadata in the selected fields',
+					  'delete'=>'Delete all existing metadata in the selected fields'
+					)
 							   )
 			  );
 
