@@ -297,7 +297,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				   ));
 
 
-      if(version_compare('2.2',OMEKA_VERSION))
+      if(!version_compare('2.2.1',OMEKA_VERSION))
           $this->addElement('hash','bulk_editor_token');
       
       $this->addElement('submit', 'performButton', array(
