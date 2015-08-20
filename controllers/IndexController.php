@@ -40,7 +40,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
       $this->view->form_compare_options = $this->_getFormCompareOptions();
 
-      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
+v      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
       try{
 	$this->view->form = new BulkMetadataEditor_Form_Main();
       }catch(Exception $e) {
@@ -85,8 +85,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	$this->view->items = array(array("Error",$e->getMessage(),"",""));
       }
     }
-
-
 
     /**
      * Retrieves number of selected items for preview.
@@ -678,8 +676,8 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 			$matched2=true;
 		    }
 
-		  //if none of the metadata entries for this field match the rule
-		  if(!$matched2) 
+		  //if none of the metadata entries for this field match the rule (unless the rule is negative and there are no entries, which should match)
+		  if( !($matched2) && !($neg && empty($compareTexts) ) ) 
 		    {
 		      //then this item will not be selected
 		      $matched=false;
