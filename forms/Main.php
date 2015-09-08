@@ -88,7 +88,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 
 
       $this->addElement('button', 'previewItemsButton', array(
-	    'label'=>'Preview Selected Items',
+	    'label'=>__('Preview Selected Items'),
 	    'class' => 'preview-button',
 	    'id' => 'preview-items-button',
 	    'order'         => 4
@@ -96,7 +96,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			);
 
       $this->addElement('button', 'hideItemPreview', array(
-	    'label'=>'Hide Item Preview',
+	    'label'=>__('Hide Item Preview'),
 	    'id' => 'hide-item-preview',
 	    'class' => 'hide-preview',
 	    'order'         => 5
@@ -128,7 +128,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			);
       
       $this->addElement('button', 'previewFieldsButton', array(
-	    'label'=>'Preview Selected Fields',
+	    'label'=>__('Preview Selected Fields'),
 	    'class' => 'preview-button',
 	    'id' => 'preview-fields-button',
 	    'order'         => 8
@@ -136,7 +136,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			);
 
       $this->addElement('button', 'hideFieldPreview', array(
-	    'label'=>'Hide Field Preview',
+	    'label'=>__('Hide Field Preview'),
 	    'class' => 'hide-preview',
 	    'id' => 'hide-field-preview',
 	    'order'         => 9
@@ -171,17 +171,17 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 					      )
 				     ),
 	    'multiOptions'       => array(
-					  'replace'=>'Search and replace text',
-					  'add'=>'Add a new metadatum in the selected field',
-					  'append'=>'Append text to existing metadata in the selected fields',
-					  'delete'=>'Delete all existing metadata in the selected fields'	  
+					  'replace'=>__('Search and replace text'),
+					  'add'=>__('Add a new metadatum in the selected field'),
+					  'append'=>__('Append text to existing metadata in the selected fields'),
+					  'delete'=>__('Delete all existing metadata in the selected fields')
 					  )
 							   )
 			  );
 
  
       $this->addElement('button', 'previewChangesButton', array(
-	    'label'=>'Preview Changes',
+	    'label'=>__('Preview Changes'),
 	    'id' => 'preview-changes-button',
 	    'class' => 'preview-button',
 	    'order'         => 12
@@ -189,7 +189,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			);
 
       $this->addElement('button', 'hideChangesPreview', array(
-	    'label'=>'Hide Change Preview',
+	    'label'=>__('Hide Change Preview'),
 	    'class' => 'hide-preview',
 	    'id' => 'hide-changes-preview',
 	    'order'         => 13
@@ -216,38 +216,38 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
       //gotta create a new element that can be hidden and shown and junk?
 
       $this->addElement('text','bmeSearch', array(
-	        'label'=>'Search for:',
+	        'label'=>__('Search for:'),
 		'id'=>'bulk-metadata-editor-search',
 		'class'=>'elementHidden',
-		'description'=>'Input text you want to search for '
+		'description'=>__('Input text you want to search for ')
 						       )
 			);
       $this->addElement('text','bmeReplace', array(
-	        'label'=>'Replace with:',
+	        'label'=>__('Replace with:'),
 		'id'=>'bulk-metadata-editor-replace',
 		'class'=>'elementHidden',
-		'description'=>'Input text you want to replace with '
+		'description'=>__('Input text you want to replace with ')
 						       )
 			);
       $this->addElement('checkbox','regexp', array(
-	        'description'=>'Use regular expressions',
+	        'description'=>__('Use regular expressions'),
 		'id'=>'regexp',
 		'class'=>'elementHidden',
 		'value'=>'true'
 						       )
 			);
       $this->addElement('text','bmeAdd', array(
-	        'label'=>'Text to Add',
+	        'label'=>__('Text to Add'),
 		'id'=>'bulk-metadata-editor-add',
 		'class'=>'elementHidden',
-		'description'=>'Input text you want to add as metadata'
+		'description'=>__('Input text you want to add as metadata')
 						       )
 			);
       $this->addElement('text','bmeAppend', array(
-	        'label'=>'Text to Append',
+	        'label'=>__('Text to Append'),
 		'id'=>'bulk-metadata-editor-append',
 		'class'=>'elementHidden',
-		'description'=>'Input text you want to append to metadata'
+		'description'=>__('Input text you want to append to metadata')
 						       )
 			);
 
@@ -264,7 +264,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				   ), 
 			     'bmeItemsSet',
 			     array(
-				   'legend'=>'Step 1: Select Items',
+				   'legend'=>__('Step 1: Select Items'),
 				   'class'=>'bmeFieldset'
 				   ));
       
@@ -275,7 +275,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				   'fieldPreviewDiv'
 				   ), 'bmeFieldsSet',
 			     array(
-				   'legend'=>'Step 2: Select Fields',
+				   'legend'=>__('Step 2: Select Fields'),
 				   'class'=>'bmeFieldset'
 				   ));
       
@@ -291,8 +291,8 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				   'changesPreviewDiv'
 				    ), 'bmeChangesSet',
 			     array(
-				   'legend'=>'Step 3: Define Changes',
-				   'description'=>'Define Edits to Apply',
+				   'legend'=>__('Step 3: Define Changes'),
+				   'description'=>__('Define Edits to Apply'),
 				   'class'=>'bmeFieldset'
 				   ));
 
@@ -301,7 +301,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
           $this->addElement('hash','bulk_editor_token');
       
       $this->addElement('submit', 'performButton', array(
-	    'label'=>'Apply Edits Now',
+	    'label'=>__('Apply Edits Now'),
 	    'order'         => 99
 							 )
 			);
@@ -352,7 +352,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
     private function _getCollectionOptions()
     {
       $collections = get_records('Collection',array(),'0');
-      $options = array('0'=>'All Collections');
+      $options = array('0'=>__('All Collections'));
       foreach ($collections as $collection)
 	{
 	  $titles = $collection->getElementTexts('Dublin Core','Title');

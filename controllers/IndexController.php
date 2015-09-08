@@ -35,7 +35,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     public function indexAction()
     {
       $flashMessenger = $this->_helper->FlashMessenger;
-      $message = 'The requested changes have been applied to the database';
+      $message = __('The requested changes have been applied to the database');
       $status = 'success';
 
       $this->view->form_compare_options = $this->_getFormCompareOptions();
@@ -44,7 +44,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
       try{
 	$this->view->form = new BulkMetadataEditor_Form_Main();
       }catch(Exception $e) {
-	$flashMessenger->addMessage('Error loading metadata editing form: '.$e->getMessage(),'error');
+	$flashMessenger->addMessage(__('Error loading metadata editing form: ').$e->getMessage(),'error');
       }
 
       //if the form was submitted
@@ -247,7 +247,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     private function _getFormCollectionOptions()
     {
       $collections = get_records('Collection',array(),'0');
-      $options = array('0'=>'All Collections');
+      $options = array('0'=>__('All Collections'));
       foreach ($collections as $collection)
 	{
 	  $titles = $collection->getElementTexts('Dublin Core','Title');
@@ -273,11 +273,11 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     private function _getFormCompareOptions()
     {
       $options = array(
-		       'exact' => 'is exactly',
-		       'contains' => 'contains',
-		       '!exact' => 'is not exactly',
-		       '!contains' => 'does not contain',
-		       'regexp'=>'matches regular expression'
+		       'exact' => __('is exactly'),
+		       'contains' => __('contains'),
+		       '!exact' => __('is not exactly'),
+		       '!contains' => __('does not contain'),
+		       'regexp'=>__('matches regular expression')
 		       );
         return $options;
     }
@@ -316,7 +316,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     private function _getChanges($items,$fields,$max,$perform)
     {
       if(!isset($_REQUEST['changesRadio']))
-	throw new Exception("Please select an action to perform");
+	throw new Exception(__("Please select an action to perform"));
       $changes=array();
 
       $j=1;
@@ -369,7 +369,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
 		  //expect a 'find' and 'replace' variable
 		  if(!isset($_REQUEST['bmeSearch'])||!isset($_REQUEST['bmeReplace']))
-		    throw new Exception("Please define search and replace terms");//TODO:proper error handling
+		    throw new Exception(__("Please define search and replace terms"));//TODO:proper error handling
 
 		  $element=$itemObj->getElementById($field['elementID']);
 		  //$eText = $itemObj->getElementTextsByRecord($element);
@@ -421,7 +421,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 		  }
 
 		  if(empty($item['title']) || empty($element->name) || empty($eText->text) ) {
-		    throw new Exception("Error retrieving item data for deletion.");
+		    throw new Exception(__("Error retrieving item data for deletion."));
 		  }
 
 		  $new = '';
@@ -444,7 +444,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	      
 		case 'append':
 		  if(!isset($_REQUEST['bmeAppend']))
-		    throw new Exception("Please input some text to append");
+		    throw new Exception(__("Please input some text to append"));
 
 		  if(!isset($_REQUEST['delimiter']))
 		    $_REQUEST['delimiter']=' ';
@@ -485,7 +485,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
 		case 'add':
 		  if(!isset($_REQUEST['bmeAdd']))
-		    throw new Exception('Please input some text to add.');
+		    throw new Exception(__('Please input some text to add.'));
 
 		  try{
 		    $element=$itemObj->getElementById($field['elementID']);
@@ -534,9 +534,9 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	  $j++;
 	  if ($leftover>0)
 	    {
-	      $title='<strong>...and changes for '.$leftover.' more items</strong>   ';
+	      $title='<strong>' . __('...and changes for %s more items', $leftover) . '</strong>   ';
 	      if($max<50)
-		$title.='<a id="show-more-changes" href="">Show More</a>';
+		$title.='<a id="show-more-changes" href="">' . __('Show More') . '</a>';
 	      $changes[]=array(
 			       'item'=>$title,
 			       'field'=>'',
@@ -667,7 +667,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 		      $match = preg_match($rule['search'],$comparator);
 		      
 		      if ($match===false)
-			throw new Exception('Unable to parse regular expression');//TODO proper error handling
+			throw new Exception(__('Unable to parse regular expression'));//TODO proper error handling
 
 		      //negate if necessary
 		      if($rule['neg'])
@@ -728,7 +728,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	    {
 	      $title = 'plus '.$leftover.' more items. ';
 	      if($max<90)
-		$title.=' <a id="show-more-items" href="">Show More</a>';
+		$title.=' <a id="show-more-items" href="">' . __('Show More') . '</a>';
 	      $newitems[]=array(
 				'title'=>$title,
 				'description'=>'',
@@ -740,7 +740,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
       if(count($newitems)==0)
 	$newitems = array(array(
-				'title'=>'No matching items found',
+				'title'=>__('No matching items found'),
 				'description'=>'',
 				'type'=>'',
 				'id'=>''
@@ -759,10 +759,10 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     private function _pullItemData($item)
     {
       if(! $item instanceOf Item)
-	throw new Exception("Cannot pull item data from a non-item");
-      $title = 'untitled';
-      $description = 'no description given';
-      $typename="undefined";
+	throw new Exception(__("Cannot pull item data from a non-item"));
+      $title = __('untitled');
+      $description = __('no description given');
+      $typename=__("undefined");
       $titles = $item->getElementTexts('Dublin Core','Title');
       if(count($titles)>0)
 	$title=$titles[0]->text;
@@ -867,9 +867,9 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	  $leftover = count($items)-$i;
 	  if ($leftover>0)
 	    {
-	      $title = '...and corresponding fields from '.$leftover.' more items.  ';
+	      $title = __('...and corresponding fields from %s more items.  ', $leftover);
 		if($max<40)
-		  $title.='<a id="show-more-fields" href="">Show More</a>';
+		  $title.='<a id="show-more-fields" href="">' . __('Show More') . '</a>';
 	      $newfields[]=array('title'=>$title);
 	    }
 	}
