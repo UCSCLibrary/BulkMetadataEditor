@@ -6,6 +6,7 @@ jQuery(document).ready(function() {
     jQuery("#changesRadio-add-field").after(jQuery('#bulk-metadata-editor-add-field'));
     jQuery("#changesRadio-append-field").after(jQuery('#bulk-metadata-editor-append-field'));
     jQuery("#changesRadio-deduplicate-field").after(jQuery('#bulk-metadata-editor-deduplicate-field'));
+    jQuery("#changesRadio-deduplicate-files-field").after(jQuery('#bulk-metadata-editor-deduplicate-files-field'));
 
 
     jQuery("#preview-items-button").wrap('<div class = "previewButtonDiv"></div>');
@@ -58,7 +59,8 @@ jQuery(document).ready(function() {
 	    jQuery('#regexp-field').show(300);
 	    jQuery("#bulk-metadata-editor-add-field").hide(300);
 	    jQuery("#bulk-metadata-editor-append-field").hide(300);
-	    jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
+        jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
+        jQuery("#bulk-metadata-editor-deduplicate-files-field").hide(300);
 	}
     });
     jQuery("#changesRadio-add").change(function(){
@@ -69,6 +71,7 @@ jQuery(document).ready(function() {
 	    jQuery("#bulk-metadata-editor-add-field").show(300);
 	    jQuery("#bulk-metadata-editor-append-field").hide(300);
 	    jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
+        jQuery("#bulk-metadata-editor-deduplicate-files-field").hide(300);
 	}
     });
     jQuery("#changesRadio-append").change(function(){
@@ -79,6 +82,7 @@ jQuery(document).ready(function() {
 	    jQuery("#bulk-metadata-editor-add-field").hide(300);
 	    jQuery("#bulk-metadata-editor-append-field").show(300);
 	    jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
+        jQuery("#bulk-metadata-editor-deduplicate-files-field").hide(300);
 	}
     });
     jQuery("#changesRadio-deduplicate").change(function(){
@@ -89,6 +93,18 @@ jQuery(document).ready(function() {
             jQuery("#bulk-metadata-editor-add-field").hide(300);
             jQuery("#bulk-metadata-editor-append-field").hide(300);
             jQuery("#bulk-metadata-editor-deduplicate-field").show(300);
+            jQuery("#bulk-metadata-editor-deduplicate-files-field").hide(300);
+        }
+    });
+    jQuery("#changesRadio-deduplicate-files").change(function(){
+        if(this.checked) {
+            jQuery('#bulk-metadata-editor-search-field').hide(300);
+            jQuery('#bulk-metadata-editor-replace-field').hide(300);
+            jQuery('#regexp-field').hide(300);
+            jQuery("#bulk-metadata-editor-add-field").hide(300);
+            jQuery("#bulk-metadata-editor-append-field").hide(300);
+            jQuery("#bulk-metadata-editor-deduplicate-field").hide(300);
+            jQuery("#bulk-metadata-editor-deduplicate-files-field").show(300);
         }
     });
     jQuery("#changesRadio-delete").change(function(){

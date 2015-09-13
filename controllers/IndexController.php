@@ -370,6 +370,13 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
             }
         }
 
+        // Deduplicate files ().
+        if ($_REQUEST['changesRadio'] == 'deduplicate-files') {
+            $this->_deduplicateFiles($item);
+            // No field to change, so process the next item.
+            continue;
+        }
+
 	  foreach($fieldItem as $field)
 	    {
 	      $replaceType="normal";
@@ -561,6 +568,10 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
             }
 
             $j++;
+            break;
+
+        case 'deduplicate-files':
+            // Nothing to do here.
             break;
 
 		} //end switch
@@ -924,5 +935,37 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
     }
 
-    
+    /**
+     * Remove all files of an item with the same hash, except the first.
+     *
+     * @param array $item An item array
+     * @return boolean Success or fail.
+     */
+    protected function _deduplicateFiles($item)
+    {
+        // TODO Use a main sql to avoid to load each file.
+        $item = get_record_by_id('Item', $item['id']);
+        if (empty($item)) {
+            return false;
+        }
+
+        // Create the list of hashs.
+        $hashs = array();
+        $toDelete = array();
+        $files = $item->Files;
+        foreach ($files as $key => $file) {
+            if (in_array($file->authentication, $hashs)) {
+                $toDelete[] = $file;
+            }
+            // New hash.
+            else {
+                $hashs[] = $file->authentication;
+            }
+        }
+        foreach ($toDelete as $file) {
+            $file->delete();
+        }
+
+        return true;
+    }
 }
