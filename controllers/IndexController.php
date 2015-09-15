@@ -40,7 +40,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
       $this->view->form_compare_options = $this->_getFormCompareOptions();
 
-v      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
+      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
       try{
 	$this->view->form = new BulkMetadataEditor_Form_Main();
       }catch(Exception $e) {
