@@ -1,0 +1,262 @@
+# Translation for the BulkMetadataEditor plugin for Omeka.
+# Copyright (C) 2015 BibLibre
+# This file is distributed under the same license as the Omeka package.
+# Julian Maurice <julian.maurice@biblibre.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: BulkMetadataEditor\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-08 15:10+0200\n"
+"PO-Revision-Date: 2015-09-08 15:17+0200\n"
+"Last-Translator: Julian Maurice <julian.maurice@biblibre.com>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: BulkMetadataEditorPlugin.php:74
+msgid "Bulk Editor"
+msgstr "Modification par lot"
+
+#: controllers/IndexController.php:38
+msgid "The requested changes have been applied to the database"
+msgstr "Les modifications demandées ont été appliquées à la base de données"
+
+#: controllers/IndexController.php:47
+msgid "Error loading metadata editing form: "
+msgstr "Erreur pendant le chargement du formulaire d'édition des métadonnées: "
+
+#: controllers/IndexController.php:250 forms/Main.php:355
+msgid "All Collections"
+msgstr "Toutes les collections"
+
+#: controllers/IndexController.php:278 views/admin/FormRulebox.php:34
+msgid "is not exactly"
+msgstr "n'est pas exactement"
+
+#: controllers/IndexController.php:280 views/admin/FormRulebox.php:36
+msgid "matches regular expression"
+msgstr "correspond à l'expression régulière"
+
+#: controllers/IndexController.php:319
+msgid "Please select an action to perform"
+msgstr "Sélectionnez une action à effectuer"
+
+#: controllers/IndexController.php:372
+msgid "Please define search and replace terms"
+msgstr "Définissez les termes à chercher et remplacer"
+
+#: controllers/IndexController.php:424
+msgid "Error retrieving item data for deletion."
+msgstr ""
+"Erreur pendant la récupération des données de contenu pour la suppression"
+
+#: controllers/IndexController.php:447
+msgid "Please input some text to append"
+msgstr "Entrez le texte à ajouter"
+
+#: controllers/IndexController.php:488
+msgid "Please input some text to add."
+msgstr "Entrez le texte à ajouter"
+
+#: controllers/IndexController.php:537
+#, php-format
+msgid "...and changes for %s more items"
+msgstr "...et les modification pour %s contenus supplémentaires"
+
+#: controllers/IndexController.php:539 controllers/IndexController.php:731
+#: controllers/IndexController.php:872
+msgid "Show More"
+msgstr "Voir plus"
+
+#: controllers/IndexController.php:670
+msgid "Unable to parse regular expression"
+msgstr "Impossible d'analyser l'expression régulière"
+
+#: controllers/IndexController.php:743
+msgid "No matching items found"
+msgstr "Aucun contenu correspondant trouvé"
+
+#: controllers/IndexController.php:762
+msgid "Cannot pull item data from a non-item"
+msgstr ""
+"Impossible de récupérer des données de contenu depuis un objet qui n'est pas "
+"un contenu"
+
+#: controllers/IndexController.php:763
+msgid "untitled"
+msgstr "sans titre"
+
+#: controllers/IndexController.php:764
+msgid "no description given"
+msgstr "aucune description"
+
+#: controllers/IndexController.php:765
+msgid "undefined"
+msgstr "indéfini"
+
+#: controllers/IndexController.php:870
+#, php-format
+msgid "...and corresponding fields from %s more items.  "
+msgstr "...et les champs correspondants de %s contenus supplémentaires.  "
+
+#: forms/Main.php:55
+msgid "Edit items from this collection"
+msgstr "Modifier les contenus de cette collection"
+
+#: forms/Main.php:65
+msgid "Select Items by Metadata"
+msgstr "Sélectionner les contenus selon leurs éléments"
+
+#: forms/Main.php:67
+msgid "Select items to edit based on their associated metadata elements"
+msgstr ""
+"Sélectionner les contenus à modifier en fonction de leurs éléments associés"
+
+#: forms/Main.php:91
+msgid "Preview Selected Items"
+msgstr "Prévisualiser les contenus sélectionnés"
+
+#: forms/Main.php:99
+msgid "Hide Item Preview"
+msgstr "Cacher la prévisualisation des contenus"
+
+#: forms/Main.php:121
+msgid "Metadata elements"
+msgstr "Éléments"
+
+#: forms/Main.php:122
+msgid ""
+"Select the metadata elements you would like to edit. You can select multiple "
+"values. (default: all)"
+msgstr ""
+"Sélectionnez les éléments que vous voulez modifier. Vous pouvez sélectionner "
+"plusieurs valeurs. (défaut: tous)"
+
+#: forms/Main.php:131
+msgid "Preview Selected Fields"
+msgstr "Prévisualiser les champs sélectionnés"
+
+#: forms/Main.php:139
+msgid "Hide Field Preview"
+msgstr "Cacher la prévisualisation des champs"
+
+#: forms/Main.php:161
+msgid "Edit Type"
+msgstr "Type de modification"
+
+#: forms/Main.php:162
+msgid "Choose the type of edit you would like to perform"
+msgstr "Choisissez le type de modification que vous voulez effectuer"
+
+#: forms/Main.php:174
+msgid "Search and replace text"
+msgstr "Chercher et remplacer du texte"
+
+#: forms/Main.php:175
+msgid "Add a new metadatum in the selected field"
+msgstr "Ajouter une nouvelle donnée dans les champs sélectionnés"
+
+#: forms/Main.php:176
+msgid "Append text to existing metadata in the selected fields"
+msgstr ""
+"Ajouter du texte à la fin des données existantes dans les champs sélectionnés"
+
+#: forms/Main.php:177
+msgid "Delete all existing metadata in the selected fields"
+msgstr "Supprimer toutes les données existantes dans les champs sélectionnés"
+
+#: forms/Main.php:184
+msgid "Preview Changes"
+msgstr "Prévisualiser les modifications"
+
+#: forms/Main.php:192
+msgid "Hide Change Preview"
+msgstr "Cacher la prévisualisation des modifications"
+
+#: forms/Main.php:219 views/admin/index/index_old.php:105
+msgid "Search for:"
+msgstr "Chercher:"
+
+#: forms/Main.php:222 views/admin/index/index_old.php:109
+msgid "Input text you want to search for "
+msgstr "Saisissez le texte que vous voulez chercher"
+
+#: forms/Main.php:226 views/admin/index/index_old.php:114
+msgid "Replace with:"
+msgstr "Remplacer par:"
+
+#: forms/Main.php:229 views/admin/index/index_old.php:118
+msgid "Input text you want to replace with "
+msgstr "Saisissez le texte à utiliser pour le remplacement"
+
+#: forms/Main.php:233
+msgid "Use regular expressions"
+msgstr "Utiliser des expressions régulières"
+
+#: forms/Main.php:240
+msgid "Text to Add"
+msgstr "Texte à ajouter"
+
+#: forms/Main.php:243 views/admin/index/index_old.php:136
+msgid "Input text you want to add as metadata"
+msgstr "Saisissez le texte que vous voulez ajouter"
+
+#: forms/Main.php:247
+msgid "Text to Append"
+msgstr "Texte à ajouter"
+
+#: forms/Main.php:250 views/admin/index/index_old.php:151
+msgid "Input text you want to append to metadata"
+msgstr "Saisissez le texte que vous voulez ajouter"
+
+#: forms/Main.php:267
+msgid "Step 1: Select Items"
+msgstr "Étape 1: Sélectionnez les contenus"
+
+#: forms/Main.php:278
+msgid "Step 2: Select Fields"
+msgstr "Étape 2: Sélectionnez les champs"
+
+#: forms/Main.php:294
+msgid "Step 3: Define Changes"
+msgstr "Étape 3: Définissez les modifications"
+
+#: forms/Main.php:295
+msgid "Define Edits to Apply"
+msgstr "Définissez les modifications à appliquer"
+
+#: forms/Main.php:304
+msgid "Apply Edits Now"
+msgstr "Appliquer les modifications maintenant"
+
+#: views/admin/index/index.php:4
+msgid "Bulk Metadata Editor"
+msgstr "Modification de contenus par lot"
+
+#: views/admin/index/index_old.php:132
+msgid "Text to Add:"
+msgstr "Texte à ajouter:"
+
+#: views/admin/index/index_old.php:147
+msgid "Text to Append:"
+msgstr "Texte à ajouter:"
+
+#: views/admin/FormRulebox.php:43
+msgid ""
+"Only select items which also meet the following criteria: (use * as a "
+"wildcard character)"
+msgstr ""
+"Sélectionner seulement les contenus qui satisfont aussi les critères "
+"suivants: (utilisez * comme caractère joker)"
+
+#: views/admin/FormRulebox.php:58
+msgid "Match Case"
+msgstr "Respecter la casse"
+
+#: views/admin/FormRulebox.php:65
+msgid "Add Another Rule"
+msgstr "Ajouter une autre règle"

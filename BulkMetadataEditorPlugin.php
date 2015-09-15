@@ -24,12 +24,17 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
     /**
      * @var array Hooks for the plugin.
      */
-    protected $_hooks = array('define_acl','admin_head');
+    protected $_hooks = array('define_acl','admin_head','initialize');
 
     /**
      * @var array Filters for the plugin.
      */
     protected $_filters = array('admin_navigation_main');
+
+    public function hookInitialize()
+    {
+      add_translation_source(dirname(__FILE__) . '/languages');
+    }
 
     /**
      * Queue css and javascript files when admin section loads
