@@ -29,18 +29,18 @@ foreach ($elements as $element) {
 
 
 $form_compare_options = array(
-			      'exact' => 'is exactly',
-			      'contains' => 'contains',
-			      '!exact' => 'is not exactly',
-			      '!contains' => 'does not contain',
-			      'regexp'=>'matches regular expression'
+			      'exact' => __('is exactly'),
+			      'contains' => __('contains'),
+			      '!exact' => __('is not exactly'),
+			      '!contains' => __('does not contain'),
+			      'regexp'=>__('matches regular expression')
 			      );
 
 
 ?>
 <div id="item-meta-selects" style="display:none;">
    <div class="field" id="item-meta-select">
-   <p>Only select items which also meet the following criteria: (use * as a wildcard character)</p>
+   <p><?php echo __('Only select items which also meet the following criteria: (use * as a wildcard character)'); ?></p>
    <div id="item-rule-boxes">
    <div id="item-rule-box" class="item-rule-box" style="clear:left;">
    <div class="inputs three columns alpha">
@@ -55,13 +55,13 @@ $form_compare_options = array(
   <div class="removeRule">[x]</div>
    <div class="field">
    <div class="inputs two columns omega">
-  <?php echo $this->formCheckbox('bulk-metadata-editor-case',"Match Case",array('class'=>'bulk-metadata-editor-case')) ?><label for="bulk-metadata-editor-case"> Match Case </label>
+  <?php echo $this->formCheckbox('bulk-metadata-editor-case',"Match Case",array('class'=>'bulk-metadata-editor-case')) ?><label for="bulk-metadata-editor-case"> <?php echo __('Match Case'); ?> </label>
    </div>
    </div>
    </div>	     
    </div>
    </div> 
    <div class="field">
-   <button id="add-rule">Add Another Rule</button>
+   <button id="add-rule"><?php echo __('Add Another Rule'); ?></button>
    </div>
    </div>
