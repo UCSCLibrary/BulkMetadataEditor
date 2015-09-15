@@ -156,9 +156,9 @@ v      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
      * Perform the edits specified by the form input.
      *
      * This function calls the matching subroutines
-+     * with no maximum number of results, and 
-     * alerts the changes subroutine to perform the 
-     * changes rather than just displaying them. 
+     * with no maximum number of results, and
+     * alerts the changes subroutine to perform the
+     * changes rather than just displaying them.
      */
     private function _perform()
     {
@@ -355,6 +355,26 @@ v      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
 	    }
 
 	  if($max>0 and $j>$max) break;
+
+        // Regroup fields by element and deduplicate them before processing.
+        if ($_REQUEST['changesRadio'] == 'deduplicate') {
+            $fieldsByElement = array();
+            foreach ($fieldItem as $field) {
+                $fieldsByElement[$field['elementID']][$field['id']] = $field['value'];
+            }
+            $deduplicatedFieldsByElement = array();
+            foreach ($fieldsByElement  as $key => $element) {
+                $deduplicatedFieldsByElement[$key] = array_unique(array_filter(array_map('trim', $element)));
+            }
+        }
+
+        // Deduplicate files ().
+        if ($_REQUEST['changesRadio'] == 'deduplicate-files') {
+            $this->_deduplicateFiles($item);
+            // No field to change, so process the next item.
+            continue;
+        }
+
 	  foreach($fieldItem as $field)
 	    {
 	      $replaceType="normal";
@@ -515,6 +535,43 @@ v      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
 		    }
 		  $made[]=$field['elementID'];
 		  break;
+
+        case 'deduplicate':
+            try {
+                $element = $itemObj->getElementById($field['elementID']);
+                $eText = get_record_by_id('ElementText',$field['id']);
+            } catch (Exception $e) {
+                throw $e;
+            }
+
+            if (empty($item['title']) || empty($element) || empty($eText)) {
+                throw new Exception('Error retrieving item data for deduplication.');
+            }
+
+            if (!isset($deduplicatedFieldsByElement[$element->id][$field['id']])) {
+                $new = '';
+                $changes[] = array(
+                    'item' => $item['title'],
+                    'field' => $element->name,
+                    'old' => $eText->text,
+                    'new' => 'null',
+                );
+                if ($perform) {
+                    try {
+                        $eText->delete();
+                    } catch (Exception $e) {
+                        throw $e;
+                    }
+                }
+            }
+
+            $j++;
+            break;
+
+        case 'deduplicate-files':
+            // Nothing to do here.
+            break;
+
 		} //end switch
 
 	    } //end field item loop
@@ -876,5 +933,37 @@ v      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
 
     }
 
-    
+    /**
+     * Remove all files of an item with the same hash, except the first.
+     *
+     * @param array $item An item array
+     * @return boolean Success or fail.
+     */
+    protected function _deduplicateFiles($item)
+    {
+        // TODO Use a main sql to avoid to load each file.
+        $item = get_record_by_id('Item', $item['id']);
+        if (empty($item)) {
+            return false;
+        }
+
+        // Create the list of hashs.
+        $hashs = array();
+        $toDelete = array();
+        $files = $item->Files;
+        foreach ($files as $key => $file) {
+            if (in_array($file->authentication, $hashs)) {
+                $toDelete[] = $file;
+            }
+            // New hash.
+            else {
+                $hashs[] = $file->authentication;
+            }
+        }
+        foreach ($toDelete as $file) {
+            $file->delete();
+        }
+
+        return true;
+    }
 }
