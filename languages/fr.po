@@ -17,7 +17,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: BulkMetadataEditorPlugin.php:74
+#: BulkMetadataEditorPlugin.php:47
+msgid "Please wait..."
+msgstr "Veuillez patienter..."
+
+#: BulkMetadataEditorPlugin.php:52
+msgid "Field"
+msgstr "Champ"
+
+#: BulkMetadataEditorPlugin.php:53
+msgid "Old Value"
+msgstr "Ancienne Valeur"
+
+#: BulkMetadataEditorPlugin.php:54
+msgid "New Value"
+msgstr "Nouvelle Valeur"
+
+#: BulkMetadataEditorPlugin.php:55
+msgid "Error generating preview! :("
+msgstr "Erreur pendant la génération de la prévisualisation! :("
+
+#: BulkMetadataEditorPlugin.php:56
+msgid ""
+"Apologies, but we could not generate a preview at this time. You may be "
+"asking for too many changes at once."
+msgstr ""
+"Veuillez nous excuser, mais nous ne pouvons pas générer de prévisualisation "
+"pour le moment. Vous demandez peut-être trop de modifications à la fois."
+
+#: BulkMetadataEditorPlugin.php:57
+msgid ""
+"The items preview request is taking too long! You must be trying to select a "
+"ton of fields at once. Sorry we can't preview them all for you."
+msgstr ""
+"La requête de prévisualisation des contenus prend trop de temps! Vous "
+"essayez peut-être de sélectionner trop de champs à la fois. Désolé de ne pas "
+"pouvoir vous montrer la prévisualisation."
+
+#: BulkMetadataEditorPlugin.php:58
+msgid ""
+"The fields preview request is taking too long! You must be trying to select "
+"a ton of fields at once. Sorry we can't preview them all for you."
+msgstr ""
+"La requête de prévisualisation des champs prend trop de temps! Vous essayez "
+"peut-être de sélectionner trop de champs à la fois. Désolé de ne pas pouvoir "
+"vous montrer la prévisualisation."
+
+#: BulkMetadataEditorPlugin.php:59
+msgid ""
+"The changes preview request is taking too long! You must be trying to make a "
+"ton of changes at once. Sorry we can't preview them all for you."
+msgstr ""
+"La requête de prévisualisation des modifications prend trop de temps! Vous "
+"essayez peut-être d'effectuer trop de modifications à la fois. Désolé de ne "
+"pas pouvoir vous montrer la prévisualisation."
+
+#: BulkMetadataEditorPlugin.php:91
 msgid "Bulk Editor"
 msgstr "Modification par lot"
 
@@ -29,76 +84,76 @@ msgstr "Les modifications demandées ont été appliquées à la base de donnée
 msgid "Error loading metadata editing form: "
 msgstr "Erreur pendant le chargement du formulaire d'édition des métadonnées: "
 
-#: controllers/IndexController.php:250 forms/Main.php:355
+#: controllers/IndexController.php:248 forms/Main.php:352
 msgid "All Collections"
 msgstr "Toutes les collections"
 
-#: controllers/IndexController.php:278 views/admin/FormRulebox.php:34
+#: controllers/IndexController.php:276 views/admin/FormRulebox.php:34
 msgid "is not exactly"
 msgstr "n'est pas exactement"
 
-#: controllers/IndexController.php:280 views/admin/FormRulebox.php:36
+#: controllers/IndexController.php:278 views/admin/FormRulebox.php:36
 msgid "matches regular expression"
 msgstr "correspond à l'expression régulière"
 
-#: controllers/IndexController.php:319
+#: controllers/IndexController.php:317
 msgid "Please select an action to perform"
 msgstr "Sélectionnez une action à effectuer"
 
-#: controllers/IndexController.php:372
+#: controllers/IndexController.php:390
 msgid "Please define search and replace terms"
 msgstr "Définissez les termes à chercher et remplacer"
 
-#: controllers/IndexController.php:424
+#: controllers/IndexController.php:442
 msgid "Error retrieving item data for deletion."
 msgstr ""
 "Erreur pendant la récupération des données de contenu pour la suppression"
 
-#: controllers/IndexController.php:447
+#: controllers/IndexController.php:465
 msgid "Please input some text to append"
 msgstr "Entrez le texte à ajouter"
 
-#: controllers/IndexController.php:488
+#: controllers/IndexController.php:506
 msgid "Please input some text to add."
 msgstr "Entrez le texte à ajouter"
 
-#: controllers/IndexController.php:537
+#: controllers/IndexController.php:592
 #, php-format
 msgid "...and changes for %s more items"
 msgstr "...et les modification pour %s contenus supplémentaires"
 
-#: controllers/IndexController.php:539 controllers/IndexController.php:731
-#: controllers/IndexController.php:872
+#: controllers/IndexController.php:594 controllers/IndexController.php:786
+#: controllers/IndexController.php:927
 msgid "Show More"
 msgstr "Voir plus"
 
-#: controllers/IndexController.php:670
+#: controllers/IndexController.php:725
 msgid "Unable to parse regular expression"
 msgstr "Impossible d'analyser l'expression régulière"
 
-#: controllers/IndexController.php:743
+#: controllers/IndexController.php:798
 msgid "No matching items found"
 msgstr "Aucun contenu correspondant trouvé"
 
-#: controllers/IndexController.php:762
+#: controllers/IndexController.php:817
 msgid "Cannot pull item data from a non-item"
 msgstr ""
 "Impossible de récupérer des données de contenu depuis un objet qui n'est pas "
 "un contenu"
 
-#: controllers/IndexController.php:763
+#: controllers/IndexController.php:818
 msgid "untitled"
 msgstr "sans titre"
 
-#: controllers/IndexController.php:764
+#: controllers/IndexController.php:819
 msgid "no description given"
 msgstr "aucune description"
 
-#: controllers/IndexController.php:765
+#: controllers/IndexController.php:820
 msgid "undefined"
 msgstr "indéfini"
 
-#: controllers/IndexController.php:870
+#: controllers/IndexController.php:925
 #, php-format
 msgid "...and corresponding fields from %s more items.  "
 msgstr "...et les champs correspondants de %s contenus supplémentaires.  "
@@ -166,30 +221,38 @@ msgstr ""
 "Ajouter du texte à la fin des données existantes dans les champs sélectionnés"
 
 #: forms/Main.php:177
+msgid "Deduplicate and remove empty metadata in the selected fields"
+msgstr "Dédoublonner et supprimer les données vides dans les champs sélectionnés"
+
+#: forms/Main.php:178
+msgid "Deduplicate files of selected items by hash"
+msgstr "Dédoublonner les fichiers des contenus sélectionnés"
+
+#: forms/Main.php:179
 msgid "Delete all existing metadata in the selected fields"
 msgstr "Supprimer toutes les données existantes dans les champs sélectionnés"
 
-#: forms/Main.php:184
+#: forms/Main.php:186
 msgid "Preview Changes"
 msgstr "Prévisualiser les modifications"
 
-#: forms/Main.php:192
+#: forms/Main.php:194
 msgid "Hide Change Preview"
 msgstr "Cacher la prévisualisation des modifications"
 
-#: forms/Main.php:219 views/admin/index/index_old.php:105
+#: forms/Main.php:221 views/admin/index/index_old.php:105
 msgid "Search for:"
 msgstr "Chercher:"
 
-#: forms/Main.php:222 views/admin/index/index_old.php:109
+#: forms/Main.php:224 views/admin/index/index_old.php:109
 msgid "Input text you want to search for "
 msgstr "Saisissez le texte que vous voulez chercher"
 
-#: forms/Main.php:226 views/admin/index/index_old.php:114
+#: forms/Main.php:227 views/admin/index/index_old.php:114
 msgid "Replace with:"
 msgstr "Remplacer par:"
 
-#: forms/Main.php:229 views/admin/index/index_old.php:118
+#: forms/Main.php:230 views/admin/index/index_old.php:118
 msgid "Input text you want to replace with "
 msgstr "Saisissez le texte à utiliser pour le remplacement"
 
@@ -197,39 +260,39 @@ msgstr "Saisissez le texte à utiliser pour le remplacement"
 msgid "Use regular expressions"
 msgstr "Utiliser des expressions régulières"
 
-#: forms/Main.php:240
+#: forms/Main.php:239
 msgid "Text to Add"
 msgstr "Texte à ajouter"
 
-#: forms/Main.php:243 views/admin/index/index_old.php:136
+#: forms/Main.php:242 views/admin/index/index_old.php:136
 msgid "Input text you want to add as metadata"
 msgstr "Saisissez le texte que vous voulez ajouter"
 
-#: forms/Main.php:247
+#: forms/Main.php:245
 msgid "Text to Append"
 msgstr "Texte à ajouter"
 
-#: forms/Main.php:250 views/admin/index/index_old.php:151
+#: forms/Main.php:248 views/admin/index/index_old.php:151
 msgid "Input text you want to append to metadata"
 msgstr "Saisissez le texte que vous voulez ajouter"
 
-#: forms/Main.php:267
+#: forms/Main.php:264
 msgid "Step 1: Select Items"
 msgstr "Étape 1: Sélectionnez les contenus"
 
-#: forms/Main.php:278
+#: forms/Main.php:275
 msgid "Step 2: Select Fields"
 msgstr "Étape 2: Sélectionnez les champs"
 
-#: forms/Main.php:294
+#: forms/Main.php:291
 msgid "Step 3: Define Changes"
 msgstr "Étape 3: Définissez les modifications"
 
-#: forms/Main.php:295
+#: forms/Main.php:292
 msgid "Define Edits to Apply"
 msgstr "Définissez les modifications à appliquer"
 
-#: forms/Main.php:304
+#: forms/Main.php:301
 msgid "Apply Edits Now"
 msgstr "Appliquer les modifications maintenant"
 

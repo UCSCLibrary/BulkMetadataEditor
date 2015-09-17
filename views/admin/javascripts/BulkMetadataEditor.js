@@ -1,3 +1,7 @@
+(function() {
+
+var language = Omeka.BulkMetadataEditor.language;
+
 jQuery(document).ready(function() {
 
     jQuery("#changesRadio-replace-field").after(jQuery('#bulk-metadata-editor-replace-field'));
@@ -13,9 +17,9 @@ jQuery(document).ready(function() {
     jQuery("#preview-fields-button").wrap('<div class = "previewButtonDiv"></div>');
     jQuery("#preview-changes-button").wrap('<div class = "previewButtonDiv"></div>');
 
-    jQuery("#preview-items-button").after('<div class="bulk-metadata-editor-waiting" id="items-waiting">Please wait...</div>');
-    jQuery("#preview-fields-button").after('<div class="bulk-metadata-editor-waiting" id="fields-waiting">Please wait...</div>');
-    jQuery("#preview-changes-button").after('<div class="bulk-metadata-editor-waiting" id="changes-waiting">Please wait...</div>');
+    jQuery("#preview-items-button").after('<div class="bulk-metadata-editor-waiting" id="items-waiting">' + language.PleaseWait + '</div>');
+    jQuery("#preview-fields-button").after('<div class="bulk-metadata-editor-waiting" id="fields-waiting">' + language.PleaseWait + '</div>');
+    jQuery("#preview-changes-button").after('<div class="bulk-metadata-editor-waiting" id="changes-waiting">' + language.PleaseWait + '</div>');
 
     jQuery("#preview-items-button").after(jQuery('#hide-item-preview'));
     jQuery("#preview-fields-button").after(jQuery('#hide-field-preview'));
@@ -131,11 +135,11 @@ jQuery(document).ready(function() {
 		if(data)
 		    dataObj = jQuery.parseJSON(data);
 		else
-		    alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+		    alert(language.CouldNotGeneratePreview);
 
 		var r = new Array(), j=0;
 
-		r[0] ='<tr><td class="prevcol1"><strong>Title</strong></td><td class="prevcol2"><strong>Description</strong></td><td class="prevcol3"><strong>Item Type</strong></td</tr>';
+		r[0] ='<tr><td class="prevcol1"><strong>' + language.Title + '</strong></td><td class="prevcol2"><strong>' + language.Description + '</strong></td><td class="prevcol3"><strong>' + language.ItemType + '</strong></td</tr>';
 
 		for (var key=0, size=dataObj.length; key<size; key++){
 		    r[++j] ='<tr><td>';
@@ -154,9 +158,9 @@ jQuery(document).ready(function() {
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
-		    alert('The items preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can\'t preview them all for you.');
+		    alert(language.ItemsPreviewRequestTooLong);
 		else
-		    alert('Error generating preview! :(');
+		    alert(language.ErrorGeneratingPreview);
 
 	    },
 	    complete: function(data,status) {
@@ -188,7 +192,7 @@ jQuery(document).ready(function() {
 		if(data)
 		    dataObj = jQuery.parseJSON(data);
 		else
-		    alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+		    alert(language.CouldNotGeneratePreview);
 
 		var r = new Array(), j=-1;
 
@@ -217,9 +221,9 @@ jQuery(document).ready(function() {
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
-		    alert('The fields preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can\'t preview them all for you.');
+		    alert(language.FieldsPreviewRequestTooLong);
 		else
-		    alert('Error generating preview! :(');
+		    alert(language.ErrorGeneratingPreview);
 
 	    },
 	    complete: function(data,status) {
@@ -251,11 +255,11 @@ jQuery(document).ready(function() {
 		if(data)
 		    dataObj = jQuery.parseJSON(data);
 		else
-		    alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+		    alert(language.CouldNotGeneratePreview);
 
 		var r = new Array(), j=0;
 
-		r[0] ='<tr><td class="prevcol1"><strong>Item</strong></td><td class="prevcol2"><strong>Field</strong></td><td class="prevcol3"><strong>Old Value</strong></td><td class="prevcol4"><strong>New Value</strong></td></tr>';
+		r[0] ='<tr><td class="prevcol1"><strong>' + language.Item + '</strong></td><td class="prevcol2"><strong>' + language.Field + '</strong></td><td class="prevcol3"><strong>' + language.OldValue + '</strong></td><td class="prevcol4"><strong>' + language.NewValue + '</strong></td></tr>';
 
 		for (var key=0, size=dataObj.length; key<size; key++){
 		    r[++j] ='<tr><td class = "prevcol1">';
@@ -275,9 +279,9 @@ jQuery(document).ready(function() {
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
-		    alert('The changes preview request is taking too long! You must be trying to make a ton of changes at once. Sorry we can\'t preview them all for you.');
+		    alert(language.ChangesPreviewRequestTooLong);
 		else
-		    alert('Error generating preview! :(');
+		    alert(language.ErrorGeneratingPreview);
 
 	    },
 	    complete: function(data,status) {
@@ -346,11 +350,11 @@ function showMoreItems(event){
 	    if(data)
 		dataObj = jQuery.parseJSON(data);
 	    else
-		alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+		alert(language.CouldNotGeneratePreview);
 
 	    var r = new Array(), j=0;
 
-	    r[0] ='<tr><td class="prevcol1"><strong>Title</strong></td><td class="prevcol2"><strong>Description</strong></td><td class="prevcol3"><strong>Item Type</strong></td</tr>';
+	    r[0] ='<tr><td class="prevcol1"><strong>' + language.Title + '</strong></td><td class="prevcol2"><strong>' + language.Description + '</strong></td><td class="prevcol3"><strong>' + language.ItemType +'</strong></td></tr>';
 
 	    for (var key=0, size=dataObj.length; key<size; key++){
 		r[++j] ='<tr><td>';
@@ -383,7 +387,7 @@ function showMoreFields(event){
 	    if(data)
 		dataObj = jQuery.parseJSON(data);
 	    else
-		alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+		alert(language.CouldNotGeneratePreview);
 
 	    var r = new Array(), j=-1;
 
@@ -428,11 +432,11 @@ function showMoreChanges(event){
 	    if(data)
 		dataObj = jQuery.parseJSON(data);
 	    else
-		alert('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.');
+		alert(language.CouldNotGeneratePreview);
 
 	    var r = new Array(), j=0;
 
-	    r[0] ='<tr><td class="prevcol1"><strong>Item</strong></td><td class="prevcol2"><strong>Field</strong></td><td class="prevcol3"><strong>Old Value</strong></td><td class="prevcol4"><strong>New Value</strong></td></tr>';
+	    r[0] ='<tr><td class="prevcol1"><strong>' + language.Item + '</strong></td><td class="prevcol2"><strong>' + language.Field + '</strong></td><td class="prevcol3"><strong>' + language.OldValue + '</strong></td><td class="prevcol4"><strong>' + language.NewValue + '</strong></td></tr>';
 
 	    for (var key=0, size=dataObj.length; key<size; key++){
 		r[++j] ='<tr><td class = "prevcol1">';
@@ -452,3 +456,5 @@ function showMoreChanges(event){
     });
     jQuery('#waiting').show();
 }
+
+})();
