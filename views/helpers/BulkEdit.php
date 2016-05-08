@@ -651,7 +651,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                                 $html = $new != strip_tags($new);
                                 try {
                                     $eText->delete();
-                                    $itemObj->addTextForElement($element, $new, $html);
+                                    if (strlen($new)) {
+                                        $itemObj->addTextForElement($element, $new, $html);
+                                    }
                                 } catch (Exception $e) {
                                     throw $e;
                                 }
