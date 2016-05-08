@@ -97,15 +97,14 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
      */
     public function countitemsAction()
     {
-      try{
-	$this->view->items = $this->_getItems($max);
-	$this->view->count = count($this->_getItems());
-      }catch(Exception $e) {
-	$this->view->items = array(array("Error",$e->getMessage(),"",""));
-      }
+        $max = $this->_getParam('max');
+        try{
+            $this->view->items = $this->_getItems($max);
+            $this->view->count = count($this->_getItems());
+        } catch (Exception $e) {
+            $this->view->items = array(array("Error",$e->getMessage(),"",""));
+        }
     }
-
-
 
     /**
      * Retrieves the selected metadata elements for preview.
