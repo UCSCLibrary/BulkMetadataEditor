@@ -25,19 +25,21 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     }
 
     /**
-     * Retrieve the edits specified by the form input.
+     * Retrieve the edits specified by the params.
      *
-     * Retrieve metadata element texts according to the rules in the POST
-     * variables set by the input form.
+     * Retrieve metadata element texts according to the rules in the params
+     * (generally from POST variables set by the input form).
      *
-     * @param max change to get
+     * @param array $params
+     * @param integer $max Max change to get
+     * @return array Array of items.
      */
-    public function getChanges($max = 0)
+    public function getChanges($params, $max = 0)
     {
         try {
-            $items = $this->getItems();
-            $fields = $this->getFields($items);
-            $changes = $this->_update($items, $fields, $max, false);
+            $items = $this->getItems($params);
+            $fields = $this->getFields($params, $items);
+            $changes = $this->_update($params, $items, $fields, $max, false);
         } catch (Exception $e) {
             throw $e;
         }
@@ -45,18 +47,21 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     }
 
     /**
-     * Perform the edits specified by the form input.
+     * Perform the edits specified by the params.
      *
      * This function calls the matching subroutines with no maximum number of
      * results, and alerts the changes subroutine to perform the changes rather
      * than just displaying them.
+     *
+     * @param array $params
+     * @return void
      */
-    public function perform()
+    public function perform($params)
     {
         try {
-            $items = $this->getItems();
-            $fields = $this->getFields($items);
-            $this->_update($items, $fields, 0, true);
+            $items = $this->getItems($params);
+            $fields = $this->getFields($params, $items);
+            $this->_update($params, $items, $fields, 0, true);
         } catch (Exception $e) {
             throw $e;
         }
@@ -65,22 +70,23 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     /**
      * Retrieve Items matching selection rules.
      *
-     * Retrieve items matching the rules contained in the POST data from the
-     * user input form.
+     * Retrieve items matching the rules contained in the params (generally from
+     * POST data from the user input form).
      *
+     * @param array $params
      * @param int $max Maximum number of items to return. If set to zero, all
      * matching items will be returned.
      * @param array $items Array of items matching the selection rules. Each
      * element of this array is itself an array containing identifying
      * information for a single matched item.
      */
-    public function getItems($max = 0)
+    public function getItems($params, $max = 0)
     {
         $rules = array();
 
-        if (!empty($_REQUEST['itemSelectMeta'])) {
-            for ($i = 0; $i < count($_REQUEST['item-rule-elements']); $i++) {
-                $search = urldecode($_REQUEST['item-selectors'][$i]);
+        if (!empty($params['itemSelectMeta'])) {
+            for ($i = 0; $i < count($params['item-rule-elements']); $i++) {
+                $search = urldecode($params['item-selectors'][$i]);
 
                 $neg = false;
                 $exact = true;
@@ -89,12 +95,12 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                 $search = preg_quote($search);
                 $search = str_replace('\*', '.*', $search);
 
-                if (isset($_REQUEST['item-cases'][$i]) && $_REQUEST['item-cases'][$i] == "false") {
+                if (isset($params['item-cases'][$i]) && $params['item-cases'][$i] == "false") {
                     $case = false;
                     $search = strtolower($search);
                 }
 
-                switch ($_REQUEST['item-compare-types'][$i]) {
+                switch ($params['item-compare-types'][$i]) {
                     case '!exact':
                         $neg = true;
                     case 'exact':
@@ -108,7 +114,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                 }
 
                 $rules[] = array(
-                    'field' => $_REQUEST['item-rule-elements'][$i],
+                    'field' => $params['item-rule-elements'][$i],
                     'search' => $search,
                     'case' => $case,
                     'neg' => $neg,
@@ -116,16 +122,17 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             }
         }
 
-        $params = array();
+        $itemsParams = array();
 
         // set up query parameters to select items from a given collection
-        if (isset($_REQUEST['bmeCollectionId']) && $_REQUEST['bmeCollectionId'] != 0) {
-            $params['collection'] = $_REQUEST['bmeCollectionId'];
+        if (isset($params['bmeCollectionId']) && $params['bmeCollectionId'] != 0) {
+            $itemsParams['collection'] = $params['bmeCollectionId'];
         }
 
+        // TODO Get items with all params with one query to avoid this huge one.
         // retrieve all potentially matching items
         try {
-            $items = get_records('Item', $params, 0);
+            $items = get_records('Item', $itemsParams, 0);
         } catch (Exception $e) {
             throw $e;
         }
@@ -262,25 +269,27 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * Retrieve metadata elements matching selection rules.
      *
      * Retrieve metadata elements from the items provided which match the rules
-     * contained in the POST data from the user input form.
+     * contained in the params (generally from POST data from the user input
+     * form).
      *
+     * @param array $params
      * @param array $items Array of items from whose metadata elements the
      * fields will be selected.
      * @param int $max Maximum number of items to return. If set to zero, all
      * matching items will be returned.
-     * @param array $elements Array of elements matching the selection rules.
+     * @return array $elements Array of elements matching the selection rules.
      * Each element of this array is itself an array containing identifying
      * information for a single matched metadata element.
      */
-    public function getFields($items, $max = 0)
+    public function getFields($params, $items, $max = 0)
     {
         $fields = array();
         $newfields = array();
 
-        if (!isset($_REQUEST['selectFields'])) {
+        if (!isset($params['selectFields'])) {
             $fields = $this->_getElementIds();
         } else {
-            $fields = $_REQUEST['selectFields'];
+            $fields = $params['selectFields'];
         }
 
         $i = 0;
@@ -345,8 +354,10 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * Retrieve and/or perform bulk edits.
      *
      * Retrieve and optionally perform edits to metadata element texts according
-     * to the rules in the POST variables set by the input form.
+     * to the rules in the params (generally from POST variables set by the
+     * input form).
      *
+     * @param array $params
      * @param array $items Array of items on which to perform the edits. Each
      * element of this array is an array containing a single item's identifying
      * information. Only items in this array will be selected for editing.
@@ -357,14 +368,14 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * @param int $max The maximum number of changes to return. If set to zero,
      * all changes will be returned.
      * @param bool $perform If true, the edits will be performed. Otherwise, the
-     * changes defined by the form input will be returned but the database will
+     * changes defined by the params will be returned but the database will
      * remain unchanged.
      * @return array $changes An array containing the old and new values of
      * element text records which will be updated in the database.
      */
-    protected function _update($items, $fields, $max, $perform)
+    protected function _update($params, $items, $fields, $max, $perform)
     {
-        if (!isset($_REQUEST['changesRadio'])) {
+        if (!isset($params['changesRadio'])) {
             throw new Exception(__('Please select an action to perform.'));
         }
 
@@ -382,19 +393,19 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             if (empty($item)) {
                 continue;
             }
-            if (!isset($fields[$item['id']]) && $_REQUEST['changesRadio'] != 'add') {
+            if (!isset($fields[$item['id']]) && $params['changesRadio'] != 'add') {
                 continue;
             }
 
             $itemObj = get_record_by_id('Item', $item['id']);
 
-            if ($_REQUEST['changesRadio'] == 'add') {
+            if ($params['changesRadio'] == 'add') {
                 $fieldItem = array();
 
-                if (!isset($_REQUEST['selectFields'])) {
+                if (!isset($params['selectFields'])) {
                     $fields = $this->_getElementIds();
                 } else {
-                    $fields = $_REQUEST['selectFields'];
+                    $fields = $params['selectFields'];
                 }
                 foreach ($fields as $elementID) {
                     $fieldItem[] = array(
@@ -411,7 +422,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             }
 
             // Regroup fields by element and deduplicate them before processing.
-            if ($_REQUEST['changesRadio'] == 'deduplicate') {
+            if ($params['changesRadio'] == 'deduplicate') {
                 $fieldsByElement = array();
                 foreach ($fieldItem as $field) {
                     $fieldsByElement[$field['elementID']][$field['id']] = $field['value'];
@@ -423,7 +434,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             }
 
             // Deduplicate files ().
-            if ($_REQUEST['changesRadio'] == 'deduplicate-files') {
+            if ($params['changesRadio'] == 'deduplicate-files') {
                 $this->_deduplicateFiles($item);
                 // No field to change, so process the next item.
                 continue;
@@ -431,14 +442,14 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
             foreach ($fieldItem as $field) {
                 $replaceType = "normal";
-                switch ($_REQUEST['changesRadio']) {
+                switch ($params['changesRadio']) {
                     case 'preg':
                         $replaceType = "preg";
                         // No break.
 
                     case 'replace':
                         // expect a 'find' and 'replace' variable
-                        if (!isset($_REQUEST['bmeSearch']) || !isset($_REQUEST['bmeReplace'])) {
+                        if (!isset($params['bmeSearch']) || !isset($params['bmeReplace'])) {
                             // TODO:proper error handling
                             throw new Exception(__("Please define search and replace terms"));
                         }
@@ -450,9 +461,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         $count = 0;
 
                         if ($replaceType == "normal") {
-                            $new = str_replace($_REQUEST['bmeSearch'], $_REQUEST['bmeReplace'], $eText->text, $count);
+                            $new = str_replace($params['bmeSearch'], $params['bmeReplace'], $eText->text, $count);
                         } elseif ($replaceType == "regexp") {
-                            $new = preg_replace($_REQUEST['bmeSearch'], $_REQUEST['bmeReplace'], $eText->text, - 1, $count);
+                            $new = preg_replace($params['bmeSearch'], $params['bmeReplace'], $eText->text, - 1, $count);
                         }
 
                         // if str_replace matches anything, update the return
@@ -512,19 +523,19 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         break;
 
                     case 'append':
-                        if (!isset($_REQUEST['bmeAppend'])) {
+                        if (!isset($params['bmeAppend'])) {
                             throw new Exception(__("Please input some text to append"));
                         }
 
-                        if (!isset($_REQUEST['delimiter'])) {
-                            $_REQUEST['delimiter'] = ' ';
+                        if (!isset($params['delimiter'])) {
+                            $params['delimiter'] = ' ';
                         }
 
                         try {
                             $element = $itemObj->getElementById($field['elementID']);
                             $eText = get_record_by_id('ElementText', $field['id']);
 
-                            $new = $eText->text . $_REQUEST['delimiter'] . $_REQUEST['bmeAppend'];
+                            $new = $eText->text . $params['delimiter'] . $params['bmeAppend'];
                         } catch (Exception $e) {
                             throw $e;
                         }
@@ -553,7 +564,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         break;
 
                     case 'add':
-                        if (!isset($_REQUEST['bmeAdd'])) {
+                        if (!isset($params['bmeAdd'])) {
                             throw new Exception(__('Please input some text to add.'));
                         }
 
@@ -564,7 +575,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         }
 
                         if (!in_array($field['elementID'], $made)) {
-                            $new = $_REQUEST['bmeAdd'];
+                            $new = $params['bmeAdd'];
                             $changes[] = array(
                                 'item' => $item['title'],
                                 'field' => $element->name,

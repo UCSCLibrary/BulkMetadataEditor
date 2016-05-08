@@ -44,8 +44,9 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
         if ($this->getRequest()->isPost()
             && $this->view->form->isValid($this->getRequest()->getPost())) {
 
+            $params = $_REQUEST;
             try {
-                $this->_bulkEdit->perform();
+                $this->_bulkEdit->perform($params);
                 $message = __('The requested changes have been applied to the database.');
                 $status = 'success';
             } catch (Exception $e) {
@@ -70,9 +71,10 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
      */
     public function itemsAction()
     {
+        $params = $_REQUEST;
         $max = $this->_getParam('max');
         try {
-            $items = $this->_bulkEdit->getItems($max);
+            $items = $this->_bulkEdit->getItems($params, $max);
             $this->_helper->json($items);
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(500);
@@ -91,9 +93,9 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
      */
     public function countitemsAction()
     {
-        $max = $this->_getParam('max');
+        $params = $_REQUEST;
         try {
-            $count = count($this->_bulkEdit->getItems());
+            $count = count($this->_bulkEdit->getItems($params));
             $this->_helper->json($count);
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(500);
@@ -112,9 +114,11 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
      */
     public function fieldsAction()
     {
+        $params = $_REQUEST;
         $max = $this->_getParam('max');
         try {
-            $fields = $this->_bulkEdit->getFields($this->_bulkEdit->getItems(), $max);
+            $items = $this->_bulkEdit->getItems($params, $max);
+            $fields = $this->_bulkEdit->getFields($params, $items, $max);
             $this->_helper->json($fields);
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(500);
@@ -133,9 +137,10 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
      */
     public function changesAction()
     {
+        $params = $_REQUEST;
         $max = $this->_getParam('max');
         try {
-            $changes = $this->_bulkEdit->getChanges($max);
+            $changes = $this->_bulkEdit->getChanges($params, $max);
             $this->_helper->json($changes);
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(500);
