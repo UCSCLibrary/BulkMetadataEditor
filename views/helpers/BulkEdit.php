@@ -612,6 +612,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             $itemHasTitle = (boolean) $titles;
             $itemTitle = $itemHasTitle ? strip_formatting($titles[0]->text) : __('[Untitled]');
             foreach ($fieldItem as $field) {
+                $message = __('Bulk Metadata Editor #%d [%s]:', $itemId, $params['changesRadio']) . ' ';
                 $replaceType = 'normal';
                 switch ($params['changesRadio']) {
                     case 'preg':
@@ -655,7 +656,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                                         $itemObj->addTextForElement($element, $new, $html);
                                     }
                                 } catch (Exception $e) {
-                                    throw $e;
+                                    $message .= __('An error occurred: %s', $e->getMessage());
+                                    _log($message, Zend_Log::ERR);
+                                    continue 2;
                                 }
                             }
                             $j++;
@@ -687,7 +690,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                             try {
                                 $eText->delete();
                             } catch (Exception $e) {
-                                throw $e;
+                                $message .= __('An error occurred: %s', $e->getMessage());
+                                _log($message, Zend_Log::ERR);
+                                continue 2;
                             }
                         }
 
@@ -726,7 +731,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                                 $eText->delete();
                                 $itemObj->addTextForElement($element, $new, $html);
                             } catch (Exception $e) {
-                                throw $e;
+                                $message .= __('An error occurred: %s', $e->getMessage());
+                                _log($message, Zend_Log::ERR);
+                                continue 2;
                             }
                         }
                         $j++;
@@ -757,7 +764,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                                 try {
                                     $itemObj->addTextForElement($element, $new, $html);
                                 } catch (Exception $e) {
-                                    throw $e;
+                                    $message .= __('An error occurred: %s', $e->getMessage());
+                                    _log($message, Zend_Log::ERR);
+                                    continue 2;
                                 }
                             }
                             $j++;
@@ -790,7 +799,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                                 try {
                                     $eText->delete();
                                 } catch (Exception $e) {
-                                    throw $e;
+                                    $message .= __('An error occurred: %s', $e->getMessage());
+                                    _log($message, Zend_Log::ERR);
+                                    continue 2;
                                 }
                             }
                         }
@@ -806,7 +817,13 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             try {
                 $itemObj->saveElementTexts();
             } catch (Exception $e) {
-                throw $e;
+                $message .= __('An error occurred: %s', $e->getMessage());
+                _log($message, Zend_Log::ERR);
+                continue;
+            }
+            if ($perform) {
+                $message .= __('Success.');
+                _log($message, Zend_Log::INFO);
             }
         } // end item loop
 
