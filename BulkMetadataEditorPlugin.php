@@ -57,6 +57,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
         'ItemsPreviewRequestTooLong' => __("The items preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can't preview them all for you."),
         'FieldsPreviewRequestTooLong' => __("The fields preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can't preview them all for you."),
         'ChangesPreviewRequestTooLong' => __("The changes preview request is taking too long! You must be trying to make a ton of changes at once. Sorry we can't preview them all for you."),
+        'SelectActionPerform' => __('Please select an action to perform.'),
       );
       $language = json_encode($language);
       queue_js_string("Omeka.BulkMetadataEditor = {language: $language};");

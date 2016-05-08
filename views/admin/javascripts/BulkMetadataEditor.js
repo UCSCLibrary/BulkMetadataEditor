@@ -244,6 +244,10 @@ jQuery(document).ready(function () {
         $('#preview-changes-button').click(function (event) {
             var max = 20;
             event.preventDefault();
+            if ($('input[name=changesRadio]').is(':checked') === false) {
+                alert(language.SelectActionPerform);
+                return;
+            }
             processItemRules();
             $.ajax({
                 url: url + '/index/changes/max/' + max,
