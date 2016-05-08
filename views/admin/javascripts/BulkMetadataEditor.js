@@ -34,19 +34,11 @@ jQuery(document).ready(function () {
             }
         });
 
-        $('.bulk-metadata-editor-selector').focus(function (e) {
-            var value = $(this).val();
-            if (value == 'Input search term here') {
-                $(this).val('');
-            }
-        });
-
         $('#item-select-meta').change(function () {
             if (this.checked) {
                 $('#item-meta-selects').show();
             } else {
                 $('#item-meta-selects').hide();
-                $('.bulk-metadata-editor-selector').val('Input search term here');
             }
         });
 
@@ -301,7 +293,7 @@ jQuery(document).ready(function () {
 
         $('.removeRule').click(function () {
             if ($('.item-rule-box').length > 1) {
-                $(this).parent().remove();
+                $(this).closest('.item-rule-box').remove();
             } else {
                 $('#item-select-meta').trigger('click');
             }
