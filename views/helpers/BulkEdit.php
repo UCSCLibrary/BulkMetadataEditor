@@ -195,7 +195,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                     // if none of the metadata entries for this field match the
                     // rule (unless the rule is negative and there are no
                     // entries, which should match)
-                    if (!($matched2) && !($neg && empty($compareTexts))) {
+                    if (!($matched2) && !($rule['neg'] && empty($compareTexts))) {
                         // then this item will not be selected
                         $matched = false;
 
