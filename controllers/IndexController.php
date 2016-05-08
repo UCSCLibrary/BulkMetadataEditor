@@ -37,7 +37,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
       $message = __('The requested changes have been applied to the database');
       $status = 'success';
 
-      include_once(dirname(dirname(__FILE__))."/forms/Main.php");
       try{
 	$this->view->form = new BulkMetadataEditor_Form_Main();
       }catch(Exception $e) {
