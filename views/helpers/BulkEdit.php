@@ -25,49 +25,6 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     }
 
     /**
-     * Retrieve the edits specified by the params.
-     *
-     * Retrieve metadata element texts according to the rules in the params
-     * (generally from POST variables set by the input form).
-     *
-     * @param array $params
-     * @param integer $max Max change to get
-     * @return array Array of items.
-     */
-    public function getChanges($params, $max = 0)
-    {
-        try {
-            $items = $this->getItems($params);
-            $fields = $this->getFields($params, $items);
-            $changes = $this->_update($params, $items, $fields, $max, false);
-        } catch (Exception $e) {
-            throw $e;
-        }
-        return $changes;
-    }
-
-    /**
-     * Perform the edits specified by the params.
-     *
-     * This function calls the matching subroutines with no maximum number of
-     * results, and alerts the changes subroutine to perform the changes rather
-     * than just displaying them.
-     *
-     * @param array $params
-     * @return void
-     */
-    public function perform($params)
-    {
-        try {
-            $items = $this->getItems($params);
-            $fields = $this->getFields($params, $items);
-            $this->_update($params, $items, $fields, 0, true);
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-    /**
      * Retrieve Items matching selection rules.
      *
      * Retrieve items matching the rules contained in the params (generally from
@@ -150,7 +107,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * @param array $params
      * @return Omeka_Db_Select
      */
-    protected function _getSelect($params)
+    private function _getSelect($params)
     {
         $rules = $this->_listItemRules($params);
 
@@ -386,6 +343,43 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     }
 
     /**
+     * Retrieves basic data about an Omeka item.
+     *
+     * @param Object $item Omeka item record object to pull data from
+     * @return array The title, description, type and ID of the given item as an
+     * associative array.
+     */
+    private function _pullItemData($item)
+    {
+        if (!$item instanceof Item) {
+            throw new Exception(__('Cannot pull item data from a non-item.'));
+        }
+        $title = __('[untitled]');
+        $description = __('[no description given]');
+        $typename = __("[undefined]");
+        $titles = $item->getElementTexts('Dublin Core', 'Title');
+        if (count($titles) > 0) {
+            $title = strip_formatting($titles[0]->text);
+        }
+        $descriptions = $item->getElementTexts('Dublin Core', 'Description');
+        if (count($descriptions) > 0) {
+            $description = strip_formatting($descriptions[0]->text);
+        }
+        $type = $item->getItemType();
+        if (is_object($type)) {
+            $typename = strip_formatting($type->name);
+        }
+
+        $rv = array(
+            'id' => $item->id,
+            'title' => $title,
+            'description' => $description,
+            'type' => $typename,
+        );
+        return $rv;
+    }
+
+    /**
      * Retrieve metadata elements matching selection rules.
      *
      * Retrieve metadata elements from the items provided which match the rules
@@ -471,6 +465,72 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     }
 
     /**
+     * Retrieve Element Ids.
+     *
+     * Retrieve from the database the IDs of all elements applicable to records
+     * of type Item
+     *
+     * @param void
+     * @return array Array of all element IDs applicable to records of type
+     * Item.
+     */
+    private function _getElementIds()
+    {
+        $db = $this->_db;
+        $sql = "
+        SELECT DISTINCT(e.id) as id
+        FROM {$db->ElementSet} es
+        JOIN {$db->Element} e ON es.id = e.element_set_id
+        LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id
+        LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id
+        WHERE es.record_type IS NULL OR es.record_type = 'Item' ";
+        return $db->fetchCol($sql);
+    }
+
+    /**
+     * Retrieve the edits specified by the params.
+     *
+     * Retrieve metadata element texts according to the rules in the params
+     * (generally from POST variables set by the input form).
+     *
+     * @param array $params
+     * @param integer $max Max change to get
+     * @return array Array of items.
+     */
+    public function getChanges($params, $max = 0)
+    {
+        try {
+            $items = $this->getItems($params);
+            $fields = $this->getFields($params, $items);
+            $changes = $this->_update($params, $items, $fields, $max, false);
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return $changes;
+    }
+
+    /**
+     * Perform the edits specified by the params.
+     *
+     * This function calls the matching subroutines with no maximum number of
+     * results, and alerts the changes subroutine to perform the changes rather
+     * than just displaying them.
+     *
+     * @param array $params
+     * @return void
+     */
+    public function perform($params)
+    {
+        try {
+            $items = $this->getItems($params);
+            $fields = $this->getFields($params, $items);
+            $this->_update($params, $items, $fields, 0, true);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * Retrieve and/or perform bulk edits.
      *
      * Retrieve and optionally perform edits to metadata element texts according
@@ -493,7 +553,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * @return array $changes An array containing the old and new values of
      * element text records which will be updated in the database.
      */
-    protected function _update($params, $items, $fields, $max, $perform)
+    private function _update($params, $items, $fields, $max, $perform)
     {
         if (!isset($params['changesRadio'])) {
             throw new Exception(__('Please select an action to perform.'));
@@ -787,7 +847,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * @param array $item An item array
      * @return boolean Success or fail.
      */
-    protected function _deduplicateFiles($item)
+    private function _deduplicateFiles($item)
     {
         // TODO Use a main sql to avoid to load each file.
         $item = get_record_by_id('Item', $item['id']);
@@ -813,65 +873,5 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
         }
 
         return true;
-    }
-
-    /**
-     * Retrieve Element Ids.
-     *
-     * Retrieve from the database the IDs of all elements applicable to records
-     * of type Item
-     *
-     * @param void
-     * @return array Array of all element IDs applicable to records of type
-     * Item.
-     */
-    private function _getElementIds()
-    {
-        $db = $this->_db;
-        $sql = "
-        SELECT DISTINCT(e.id) as id
-        FROM {$db->ElementSet} es
-        JOIN {$db->Element} e ON es.id = e.element_set_id
-        LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id
-        LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id
-        WHERE es.record_type IS NULL OR es.record_type = 'Item' ";
-        return $db->fetchCol($sql);
-    }
-
-    /**
-     * Retrieves basic data about an Omeka item.
-     *
-     * @param Object $item Omeka item record object to pull data from
-     * @return array The title, description, type and ID of the given item as an
-     * associative array.
-     */
-    private function _pullItemData($item)
-    {
-        if (!$item instanceof Item) {
-            throw new Exception(__('Cannot pull item data from a non-item.'));
-        }
-        $title = __('[untitled]');
-        $description = __('[no description given]');
-        $typename = __("[undefined]");
-        $titles = $item->getElementTexts('Dublin Core', 'Title');
-        if (count($titles) > 0) {
-            $title = strip_formatting($titles[0]->text);
-        }
-        $descriptions = $item->getElementTexts('Dublin Core', 'Description');
-        if (count($descriptions) > 0) {
-            $description = strip_formatting($descriptions[0]->text);
-        }
-        $type = $item->getItemType();
-        if (is_object($type)) {
-            $typename = strip_formatting($type->name);
-        }
-
-        $rv = array(
-            'id' => $item->id,
-            'title' => $title,
-            'description' => $description,
-            'type' => $typename,
-        );
-        return $rv;
     }
 }
