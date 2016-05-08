@@ -20,8 +20,7 @@
  * @package BulkMetadataEditor
  */
 class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractActionController
-{    
-
+{
 
   /**
    * Process form data and prepare to display the main BulkMetadataEditor form.
@@ -37,8 +36,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
       $flashMessenger = $this->_helper->FlashMessenger;
       $message = __('The requested changes have been applied to the database');
       $status = 'success';
-
-      $this->view->form_compare_options = $this->_getFormCompareOptions();
 
       include_once(dirname(dirname(__FILE__))."/forms/Main.php");
       try{
@@ -64,7 +61,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	$flashMessenger->addMessage($message,$status);
 	  
       }
-      
     }
 
     /**
@@ -149,8 +145,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
       }
     }
 
-
-
     /**
      * Perform the edits specified by the form input.
      *
@@ -170,39 +164,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
       }catch(Exception $e) {
 	throw $e;
       }
-    }
-
-    /**
-     * Get an array to be used in formSelect() containing all elements.
-     * 
-     * @param void
-     * @return array $elementOptions Array of options for a dropdown
-     * menu containing all elements applicable to records of type Item
-     */
-    private function _getFormElementOptions()
-    {
-        $db = $this->_helper->db->getDb();
-        $sql = "
-        SELECT es.name AS element_set_name, e.id AS element_id, 
-        e.name AS element_name, it.name AS item_type_name
-        FROM {$db->ElementSet} es 
-        JOIN {$db->Element} e ON es.id = e.element_set_id 
-        LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id 
-        LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id 
-         WHERE es.record_type IS NULL OR es.record_type = 'Item' 
-        ORDER BY es.name, it.name, e.name";
-        $elements = $db->fetchAll($sql);
-        $options = array();
-	//        $options = array('' => __('Select Below'));
-        foreach ($elements as $element) {
-            $optGroup = $element['item_type_name'] 
-                      ? __('Item Type') . ': ' . __($element['item_type_name']) 
-                      : __($element['element_set_name']);
-            $value = __($element['element_name']);
-            
-            $options[$optGroup][$element['element_id']] = $value;
-        }
-        return $options;
     }
 
     /**
@@ -231,55 +192,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	  $rv[]=$id['id'];
         return $rv;
     }
-
-
-
-    /**
-     * Get an array to be used in formSelect() containing all collections.
-     * 
-     * @param void
-     * @return array $collectionOptions Array of all collections and their
-     * IDs, which will be used to populate a dropdown menu on the main view
-     */
-    private function _getFormCollectionOptions()
-    {
-      $collections = get_records('Collection',array(),'0');
-      $options = array('0'=>__('All Collections'));
-      foreach ($collections as $collection)
-	{
-	  $titles = $collection->getElementTexts('Dublin Core','Title');
-	  if(isset($titles[0]))
-	    $title = $titles[0];
-	  $options[$collection->id]=$title;
-	}
-
-      return $options;
-    }
-
-
-
-    /**
-     * Populate array for comparison operator dropdown
-     *
-     * Retrieve  an array to be used in formSelect() containing all 
-     *  comparison operators supported by this plugin.
-     * 
-     * @param void
-     * @return array $compareOptions Array of supported comparison operators
-     */
-    private function _getFormCompareOptions()
-    {
-      $options = array(
-		       'exact' => __('is exactly'),
-		       'contains' => __('contains'),
-		       '!exact' => __('is not exactly'),
-		       '!contains' => __('does not contain'),
-		       'regexp'=>__('matches regular expression')
-		       );
-        return $options;
-    }
-
-
 
     /**
      * Retrieve and/or perform bulk edits.
@@ -423,10 +335,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 			}
 		      $j++;
 		    }
-
-
 		  break;
-
 
 		case 'delete':
 		  //update the return array
@@ -601,10 +510,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	}
 
       return $changes;
-      
     }
-
-
 
     /**
      * Retrieve Items matching selection rules.
@@ -929,7 +835,6 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 	}
 
        return $newfields;
-
     }
 
     /**
