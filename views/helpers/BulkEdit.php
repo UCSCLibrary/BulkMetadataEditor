@@ -83,6 +83,75 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      */
     public function getItems($params, $max = 0)
     {
+        $select = $this->_getSelect($params);
+
+        // Get only the item ids when there is no max.
+        if (empty($max)) {
+            $select
+                ->reset(Zend_Db_Select::COLUMNS)
+                ->columns(array("items.id"));
+            try {
+                $itemIds = $this->_db->fetchCol($select);
+            } catch (Exception $e) {
+                throw $e;
+            }
+            return $itemIds;
+        }
+
+        // Get the objects.
+        $table = $this->_db->getTable('Item');
+        $table->applyPagination($select, $max);
+        $items = $table->fetchObjects($select);
+
+        if (!$items) {
+            return array();
+        }
+
+        // Generate the return array from all of the items if max is set.
+        $itemsArray = array();
+        foreach ($items as $item) {
+            try {
+                $itemsArray[] = $this->_pullItemData($item);
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
+
+        return $itemsArray;
+    }
+
+    /**
+     * Count the total of Items matching selection rules.
+     *
+     * Retrieve items matching the rules contained in the params (generally from
+     * POST data from the user input form).
+     *
+     * @param array $params
+     * @param integer
+     */
+    public function countItems($params)
+    {
+        $table = $this->_db->getTable('Item');
+        $select = $this->_getSelect($params);
+        $select
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->from(array(), "COUNT(DISTINCT(items.id))")
+            ->reset(Zend_Db_Select::ORDER)
+            ->reset(Zend_Db_Select::GROUP)
+            ->reset(Zend_Db_Select::LIMIT_COUNT)
+            ->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $total = $table->fetchOne($select);
+        return $total;
+    }
+
+    /**
+     * Helper to get select from the Bulk Metadata Editor form.
+     *
+     * @param array $params
+     * @return Omeka_Db_Select
+     */
+    protected function _getSelect($params)
+    {
         $rules = $this->_listItemRules($params);
 
         // All rules can be applied via the Omeaka core, except the case.
@@ -116,7 +185,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             }
         }
 
-        $itemsParams = array('advanced' => $rulesWithoutCase);
+        $itemsParams = $rulesWithoutCase
+            ? array('advanced' => $rulesWithoutCase)
+            : array();
 
         // set up query parameters to select items from a given collection
         if (!empty($params['bmeCollectionId'])) {
@@ -125,44 +196,10 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
         $table = $this->_db->getTable('Item');
         $select = $table->getSelectForFindBy($itemsParams);
-        if ($max) {
-            $table->applyPagination($select, $max);
-        }
-
         $this->_addRulesWithCase($select, $rulesWithCase);
         $this->_addRulesOldOmeka($select, $rulesOmekaNew);
 
-        // Get only the item ids when there is no max.
-        if (empty($max)) {
-            $select
-                ->reset(Zend_Db_Select::COLUMNS)
-                ->columns(array("items.id"));
-            try {
-                $itemIds = get_db()->fetchCol($select);
-            } catch (Exception $e) {
-                throw $e;
-            }
-            return $itemIds;
-        }
-
-        // Get the objects.
-        $items = $table->fetchObjects($select);
-
-        if (!$items) {
-            return array();
-        }
-
-        // generate the return array from all of the items if max is set.
-        $itemsArray = array();
-        foreach ($items as $item) {
-            try {
-                $itemsArray[] = $this->_pullItemData($item);
-            } catch (Exception $e) {
-                throw $e;
-            }
-        }
-
-        return $itemsArray;
+        return $select;
     }
 
     /**

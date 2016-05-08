@@ -67,6 +67,8 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
                 . ' ' . __('Preview is not possible, but the bulk edition will be done in the background.'),
             'SelectActionPerform' => __('Please select an action to perform.'),
             'NoItemFound' => __('No matching items found.'),
+            'PlusItems' => __('Plus %s more items.', '%s'),
+            'ShowMore' => __('Show more.'),
         );
         $language = json_encode($language);
         queue_js_string("Omeka.BulkMetadataEditor = {language: $language};");

@@ -128,49 +128,7 @@ jQuery(document).ready(function () {
             var max = 15;
             event.preventDefault();
             processItemRules();
-            $.ajax({
-                url: url + '/index/items/max/' + max,
-                dataType: 'json',
-                data: $('#bulk-metadata-editor-form').serialize(),
-                timeout: 30000,
-                success: function (data) {
-                    if (!data) {
-                        alert(language.CouldNotGeneratePreview);
-                    } else {
-                        var r = new Array(), j = 0;
-
-                        r[j] = '<table><thead><tr><th scope="col">' + language.Title + '</th><th scope="col">' + language.Description + '</th><th scope="col">' + language.ItemType + '</th</tr></thead><tbody>';
-                        if (data.length > 0) {
-                            for (var key = 0, size = data.length; key < size; key++) {
-                                r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
-                                r[++j] = data[key]['title'];
-                                r[++j] = '</td><td>';
-                                r[++j] = data[key]['description'];
-                                r[++j] = '</td><td>';
-                                r[++j] = data[key]['type'];
-                                r[++j] = '</td></tr>';
-                            }
-                        } else {
-                            r[++j] ='<tr class="odd"><td colspan="3">' + language.NoItemFound + '</td></tr>';
-                        }
-                        r[++j] = '</tbody></table>';
-
-                        $('#itemPreviewDiv').html(r.join(''));
-                        $('#show-more-items').click(showMoreItems);
-                        $('#hide-item-preview').show();
-                    }
-                },
-                error: function (data, errorString, error) {
-                    if (errorString == 'timeout') {
-                        alert(language.ItemsPreviewRequestTooLong);
-                    } else {
-                        alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
-                    }
-                },
-                complete: function (data, status) {
-                    $('#items-waiting').hide();
-                }
-            });
+            listItems(max);
             $('#items-waiting').css('display', 'inline');
         });
 
@@ -332,6 +290,10 @@ jQuery(document).ready(function () {
         var max = 200;
         event.preventDefault();
         processItemRules();
+        listItems(max);
+    }
+
+    function listItems(max) {
         $.ajax({
             url: url + '/index/items/max/' + max,
             dataType: 'json',
@@ -343,20 +305,43 @@ jQuery(document).ready(function () {
                 } else {
                     var r = new Array(), j = 0;
 
-                    r[0] = '<table><thead><tr><th scope="col">' + language.Title + '</th><th scope="col">' + language.Description + '</th><th scope="col">' + language.ItemType + '</th</tr></thead><tbody>';
-                    for (var key = 0, size = data.length; key < size; key++) {
-                        r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
-                        r[++j] = data[key]['title'];
-                        r[++j] = '</td><td>';
-                        r[++j] = data[key]['description'];
-                        r[++j] = '</td><td>';
-                        r[++j] = data[key]['type'];
-                        r[++j] = '</td></tr>';
+                    r[j] = '<table><thead><tr><th scope="col">' + language.Title + '</th><th scope="col">' + language.Description + '</th><th scope="col">' + language.ItemType + '</th</tr></thead><tbody>';
+                    if (data['items'].length > 0) {
+                        for (var key = 0, size = data['items'].length; key < size; key++) {
+                            r[++j] = '<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
+                            r[++j] = data['items'][key]['title'];
+                            r[++j] = '</td><td>';
+                            r[++j] = data['items'][key]['description'];
+                            r[++j] = '</td><td>';
+                            r[++j] = data['items'][key]['type'];
+                            r[++j] = '</td></tr>';
+                        }
+                        if (data['total'] > max) {
+                            var title = language.PlusItems.replace('%s', data['total'] - max);
+                            if (max < 200) {
+                                title += ' <a id="show-more-items" href="#">' + language.ShowMore + '</a>';
+                            }
+                            r[++j] = '<tr class="even"><td colspan="3">' + title + '</td></tr>';
+                        }
+                    } else {
+                        r[++j] = '<tr class="odd"><td colspan="3">' + language.NoItemFound + '</td></tr>';
                     }
                     r[++j] = '</tbody></table>';
 
                     $('#itemPreviewDiv').html(r.join(''));
+                    $('#show-more-items').click(showMoreItems);
+                    $('#hide-item-preview').show();
                 }
+            },
+            error: function (data, errorString, error) {
+                if (errorString == 'timeout') {
+                    alert(language.ItemsPreviewRequestTooLong);
+                } else {
+                    alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
+                }
+            },
+            complete: function (data, status) {
+                $('#items-waiting').hide();
             }
         });
     }

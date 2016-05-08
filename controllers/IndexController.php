@@ -79,28 +79,11 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
         $max = $this->_getParam('max');
         try {
             $items = $this->_bulkEdit->getItems($params, $max);
-            $this->_helper->json($items);
-        } catch (Exception $e) {
-            $this->getResponse()->setHttpResponseCode(500);
-            $this->_helper->json($e->getMessage());
-        }
-    }
-
-    /**
-     * Retrieves number of selected items for preview.
-     *
-     * Retrieves the number of items matching the selection rules and sends them
-     * to the view to be served to a browser preview script.
-     *
-     * @param void
-     * @return void
-     */
-    public function countitemsAction()
-    {
-        $params = $_REQUEST;
-        try {
-            $count = count($this->_bulkEdit->getItems($params));
-            $this->_helper->json($count);
+            $total = $this->_bulkEdit->countItems($params);
+            $this->_helper->json(array(
+                'items' => $items,
+                'total' => $total,
+            ));
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(500);
             $this->_helper->json($e->getMessage());
