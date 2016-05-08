@@ -5,7 +5,9 @@ Bulk Metadata Editor (plugin for Omeka)
 editing metadata in Omeka collections of digital objects by providing tools for
 administrators to edit many items at once based on prespecified rules.
 
-If you use this plugin, please take a moment to submit feedback about your experience, so we can keep making Omeka better: [User Survey] (https://docs.google.com/forms/d/1sfct41zxTelXFlyBwtsT1u33nRl7GGofSTt06d1SDMQ/viewform?usp=send_form "User Survey")
+If you use this plugin, please take a moment to submit feedback about your
+experience, so we can keep making Omeka better: [User Survey].
+
 
 Installation
 ------------
@@ -71,7 +73,8 @@ Copyright
 
 [Bulk Metadata Editor]: https://github.com/UCSCLibrary/BulkMetadataEditor
 [Omeka]: http://omeka.org
-[plugin issues]: https://github.com/UCSCLibrary/BulkMetadataEditor/Issues
+[User Survey]: https://docs.google.com/forms/d/1sfct41zxTelXFlyBwtsT1u33nRl7GGofSTt06d1SDMQ/viewform?usp=send_form
+[plugin issues]: https://github.com/UCSCLibrary/BulkMetadataEditor/issues
 [GNU/GPL v3]: https://www.gnu.org/licenses/gpl-3.0.html
 [Daniel-KM]: https://github.com/Daniel-KM
 [jajm]: https://github.com/jajm
