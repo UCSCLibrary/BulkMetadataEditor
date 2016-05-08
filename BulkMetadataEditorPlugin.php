@@ -68,8 +68,10 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
             'SelectActionPerform' => __('Please select an action to perform.'),
             'NoItemFound' => __('No matching items found.'),
             'NoFieldFound' => __('No matching field found.'),
+            'NoChange' => __('No change or no preview.'),
             'PlusItems' => __('Plus %s more items.', '%s'),
             'PlusFields' => __('...and corresponding fields from a total of %s items.', '%s'),
+            'PlusChanges' => __('...and changes for a total of %s items.', '%s'),
             'ShowMore' => __('Show more.'),
         );
         $language = json_encode($language);

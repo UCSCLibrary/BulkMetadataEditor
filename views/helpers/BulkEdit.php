@@ -529,7 +529,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * input form).
      *
      * @param array $params
-     * @param array $items Array of items on which to perform the edits. Each
+     * @param array $itemIds Array of items on which to perform the edits. Each
      * element of this array is an array containing a single item's identifying
      * information. Only items in this array will be selected for editing.
      * @param array $fields Array of metadata elements on which to perform the
@@ -544,7 +544,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * @return array $changes An array containing the old and new values of
      * element text records which will be updated in the database.
      */
-    private function _update($params, $items, $fields, $max, $perform)
+    private function _update($params, $itemIds, $fields, $max, $perform)
     {
         if (!isset($params['changesRadio'])) {
             throw new Exception(__('Please select an action to perform.'));
@@ -555,20 +555,17 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
         $i = 0;
         $j = 1;
 
-        foreach ($items as $item) {
+        foreach ($itemIds as $itemId) {
             $i++;
-            if ($item['id'] == 0) {
-                break;
-            }
             $made = array();
-            if (empty($item)) {
-                continue;
-            }
-            if (!isset($fields[$item['id']]) && $params['changesRadio'] != 'add') {
+            if (!isset($fields[$itemId]) && $params['changesRadio'] != 'add') {
                 continue;
             }
 
-            $itemObj = get_record_by_id('Item', $item['id']);
+            $itemObj = get_record_by_id('Item', $itemId);
+            if (empty($itemObj)) {
+                continue;
+            }
 
             if ($params['changesRadio'] == 'add') {
                 $fieldItem = array();
@@ -584,7 +581,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                     );
                 }
             } else {
-                $fieldItem = $fields[$item['id']];
+                $fieldItem = $fields[$itemId];
                 unset($fieldItem['title']);
             }
 
@@ -604,25 +601,28 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                 }
             }
 
-            // Deduplicate files ().
+            // Deduplicate files.
             if ($params['changesRadio'] == 'deduplicate-files') {
-                $this->_deduplicateFiles($item);
+                $this->_deduplicateFiles($itemObj);
                 // No field to change, so process the next item.
                 continue;
             }
 
+            $titles = $itemObj->getElementTexts('Dublin Core', 'Title');
+            $itemHasTitle = (boolean) $titles;
+            $itemTitle = $itemHasTitle ? strip_formatting($titles[0]->text) : __('[Untitled]');
             foreach ($fieldItem as $field) {
-                $replaceType = "normal";
+                $replaceType = 'normal';
                 switch ($params['changesRadio']) {
                     case 'preg':
-                        $replaceType = "preg";
+                        $replaceType = 'preg';
                         // No break.
 
                     case 'replace':
                         // expect a 'find' and 'replace' variable
                         if (!isset($params['bmeSearch']) || !isset($params['bmeReplace'])) {
                             // TODO:proper error handling
-                            throw new Exception(__("Please define search and replace terms"));
+                            throw new Exception(__('Please define search and replace terms.'));
                         }
 
                         $element = $itemObj->getElementById($field['element_id']);
@@ -631,7 +631,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
                         $count = 0;
 
-                        if ($replaceType == "normal") {
+                        if ($replaceType == 'normal') {
                             $new = str_replace($params['bmeSearch'], $params['bmeReplace'], $eText->text, $count);
                         } elseif ($replaceType == "regexp") {
                             $new = preg_replace($params['bmeSearch'], $params['bmeReplace'], $eText->text, - 1, $count);
@@ -641,17 +641,14 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         // array.
                         if ($count > 0) {
                             $changes[] = array(
-                                'item' => $item['title'],
+                                'item' => $itemTitle,
                                 'field' => $element->name,
                                 'old' => $eText->text,
                                 'new' => $new,
                             );
                             if ($perform) {
+                                $html = $new != strip_tags($new);
                                 try {
-                                    $html = false;
-                                    if ($new != strip_tags($new)) {
-                                        $html = true;
-                                    }
                                     $eText->delete();
                                     $itemObj->addTextForElement($element, $new, $html);
                                 } catch (Exception $e) {
@@ -671,13 +668,13 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                             throw $e;
                         }
 
-                        if (empty($item['title']) || empty($element->name) || empty($eText->text)) {
-                            throw new Exception(__("Error retrieving item data for deletion."));
+                        if (empty($element) || empty($eText)) {
+                            throw new Exception(__('Error retrieving item data for deletion.'));
                         }
 
                         $new = '';
                         $changes[] = array(
-                            'item' => $item['title'],
+                            'item' => $itemTitle,
                             'field' => $element->name,
                             'old' => $eText->text,
                             'new' => 'null',
@@ -694,8 +691,8 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         break;
 
                     case 'append':
-                        if (!isset($params['bmeAppend'])) {
-                            throw new Exception(__("Please input some text to append"));
+                        if (!isset($params['bmeAppend']) || !strlen($params['bmeAppend'])) {
+                            throw new Exception(__('Please input some text to append'));
                         }
 
                         if (!isset($params['delimiter'])) {
@@ -712,18 +709,14 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         }
 
                         $changes[] = array(
-                            'item' => $item['title'],
+                            'item' => $itemTitle,
                             'field' => $element->name,
                             'old' => $eText->text,
                             'new' => $new,
                         );
 
                         if ($perform) {
-                            $html = false;
-                            if ($new != strip_tags($new)) {
-                                $html = true;
-                            }
-
+                            $html = $new != strip_tags($new);
                             try {
                                 $eText->delete();
                                 $itemObj->addTextForElement($element, $new, $html);
@@ -735,7 +728,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         break;
 
                     case 'add':
-                        if (!isset($params['bmeAdd'])) {
+                        if (!isset($params['bmeAdd']) || !strlen($params['bmeAdd'])) {
                             throw new Exception(__('Please input some text to add.'));
                         }
 
@@ -748,16 +741,13 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         if (!in_array($field['element_id'], $made)) {
                             $new = $params['bmeAdd'];
                             $changes[] = array(
-                                'item' => $item['title'],
+                                'item' => $itemTitle,
                                 'field' => $element->name,
                                 'old' => 'null',
                                 'new' => $new,
                             );
                             if ($perform) {
-                                $html = false;
-                                if ($new != strip_tags($new)) {
-                                    $html = true;
-                                }
+                                $html = $new != strip_tags($new);
                                 try {
                                     $itemObj->addTextForElement($element, $new, $html);
                                 } catch (Exception $e) {
@@ -777,14 +767,14 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                             throw $e;
                         }
 
-                        if (empty($item['title']) || empty($element) || empty($eText)) {
-                            throw new Exception('Error retrieving item data for deduplication.');
+                        if (empty($element) || empty($eText)) {
+                            throw new Exception(__('Error retrieving item data for deduplication.'));
                         }
 
                         if (!isset($deduplicatedFieldsByElement[$element->id][$field['id']])) {
                             $new = '';
                             $changes[] = array(
-                                'item' => $item['title'],
+                                'item' => $itemTitle,
                                 'field' => $element->name,
                                 'old' => $eText->text,
                                 'new' => 'null',
@@ -813,38 +803,18 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             }
         } // end item loop
 
-        if ($max > 0 && $j > $max) {
-            $leftover = count($items) - $i;
-            $j++;
-            if ($leftover > 0) {
-                $title = __('...and changes for %s more items.', $leftover);
-                if ($max < 50)
-                    $title .= ' <a id="show-more-changes" href="">' . __('Show More') . '</a>';
-                    $changes[] = array(
-                        'item' => $title,
-                        'field' => '',
-                        'old' => '',
-                        'new' => '',
-                    );
-            }
-        }
-
         return $changes;
     }
 
     /**
      * Remove all files of an item with the same hash, except the first.
      *
-     * @param array $item An item array
+     * @param Item $item An existing item.
      * @return boolean Success or fail.
      */
     private function _deduplicateFiles($item)
     {
         // TODO Use a main sql to avoid to load each file.
-        $item = get_record_by_id('Item', $item['id']);
-        if (empty($item)) {
-            return false;
-        }
 
         // Create the list of hashs.
         $hashs = array();

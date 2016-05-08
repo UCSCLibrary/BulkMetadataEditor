@@ -140,6 +140,18 @@ jQuery(document).ready(function () {
             $('#fields-waiting').css('display', 'inline');
         });
 
+        $('#preview-changes-button').click(function (event) {
+            var max = 20;
+            event.preventDefault();
+            if ($('input[name=changesRadio]').is(':checked') === false) {
+                alert(language.SelectActionPerform);
+                return;
+            }
+            processItemRules();
+            listChanges(max);
+            $('#changes-waiting').css('display', 'inline');
+        });
+
         $('#hide-item-preview').click(function (event) {
             event.preventDefault();
             $('#itemPreviewDiv').html('<br />');
@@ -150,58 +162,6 @@ jQuery(document).ready(function () {
             event.preventDefault();
             $('#fieldPreviewDiv').html('<br />');
             $('#hide-field-preview').hide();
-        });
-
-        $('#preview-changes-button').click(function (event) {
-            var max = 20;
-            event.preventDefault();
-            if ($('input[name=changesRadio]').is(':checked') === false) {
-                alert(language.SelectActionPerform);
-                return;
-            }
-            processItemRules();
-            $.ajax({
-                url: url + '/index/changes/max/' + max,
-                dataType: 'json',
-                data: $('#bulk-metadata-editor-form').serialize(),
-                timeout: 30000,
-                success: function (data) {
-                    if (!data) {
-                        alert(language.CouldNotGeneratePreview);
-                    } else {
-                        var r = new Array(), j = 0;
-
-                        r[j] = '<table><thead><tr><th scope="col">' + language.Item + '</th><th>' + language.Field + '</th><th>' + language.OldValue + '</th><th>' + language.NewValue + '</th</tr></thead><tbody>';
-                        for (var key = 0, size = data.length; key < size; key++) {
-                            r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
-                            r[++j] = data[key]['item'];
-                            r[++j] = '</td><td>';
-                            r[++j] = data[key]['field'];
-                            r[++j] = '</td><td>';
-                            r[++j] = data[key]['old'];
-                            r[++j] = '</td><td>';
-                            r[++j] = data[key]['new'];
-                            r[++j] = '</td></tr>';
-                        }
-                        r[++j] = '</tbody></table>';
-
-                        $('#changesPreviewDiv').html(r.join(''));
-                        $('#show-more-changes').click(showMoreChanges);
-                        $('#hide-changes-preview').show();
-                    }
-                },
-                error: function (data, errorString, error) {
-                    if (errorString == 'timeout') {
-                        alert(language.ChangesPreviewRequestTooLong);
-                    } else {
-                        alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
-                    }
-                },
-                complete: function (data, status) {
-                    $('#changes-waiting').hide();
-                }
-            });
-            $('#changes-waiting').css('display', 'inline');
         });
 
         $('#hide-changes-preview').click(function (event) {
@@ -255,6 +215,13 @@ jQuery(document).ready(function () {
         event.preventDefault();
         processItemRules();
         listFields(max);
+    }
+
+    function showMoreChanges(event) {
+        var max = 200;
+        event.preventDefault();
+        processItemRules();
+        listChanges(max);
     }
 
     function listItems(max) {
@@ -368,10 +335,7 @@ jQuery(document).ready(function () {
         });
     }
 
-    function showMoreChanges(event) {
-        var max = 200;
-        event.preventDefault();
-        processItemRules();
+    function listChanges(max) {
         $.ajax({
             url: url + '/index/changes/max/' + max,
             dataType: 'json',
@@ -384,21 +348,44 @@ jQuery(document).ready(function () {
                     var r = new Array(), j = 0;
 
                     r[j] = '<table><thead><tr><th scope="col">' + language.Item + '</th><th>' + language.Field + '</th><th>' + language.OldValue + '</th><th>' + language.NewValue + '</th</tr></thead><tbody>';
-                    for (var key = 0, size = data.length; key < size; key++) {
-                        r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
-                        r[++j] = data[key]['item'];
-                        r[++j] = '</td><td>';
-                        r[++j] = data[key]['field'];
-                        r[++j] = '</td><td>';
-                        r[++j] = data[key]['old'];
-                        r[++j] = '</td><td>';
-                        r[++j] = data[key]['new'];
-                        r[++j] = '</td></tr>';
+                    if (data['changes'].length > 0) {
+                        for (var key = 0, size = data['changes'].length; key < size; key++) {
+                            r[++j] = '<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
+                            r[++j] = data['changes'][key]['item'];
+                            r[++j] = '</td><td>';
+                            r[++j] = data['changes'][key]['field'];
+                            r[++j] = '</td><td>';
+                            r[++j] = data['changes'][key]['old'];
+                            r[++j] = '</td><td>';
+                            r[++j] = data['changes'][key]['new'];
+                            r[++j] = '</td></tr>';
+                        }
+                        if (data['total'] > max) {
+                            var title = language.PlusChanges.replace('%s', data['total']);
+                            if (max < 50) {
+                                title += ' <a id="show-more-changes" href="#">' + language.ShowMore + '</a>';
+                            }
+                            r[++j] = '<tr class="even"><td colspan="4">' + title + '</td></tr>';
+                        }
+                    } else {
+                        r[++j] = '<tr class="odd"><td colspan="4">' + language.NoChange + '</td></tr>';
                     }
                     r[++j] = '</tbody></table>';
 
                     $('#changesPreviewDiv').html(r.join(''));
+                    $('#show-more-changes').click(showMoreChanges);
+                    $('#hide-changes-preview').show();
                 }
+            },
+            error: function (data, errorString, error) {
+                if (errorString == 'timeout') {
+                    alert(language.ChangesPreviewRequestTooLong);
+                } else {
+                    alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
+                }
+            },
+            complete: function (data, status) {
+                $('#changes-waiting').hide();
             }
         });
     }
