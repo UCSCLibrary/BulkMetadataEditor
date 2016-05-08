@@ -72,9 +72,11 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $max = $this->_getParam('max');
         try {
-            $this->view->items = $this->_bulkEdit->getItems($max);
+            $items = $this->_bulkEdit->getItems($max);
+            $this->_helper->json($items);
         } catch (Exception $e) {
-            $this->view->items = array(array('Error', $e->getMessage(), '', ''));
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->_helper->json($e->getMessage());
         }
     }
 
@@ -91,10 +93,11 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $max = $this->_getParam('max');
         try {
-            $this->view->items = $this->_bulkEdit->getItems($max);
-            $this->view->count = count($this->_bulkEdit->getItems());
+            $count = count($this->_bulkEdit->getItems());
+            $this->_helper->json($count);
         } catch (Exception $e) {
-            $this->view->items = array(array('Error', $e->getMessage(), '', ''));
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->_helper->json($e->getMessage());
         }
     }
 
@@ -111,10 +114,11 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $max = $this->_getParam('max');
         try {
-            $this->view->items = $this->_bulkEdit->getItems($max);
-            $this->view->fields = $this->_bulkEdit->getFields($this->_bulkEdit->getItems(), $max);
+            $fields = $this->_bulkEdit->getFields($this->_bulkEdit->getItems(), $max);
+            $this->_helper->json($fields);
         } catch (Exception $e) {
-            $this->view->items = array(array('Error', $e->getMessage(), '', ''));
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->_helper->json($e->getMessage());
         }
     }
 
@@ -131,12 +135,13 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $max = $this->_getParam('max');
         try {
-            $this->view->items = $this->_bulkEdit->getItems($max);
             $items = $this->_bulkEdit->getItems();
             $fields = $this->_bulkEdit->getFields($items);
-            $this->view->changes = $this->_bulkEdit->getChanges($items, $fields, $max, false);
+            $changes = $this->_bulkEdit->getChanges($items, $fields, $max, false);
+            $this->_helper->json($changes);
         } catch (Exception $e) {
-            $this->view->items = array(array('Error', $e->getMessage(), '', ''));
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->_helper->json($e->getMessage());
         }
     }
 

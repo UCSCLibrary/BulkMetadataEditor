@@ -1,8 +1,7 @@
-(function() {
-
-var language = Omeka.BulkMetadataEditor.language;
-
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
+    var $ = jQuery;
+    var language = Omeka.BulkMetadataEditor.language;
+    var url = document.URL.split('?')[0];
 
     jQuery("#changesRadio-replace-field").after(jQuery('#bulk-metadata-editor-replace-field'));
     jQuery("#changesRadio-replace-field").after(jQuery('#regexp-field'));
@@ -123,48 +122,45 @@ jQuery(document).ready(function() {
     });
 
     jQuery("#preview-items-button").click(function(event){
-	event.preventDefault();
-	processItemRules();
-	jQuery.ajax({
-	    type: "POST",
-            data: jQuery("#bulk-metadata-editor-form").serialize(),
-	    url: document.URL.split('?')[0]+"/index/items/max/15",
-	    success: function(data)
-            {   
-		dataObj=[];
-		if(data)
-		    dataObj = jQuery.parseJSON(data);
-		else
-		    alert(language.CouldNotGeneratePreview);
+        var max = 15;
+        event.preventDefault();
+        processItemRules();
+        jQuery.ajax({
+            url: url + '/index/items/max/' + max,
+            dataType: 'json',
+            data: jQuery('#bulk-metadata-editor-form').serialize(),
+            timeout: 30000,
+            success: function (data) {
+                if (!data) {
+                    alert(language.CouldNotGeneratePreview);
+                } else {
+                    var r = new Array(), j = 0;
 
-		var r = new Array(), j=0;
+                    r[j] = '<table><thead><tr><th scope="col">' + language.Title + '</th><th scope="col">' + language.Description + '</th><th scope="col">' + language.ItemType + '</th</tr></thead><tbody>';
+                    for (var key = 0, size = data.length; key < size; key++) {
+                        r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
+                        r[++j] = data[key]['title'];
+                        r[++j] = '</td><td>';
+                        r[++j] = data[key]['description'];
+                        r[++j] = '</td><td>';
+                        r[++j] = data[key]['type'];
+                        r[++j] = '</td></tr>';
+                    }
+                    r[++j] = '</tbody></table>';
 
-		r[0] ='<tr><td class="prevcol1"><strong>' + language.Title + '</strong></td><td class="prevcol2"><strong>' + language.Description + '</strong></td><td class="prevcol3"><strong>' + language.ItemType + '</strong></td</tr>';
-
-		for (var key=0, size=dataObj.length; key<size; key++){
-		    r[++j] ='<tr><td>';
-		    r[++j] = dataObj[key]['title'];
-		    r[++j] = '</td><td class="whatever1">';
-		    r[++j] = dataObj[key]['description'];
-		    r[++j] = '</td><td class="whatever2">';
-		    r[++j] = dataObj[key]['type'];
-		    r[++j] = '</td></tr>';
-		}
-
-		jQuery('#itemPreviewDiv').html(r.join(""));
-
-		jQuery("#show-more-items").click(showMoreItems);
-
+                    jQuery('#itemPreviewDiv').html(r.join(''));
+                    jQuery('#show-more-items').click(showMoreItems);
+                    jQuery('#hide-item-preview').show();
+                }
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
 		    alert(language.ItemsPreviewRequestTooLong);
 		else
-		    alert(language.ErrorGeneratingPreview);
+		    alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
 
 	    },
 	    complete: function(data,status) {
-		jQuery("#hide-item-preview").show();
 		jQuery('#items-waiting').hide();
 	    }
 	});
@@ -179,55 +175,50 @@ jQuery(document).ready(function() {
     });
 
     jQuery("#preview-fields-button").click(function(event){
-	event.preventDefault();
-	processItemRules();
-	jQuery.ajax({
-	    type: "POST",
-	    timeout: 30000,
-            data: jQuery("#bulk-metadata-editor-form").serialize(),
-            url: document.URL.split('?')[0]+"/index/fields/max/7",
-            success: function(data)
-            {   
-		dataObj=[];
-		if(data)
-		    dataObj = jQuery.parseJSON(data);
-		else
-		    alert(language.CouldNotGeneratePreview);
+        var max = 7;
+        event.preventDefault();
+        processItemRules();
+        jQuery.ajax({
+            url: url + '/index/fields/max/' + max,
+            dataType: 'json',
+            data: jQuery('#bulk-metadata-editor-form').serialize(),
+            timeout: 30000,
+            success: function (data) {
+                if (!data) {
+                    alert(language.CouldNotGeneratePreview);
+                } else {
+                    var r = new Array(), j = 0;
 
-		var r = new Array(), j=-1;
+                    r[j] = '<table><tbody>';
+                    jQuery.each(data, function (key, value) {
+                        var title = value['title'];
+                        delete value['title'];
+                        r[++j] = '<tr class="even"><td colspan="2">';
+                        r[++j] = title;
+                        r[++j] = '</td></tr>';
+                        jQuery.each(value, function (keyInner, valueInner) {
+                            r[++j] ='<tr class="odd"><td>';
+                            r[++j] = valueInner['field'];
+                            r[++j] = '</td><td>';
+                            r[++j] = valueInner['value'];
+                            r[++j] = '</td></tr>';
+                        });
+                    });
+                    r[++j] = '</tbody></table>';
 
-		jQuery.each(dataObj,function(key,value) {
-		    var title = value['title'];
-		    delete value['title'];
-		    r[++j] ='<tr><td><strong>';
-		    if(key.indexOf("and corresponding fields") == -1)
-			r[++j]="<strong>"+title+"</strong>";
-		    else
-			r[++j] = title;
-		    r[++j] = '</strong></td></tr>';
-		    jQuery.each(value,function(keyInner,valueInner){
-			r[++j] ='<tr><td class="prevcol1">';
-			r[++j] = valueInner['field'];
-			r[++j] = '</td><td class="prevcol2">';
-			r[++j] = valueInner['value'];
-			r[++j] = '</td></tr>';
-		    });
-		});
-
-		jQuery('#fieldPreviewDiv').html(r.join(""));
-
-		jQuery("#show-more-fields").click(showMoreFields);
-
+                    jQuery('#fieldPreviewDiv').html(r.join(''));
+                    jQuery('#show-more-fields').click(showMoreFields);
+                    jQuery('#hide-field-preview').show();
+                }
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
 		    alert(language.FieldsPreviewRequestTooLong);
 		else
-		    alert(language.ErrorGeneratingPreview);
+		    alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
 
 	    },
 	    complete: function(data,status) {
-		jQuery("#hide-field-preview").show();
 		jQuery('#fields-waiting').hide();
 	    }
 	});
@@ -242,51 +233,48 @@ jQuery(document).ready(function() {
     });
 
     jQuery("#preview-changes-button").click(function(event){
-	event.preventDefault();
-	processItemRules();
-	jQuery.ajax({
-	    type: "POST",
-	    timeout: 30000,
-            data: jQuery("#bulk-metadata-editor-form").serialize(),
-            url: document.URL.split('?')[0]+"/index/changes/max/20",
-            success: function(data)
-            {   
-		dataObj=[];
-		if(data)
-		    dataObj = jQuery.parseJSON(data);
-		else
-		    alert(language.CouldNotGeneratePreview);
+        var max = 20;
+        event.preventDefault();
+        processItemRules();
+        jQuery.ajax({
+            url: url + '/index/changes/max/' + max,
+            dataType: 'json',
+            data: jQuery('#bulk-metadata-editor-form').serialize(),
+            timeout: 30000,
+            success: function (data) {
+                if (!data) {
+                    alert(language.CouldNotGeneratePreview);
+                } else {
+                    var r = new Array(), j = 0;
 
-		var r = new Array(), j=0;
+                    r[j] = '<table><thead><tr><th scope="col">' + language.Item + '</th><th>' + language.Field + '</th><th>' + language.OldValue + '</th><th>' + language.NewValue + '</th</tr></thead><tbody>';
+                    for (var key = 0, size = data.length; key < size; key++) {
+                        r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
+                        r[++j] = data[key]['item'];
+                        r[++j] = '</td><td>';
+                        r[++j] = data[key]['field'];
+                        r[++j] = '</td><td>';
+                        r[++j] = data[key]['old'];
+                        r[++j] = '</td><td>';
+                        r[++j] = data[key]['new'];
+                        r[++j] = '</td></tr>';
+                    }
+                    r[++j] = '</tbody></table>';
 
-		r[0] ='<tr><td class="prevcol1"><strong>' + language.Item + '</strong></td><td class="prevcol2"><strong>' + language.Field + '</strong></td><td class="prevcol3"><strong>' + language.OldValue + '</strong></td><td class="prevcol4"><strong>' + language.NewValue + '</strong></td></tr>';
-
-		for (var key=0, size=dataObj.length; key<size; key++){
-		    r[++j] ='<tr><td class = "prevcol1">';
-		    r[++j] = dataObj[key]['item'];
-		    r[++j] = '</td><td class="prevcol2">';
-		    r[++j] = dataObj[key]['field'];
-		    r[++j] = '</td><td class="prevcol3">';
-		    r[++j] = dataObj[key]['old'];
-		    r[++j] = '</td><td class="prevcol4">';
-		    r[++j] = dataObj[key]['new'];
-		    r[++j] = '</td></tr>';
-		}
-		jQuery('#changesPreviewDiv').html(r.join(""));
-
-		jQuery("#show-more-changes").click(showMoreChanges);
-
+                    jQuery('#changesPreviewDiv').html(r.join(''));
+                    jQuery('#show-more-changes').click(showMoreChanges);
+                    jQuery('#hide-changes-preview').show();
+                }
             },
 	    error: function(data,errorString,error) {
 		if(errorstring=="timeout")
 		    alert(language.ChangesPreviewRequestTooLong);
 		else
-		    alert(language.ErrorGeneratingPreview);
+		    alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
 
 	    },
 	    complete: function(data,status) {
 		jQuery('#changes-waiting').hide();
-		jQuery("#hide-changes-preview").show();
 	    }
 	});
 	jQuery('#changes-waiting').css('display', 'inline');
@@ -337,124 +325,110 @@ function processItemRules(){
 }
 
 function showMoreItems(event){
+    var max = 200;
     event.preventDefault();
     processItemRules();
     jQuery.ajax({
-	type: "POST",
-	timeout: 30000,
-        data: jQuery("#bulk-metadata-editor-form").serialize(),
-        url: document.URL.split('?')[0]+"/index/items/max/200",
-        success: function(data)
-        {   
-	    dataObj=[];
-	    if(data)
-		dataObj = jQuery.parseJSON(data);
-	    else
-		alert(language.CouldNotGeneratePreview);
+        url: url + '/index/items/max/' + max,
+        dataType: 'json',
+        data: jQuery('#bulk-metadata-editor-form').serialize(),
+        timeout: 30000,
+        success: function (data) {
+            if (!data) {
+                alert(language.CouldNotGeneratePreview);
+            } else {
+                var r = new Array(), j = 0;
 
-	    var r = new Array(), j=0;
+                r[0] = '<table><thead><tr><th scope="col">' + language.Title + '</th><th scope="col">' + language.Description + '</th><th scope="col">' + language.ItemType + '</th</tr></thead><tbody>';
+                for (var key = 0, size = data.length; key < size; key++) {
+                    r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
+                    r[++j] = data[key]['title'];
+                    r[++j] = '</td><td>';
+                    r[++j] = data[key]['description'];
+                    r[++j] = '</td><td>';
+                    r[++j] = data[key]['type'];
+                    r[++j] = '</td></tr>';
+                }
+                r[++j] = '</tbody></table>';
 
-	    r[0] ='<tr><td class="prevcol1"><strong>' + language.Title + '</strong></td><td class="prevcol2"><strong>' + language.Description + '</strong></td><td class="prevcol3"><strong>' + language.ItemType +'</strong></td></tr>';
-
-	    for (var key=0, size=dataObj.length; key<size; key++){
-		r[++j] ='<tr><td>';
-		r[++j] = dataObj[key]['title'];
-		r[++j] = '</td><td class="whatever1">';
-		r[++j] = dataObj[key]['description'];
-		r[++j] = '</td><td class="whatever2">';
-		r[++j] = dataObj[key]['type'];
-		r[++j] = '</td></tr>';
-	    }
-	    jQuery('#itemPreviewDiv').html(r.join(""));
-	    
+                jQuery('#itemPreviewDiv').html(r.join(''));
+            }
         }
     });
-    jQuery("#hide-item-preview").show(300);
-
 }
 
 function showMoreFields(event){
+    var max = 100;
     event.preventDefault();
     processItemRules();
     jQuery.ajax({
-	type: "POST",
-	timeout: 30000,
-        data: jQuery("#bulk-metadata-editor-form").serialize(),
-        url: document.URL.split('?')[0]+"/index/fields/max/100",
-        success: function(data)
-        {   
-	    dataObj=[];
-	    if(data)
-		dataObj = jQuery.parseJSON(data);
-	    else
-		alert(language.CouldNotGeneratePreview);
+        url: url + '/index/fields/max/' + max,
+        dataType: 'json',
+        data: jQuery('#bulk-metadata-editor-form').serialize(),
+        timeout: 30000,
+        success: function (data) {
+            if (!data) {
+                alert(language.CouldNotGeneratePreview);
+            } else {
+                var r = new Array(), j = 0;
 
-	    var r = new Array(), j=-1;
+                r[j] = '<table><tbody>';
+                jQuery.each(data, function (key, value) {
+                    var title = value['title'];
+                    delete value['title'];
+                    r[++j] = '<tr class="even"><td colspan="2">';
+                    r[++j] = title;
+                    r[++j] = '</td></tr>';
+                    jQuery.each(value, function (keyInner, valueInner) {
+                        r[++j] ='<tr class="odd"><td>';
+                        r[++j] = valueInner['field'];
+                        r[++j] = '</td><td>';
+                        r[++j] = valueInner['value'];
+                        r[++j] = '</td></tr>';
+                    });
+                });
+                r[++j] = '</tbody></table>';
 
-	    jQuery.each(dataObj,function(key,value) {
-		var title = value['title'];
-		delete value['title'];
-		r[++j] ='<tr><td><strong>';
-		if(key.indexOf("and corresponding fields") == -1)
-		    r[++j]="<strong>"+title+"</strong>";
-		else
-		    r[++j] = title;
-		r[++j] = '</strong></td></tr>';
-		jQuery.each(value,function(keyInner,valueInner){
-		    r[++j] ='<tr><td class="prevcol1">';
-		    r[++j] = valueInner['field'];
-		    r[++j] = '</td><td class="prevcol2">';
-		    r[++j] = valueInner['value'];
-		    r[++j] = '</td></tr>';
-		});
-	    });
-
-	    jQuery('#fieldPreviewDiv').html(r.join(""));
-	    
+                jQuery('#fieldPreviewDiv').html(r.join(''));
+            }
         }
     });
-    
-    jQuery("#hide-field-preview").show(300);
 }
 
 
 function showMoreChanges(event){
+    var max = 200;
     event.preventDefault();
     processItemRules();
     jQuery.ajax({
-	type: "POST",
-	timeout: 30000,
-        data: jQuery("#bulk-metadata-editor-form").serialize(),
-        url: document.URL.split('?')[0]+"/index/changes/max/200",
-        success: function(data)
-        {   
-	    dataObj=[];
-	    if(data)
-		dataObj = jQuery.parseJSON(data);
-	    else
-		alert(language.CouldNotGeneratePreview);
+        url: url + '/index/changes/max/' + max,
+        dataType: 'json',
+        data: jQuery('#bulk-metadata-editor-form').serialize(),
+        timeout: 30000,
+        success: function (data) {
+            if (!data) {
+                alert(language.CouldNotGeneratePreview);
+            } else {
+                var r = new Array(), j = 0;
 
-	    var r = new Array(), j=0;
+                r[j] = '<table><thead><tr><th scope="col">' + language.Item + '</th><th>' + language.Field + '</th><th>' + language.OldValue + '</th><th>' + language.NewValue + '</th</tr></thead><tbody>';
+                for (var key = 0, size = data.length; key < size; key++) {
+                    r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
+                    r[++j] = data[key]['item'];
+                    r[++j] = '</td><td>';
+                    r[++j] = data[key]['field'];
+                    r[++j] = '</td><td>';
+                    r[++j] = data[key]['old'];
+                    r[++j] = '</td><td>';
+                    r[++j] = data[key]['new'];
+                    r[++j] = '</td></tr>';
+                }
+                r[++j] = '</tbody></table>';
 
-	    r[0] ='<tr><td class="prevcol1"><strong>' + language.Item + '</strong></td><td class="prevcol2"><strong>' + language.Field + '</strong></td><td class="prevcol3"><strong>' + language.OldValue + '</strong></td><td class="prevcol4"><strong>' + language.NewValue + '</strong></td></tr>';
-
-	    for (var key=0, size=dataObj.length; key<size; key++){
-		r[++j] ='<tr><td class = "prevcol1">';
-		r[++j] = dataObj[key]['item'];
-		r[++j] = '</td><td class="prevcol2">';
-		r[++j] = dataObj[key]['field'];
-		r[++j] = '</td><td class="prevcol3">';
-		r[++j] = dataObj[key]['old'];
-		r[++j] = '</td><td class="prevcol4">';
-		r[++j] = dataObj[key]['new'];
-		r[++j] = '</td></tr>';
-	    }
-	    jQuery('#changesPreviewDiv').html(r.join(""));
-	    jQuery('#waiting').hide();
-	    jQuery("#hide-changes-preview").show(300);
+                jQuery('#changesPreviewDiv').html(r.join(''));
+            }
         }
     });
-    jQuery('#waiting').show();
 }
 
 })();

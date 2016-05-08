@@ -1,9 +1,11 @@
 <?php
-
-$head = array('bodyclass' => 'bulk-metadata-editor primary', 
-              'title' => html_escape(__('Bulk Metadata Editor')));
+$title =  __('Bulk Metadata Editor');
+$head = array(
+    'title' => $title,
+    'bodyclass' => 'primary bulk-metadata-editor',
+);
 echo head($head);
 ?>
 <?php echo flash(); ?>
 <?php echo $form; ?>
-<?php echo foot(); ?>
+<?php echo foot();
