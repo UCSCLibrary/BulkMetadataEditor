@@ -52,7 +52,13 @@ jQuery(document).ready(function () {
 
         $('#add-rule').on('click', function (event) {
             event.preventDefault();
-            $('#item-rule-box').clone(true).appendTo('#item-rule-boxes');
+            var currentLast = $('.item-rule-box:last');
+            var newLast = currentLast.clone(true);
+            newLast.find('#bulk-metadata-editor-element-id').val('50');
+            newLast.find('#bulk-metadata-editor-compare').val('exact');
+            newLast.find('#bulk-metadata-editor-selector').val('');
+            newLast.find('#bulk-metadata-editor-case').attr('checked', false);
+            currentLast.parent().append(newLast);
         });
 
         $('#changesRadio-replace').change(function () {
