@@ -20,12 +20,16 @@ Then install it like any other Omeka plugin.
 Notes
 -----
 
-- After a successful process, records may need to be reindexed in order to find
-them via the quick search field.
-
+- After a successful process, records must be reindexed in order to find them
+  via the quick search field.
 - The change "Append text to existing metadata in the selected fields" appends
-text only if there is already a metadata.
-- A space is automatically added with the change "Append text to existing metadata in the selected fields".
+  text only if there is already a metadata.
+- A space is automatically added with the change "Append text to existing
+  metadata in the selected fields".
+- The preview may fail when there is a lot of fields or changes to prepare.
+  Nevermind, the true process will work fine even with a huge number of items
+  and fields, because it is done in the background, without the limit set by the
+  server. Nevertheless, it's recommended to avoid too large updates.
 
 
 Warning
@@ -67,7 +71,7 @@ Copyright
 ---------
 
 * Copyright 2014 UCSC Library Digital Initiatives
-* Copyright Daniel Berthereau, 2015 (see [Daniel-KM] on GitHub)
+* Copyright Daniel Berthereau, 2015-2016 (see [Daniel-KM] on GitHub)
 * Copyright Julian Maurice for BibLibre, 2015 (see [jajm] on GitHub)
 
 
