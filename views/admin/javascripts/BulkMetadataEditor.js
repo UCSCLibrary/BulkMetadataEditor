@@ -168,7 +168,7 @@ jQuery(document).ready(function() {
 		jQuery('#items-waiting').hide();
 	    }
 	});
-	jQuery('#items-waiting').css('display:inline;');
+	jQuery('#items-waiting').css('display', 'inline');
     });
 
 
@@ -231,7 +231,7 @@ jQuery(document).ready(function() {
 		jQuery('#fields-waiting').hide();
 	    }
 	});
-	jQuery('#fields-waiting').css('display:inline;');
+	jQuery('#fields-waiting').css('display', 'inline');
     });
 
 
@@ -289,7 +289,7 @@ jQuery(document).ready(function() {
 		jQuery("#hide-changes-preview").show();
 	    }
 	});
-	jQuery('#changes-waiting').css('display','inline');
+	jQuery('#changes-waiting').css('display', 'inline');
     });
 
 
