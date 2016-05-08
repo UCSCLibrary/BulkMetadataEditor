@@ -46,11 +46,15 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
             $params = $_REQUEST;
             try {
-                $this->_bulkEdit->perform($params);
-                $message = __('The requested changes have been applied to the database.');
+                $dispatcher = Zend_Registry::get('job_dispatcher');
+                $options = array('params' => $params);
+                $dispatcher->sendLongRunning('BulkMetadataEditor_Job_Process', $options);
+
+                $message = __('The requested changes are applied to the database one by one in the background.')
+                    . ' ' . __('Check logs for success and errors.');
                 $status = 'success';
             } catch (Exception $e) {
-                $message = $e->getMessage();
+                $message = __('Bulk edition cannot be started: %s', $e->getMessage());
                 $status = 'error';
             }
 
