@@ -324,17 +324,9 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
      */
     private function _getCollectionOptions()
     {
-        $collections = get_records('Collection', array(), '0');
-        $options = array('0' => __('All Collections'));
-        foreach ($collections as $collection) {
-            $titles = $collection->getElementTexts('Dublin Core', 'Title');
-            if (isset($titles[0])) {
-                $title = $titles[0];
-            }
-            $options[$collection->id] = $title;
-        }
-
-        return $options;
+        $options = get_table_options('Collection');
+        unset($options['']);
+        return array('0' => __('All Collections')) + $options;
     }
 
     /**
@@ -345,6 +337,15 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
      */
     private function _getElementOptions()
     {
+        /*
+        $options = get_table_options('Element', null, array(
+            'record_types' => array('Item', 'All'),
+            'sort' => 'alphaBySet')
+        );
+        unset($options['']);
+        return $options;
+        */
+
         $db = get_db();
         $sql = "
         SELECT es.name AS element_set_name, e.id AS element_id,
