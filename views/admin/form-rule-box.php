@@ -24,11 +24,16 @@ foreach ($elements as $element) {
 }
 
 $form_compare_options = array(
-    'exact' => __('is exactly'),
+    'is exactly' => __('is exactly'),
+    'is not' => __('is not'),
     'contains' => __('contains'),
-    '!exact' => __('is not exactly'),
-    '!contains' => __('does not contain'),
-    'regexp' => __('matches regular expression')
+    'does not contain' => __('does not contain'),
+    'is empty' => __('is empty'),
+    'is not empty' => __('is not empty'),
+    'starts with' => __('starts with'),
+    'ends with' => __('ends with'),
+    'matches' => __('matches'),
+    'does not match' => __('does not matches'),
 );
 ?>
 <div id="item-meta-selects" style="display: none;">

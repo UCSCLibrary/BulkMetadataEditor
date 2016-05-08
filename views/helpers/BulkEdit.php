@@ -79,152 +79,90 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * @param array $items Array of items matching the selection rules. Each
      * element of this array is itself an array containing identifying
      * information for a single matched item.
+     * If max is empty, only ids are returned (max is used only for display).
      */
     public function getItems($params, $max = 0)
     {
         $rules = $this->_listItemRules($params);
 
-        $itemsParams = array();
+        // All rules can be applied via the Omeaka core, except the case.
+        // Consequently, get_records() is not used directly.
+        $rulesWithoutCase = array();
+        $rulesWithCase = array();
+        foreach ($rules as $rule) {
+            if (empty($rule['case'])) {
+                $rulesWithoutCase[] = $rule;
+            }
+            else {
+                $rulesWithCase[] = $rule;
+            }
+        }
+
+        // Workaround to make the plugin runs with old Omeka releases.
+        $rulesOmekaNew = array();
+        if ($rulesWithoutCase && version_compare(OMEKA_VERSION, '2.5', '<')) {
+            $oldRules = array(
+                'contains',
+                'is exactly',
+                'does not contain',
+                'is empty',
+                'is not empty',
+            );
+            foreach ($rulesWithoutCase as $key => $rule) {
+                if (!in_array($rule['type'], $oldRules)) {
+                    $rulesOmekaNew[] = $rule;
+                    unset($rulesWithoutCase[$key]);
+                }
+            }
+        }
+
+        $itemsParams = array('advanced' => $rulesWithoutCase);
 
         // set up query parameters to select items from a given collection
-        if (isset($params['bmeCollectionId']) && $params['bmeCollectionId'] != 0) {
+        if (!empty($params['bmeCollectionId'])) {
             $itemsParams['collection'] = $params['bmeCollectionId'];
         }
 
-        // TODO Get items with all params with one query to avoid this huge one.
-        // retrieve all potentially matching items
-        try {
-            $items = get_records('Item', $itemsParams, 0);
-        } catch (Exception $e) {
-            throw $e;
+        $table = $this->_db->getTable('Item');
+        $select = $table->getSelectForFindBy($itemsParams);
+        if ($max) {
+            $table->applyPagination($select, $max);
         }
 
-        // if there are any metadata selection rules set
-        if (count($rules) > 0) {
-            $newitems = array();
-            $j = 0;
+        $this->_addRulesWithCase($select, $rulesWithCase);
+        $this->_addRulesOldOmeka($select, $rulesOmekaNew);
 
-            // loop through all of the items
-            foreach ($items as $item) {
-                if ($max > 0 && ++ $j > $max) {
-                    break;
-                }
+        // Get only the item ids when there is no max.
+        if (empty($max)) {
+            $select
+                ->reset(Zend_Db_Select::COLUMNS)
+                ->columns(array("items.id"));
+            try {
+                $itemIds = get_db()->fetchCol($select);
+            } catch (Exception $e) {
+                throw $e;
+            }
+            return $itemIds;
+        }
 
-                // by default, select all items.
-                // Each rule can eliminate items by setting this variable to
-                // false.
-                $matched = true;
+        // Get the objects.
+        $items = $table->fetchObjects($select);
 
-                // loop through the rules
-                foreach ($rules as $rule) {
-                    // get all elementTexts for this rule's Element
-                    try {
-                        $compareTexts = $item->getElementTextsByRecord($item->getElementById($rule['field']));
-                    } catch (Exception $e) {
-                        throw $e;
-                    }
+        if (!$items) {
+            return array();
+        }
 
-                    // this variable keeps track of whether any of the element
-                    // texts matches the rule
-                    $matched2 = false;
-
-                    // loop through the element texts
-                    foreach ($compareTexts as $compareText) {
-                        $comparator = $compareText->text;
-                        if (!$rule['case']) {
-                            $comparator = strtolower($compareText->text);
-                        }
-
-                        // perform the search
-                        $match = preg_match($rule['search'], $comparator);
-
-                        if ($match === false) {
-                            // TODO proper error handling
-                            throw new Exception(__('Unable to parse regular expression'));
-                        }
-
-                        // negate if necessary
-                        if ($rule['neg']) {
-                            $match = !(boolean) $match;
-                        }
-
-                        // throw a flag if we found a match
-                        if ($match) {
-                            $matched2 = true;
-                        }
-                    }
-
-                    // if none of the metadata entries for this field match the
-                    // rule (unless the rule is negative and there are no
-                    // entries, which should match)
-                    if (!($matched2) && !($rule['neg'] && empty($compareTexts))) {
-                        // then this item will not be selected
-                        $matched = false;
-
-                        // so we decrement our item counter
-                        $j--;
-
-                        // and we do not have to check the other rules
-                        continue;
-                    }
-                } // end rule loop
-
-                // if none of the rules has excluded this item
-                // include it in the updated list of items
-                if ($matched) {
-                    try {
-                        $newitems[] = $this->_pullItemData($item);
-                    } catch (Exception $e) {
-                        throw $e;
-                    }
-                }
-            } // end item loop
-        }  // endif (if there are any rules)
-
-        // if we had no rules to enforce, and skipped the above loops
-        else  {
-            // generate the return array from all of the items
-            $newitems = array();
-            $j = 1;
-            foreach ($items as $item) {
-                if ($max > 0 && ++ $j > $max) {
-                    break;
-                }
-                try {
-                    $newitems[] = $this->_pullItemData($item);
-                } catch (Exception $e) {
-                    throw $e;
-                }
+        // generate the return array from all of the items if max is set.
+        $itemsArray = array();
+        foreach ($items as $item) {
+            try {
+                $itemsArray[] = $this->_pullItemData($item);
+            } catch (Exception $e) {
+                throw $e;
             }
         }
 
-        if ($j > $max) {
-            $leftover = count($items) - $max;
-            if ($leftover > 0) {
-                $title = __('plus %d more items.', $leftover);
-                if ($max < 90) {
-                    $title .= ' <a id="show-more-items" href="">' . __('Show More') . '</a>';
-                }
-                $newitems[] = array(
-                    'title' => $title,
-                    'description' => '',
-                    'type' => '',
-                    'id' => 0,
-                );
-            }
-        }
-
-        if (count($newitems) == 0)
-            $newitems = array(
-                array(
-                    'title' => __('No matching items found'),
-                    'description' => '',
-                    'type' => '',
-                    'id' => '',
-                )
-            );
-
-        return $newitems;
+        return $itemsArray;
     }
 
     /**
@@ -238,47 +176,176 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
         $rules = array();
 
         if (!empty($params['itemSelectMeta'])) {
+            $noCase = array(
+                'is empty',
+                'is not empty',
+                // In mysql, regex are always case insensitive.
+                'matches',
+                'does not match',
+            );
             foreach ($params['item-rule-elements'] as $key => $ruleElement) {
-                $field = $params['item-rule-elements'][$key];
+                $rule = array();
+                $rule['element_id'] = $params['item-rule-elements'][$key];
+                $rule['type'] = $params['item-compare-types'][$key];
+                $rule['terms'] = urldecode($params['item-selectors'][$key]);
 
-                $search = urldecode($params['item-selectors'][$key]);
-                $search = preg_quote($search, '/');
-                $search = str_replace('\*', '.*', $search);
+                // By default, mysql is case insensitive.
+                $rule['case'] = !in_array($rule['type'], $noCase)
+                    && (!isset($params['item-cases'][$key]) || $params['item-cases'][$key] != 'false');
 
-                $case = true;
-                if (isset($params['item-cases'][$key]) && $params['item-cases'][$key] == "false") {
-                    $case = false;
-                    $search = strtolower($search);
-                }
-
-                $neg = false;
-                $exact = true;
-                switch ($params['item-compare-types'][$key]) {
-                    case '!exact':
-                        $neg = true;
-                    case 'exact':
-                        $search = "/^" . $search . "$/";
-                        break;
-                    case '!contains':
-                        $neg = true;
-                    case 'contains':
-                        $search = '/' . $search . '/';
-                        break;
-                    // The regular expression should be well formed.
-                    // case 'regexp':
-                    //     break;
-                }
-
-                $rules[] = array(
-                    'field' => $field,
-                    'search' => $search,
-                    'case' => $case,
-                    'neg' => $neg,
-                );
+                $rules[] = $rule;
             }
         }
 
         return $rules;
+    }
+
+    /**
+     * Helper to specify the case in queries.
+     *
+     * @see Table_Item::_advancedSearch()
+     *
+     * @param Zend_Db_Select $select
+     * @param array $simpleTerms
+     * @return void
+     */
+    private function _addRulesWithCase($select, $rulesWithCase)
+    {
+            if (empty($rulesWithCase)) {
+            return;
+        }
+
+        $db = $this->_db;
+        $advancedIndex = 0;
+        foreach ($rulesWithCase as $v) {
+            // Do not search on blank rows.
+            if (empty($v['element_id']) || empty($v['type'])) {
+                continue;
+            }
+
+            $value = isset($v['terms']) ? $v['terms'] : null;
+            $type = $v['type'];
+            $elementId = (int) $v['element_id'];
+            $alias = "_advanced_case_{$advancedIndex}";
+
+            $inner = true;
+            $extraJoinCondition = '';
+            // Determine what the WHERE clause should look like.
+            switch ($type) {
+                case 'contains':
+                    $predicate = "COLLATE UTF8_BIN LIKE " . $db->quote('%'.$value .'%');
+                    break;
+                case 'is exactly':
+                    $predicate = 'COLLATE UTF8_BIN = ' . $db->quote($value);
+                    break;
+                case 'does not contain':
+                    $extraJoinCondition = "AND {$alias}.text COLLATE UTF8_BIN LIKE " . $db->quote('%'.$value .'%');
+                    $inner = false;
+                    $predicate = "IS NULL";
+                    break;
+                case 'starts with':
+                    $predicate = "COLLATE UTF8_BIN LIKE " . $db->quote($value.'%');
+                    break;
+                case 'ends with':
+                    $predicate = "COLLATE UTF8_BIN LIKE " . $db->quote('%'.$value);
+                    break;
+                case 'is not':
+                    $predicate = 'COLLATE UTF8_BIN != ' . $db->quote($value);
+                    break;
+                default:
+                    throw new Omeka_Record_Exception(__('Invalid search type given!'));
+            }
+
+            // Note that $elementId was earlier forced to int, so manual quoting
+            // is unnecessary here
+            $joinCondition = "{$alias}.record_id = items.id AND {$alias}.record_type = 'Item' AND {$alias}.element_id = $elementId";
+            if ($extraJoinCondition) {
+                $joinCondition .= ' ' . $extraJoinCondition;
+            }
+            if ($inner) {
+                $select->joinInner(array($alias => $db->ElementText), $joinCondition, array());
+            } else {
+                $select->joinLeft(array($alias => $db->ElementText), $joinCondition, array());
+            }
+            $select->where("{$alias}.text {$predicate}");
+
+            $advancedIndex++;
+        }
+    }
+
+    /**
+     * Helper to specify new rules in queries for Omeka releases < 2.5.
+     *
+     * @see Table_Item::_advancedSearch()
+     *
+     * @param Zend_Db_Select $select
+     * @param array $simpleTerms
+     * @return void
+     */
+    private function _addRulesOldOmeka($select, $rulesOmekaNew)
+    {
+        if (empty($rulesOmekaNew)) {
+            return;
+        }
+
+        $db = $this->_db;
+        $advancedIndex = 0;
+        foreach ($rulesOmekaNew as $v) {
+            // Do not search on blank rows.
+            if (empty($v['element_id']) || empty($v['type'])) {
+                continue;
+            }
+
+            $value = isset($v['terms']) ? $v['terms'] : null;
+            $type = $v['type'];
+            $elementId = (int) $v['element_id'];
+            $alias = "_advanced_old_{$advancedIndex}";
+
+            $inner = true;
+            $extraJoinCondition = '';
+            // Determine what the WHERE clause should look like.
+            switch ($type) {
+                case 'starts with':
+                    $predicate = "LIKE " . $db->quote($value.'%');
+                    break;
+                case 'ends with':
+                    $predicate = "LIKE " . $db->quote('%'.$value);
+                    break;
+                case 'is not':
+                    $predicate = ' != ' . $db->quote($value);
+                    break;
+                case 'matches':
+                    if (strlen($value)) {
+                        $predicate = 'REGEXP ' . $db->quote($value);
+                    } else {
+                        $inner = false;
+                        $predicate = 'IS NULL';
+                    }
+                    break;
+                case 'does not match':
+                    $predicate = strlen($value)
+                        ? 'NOT REGEXP ' . $db->quote($value)
+                        : 'IS NOT NULL';
+                    break;
+                default:
+                    throw new Omeka_Record_Exception(__('Invalid search type given!'));
+            }
+
+            // Note that $elementId was earlier forced to int, so manual quoting
+            // is unnecessary here
+            $joinCondition = "{$alias}.record_id = items.id AND {$alias}.record_type = 'Item' AND {$alias}.element_id = $elementId";
+            if ($extraJoinCondition) {
+                $joinCondition .= ' ' . $extraJoinCondition;
+            }
+            if ($inner) {
+                $select->joinInner(array($alias => $db->ElementText), $joinCondition, array());
+            } else {
+                $select->joinLeft(array($alias => $db->ElementText), $joinCondition, array());
+            }
+            $select->where("{$alias}.text {$predicate}");
+
+            $advancedIndex++;
+        }
     }
 
     /**
@@ -744,29 +811,29 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     private function _pullItemData($item)
     {
         if (!$item instanceof Item) {
-            throw new Exception(__("Cannot pull item data from a non-item"));
+            throw new Exception(__('Cannot pull item data from a non-item.'));
         }
-        $title = __('untitled');
-        $description = __('no description given');
-        $typename = __("undefined");
+        $title = __('[untitled]');
+        $description = __('[no description given]');
+        $typename = __("[undefined]");
         $titles = $item->getElementTexts('Dublin Core', 'Title');
         if (count($titles) > 0) {
-            $title = $titles[0]->text;
+            $title = strip_formatting($titles[0]->text);
         }
         $descriptions = $item->getElementTexts('Dublin Core', 'Description');
         if (count($descriptions) > 0) {
-            $description = $descriptions[0]->text;
+            $description = strip_formatting($descriptions[0]->text);
         }
         $type = $item->getItemType();
         if (is_object($type)) {
-            $typename = $type->name;
+            $typename = strip_formatting($type->name);
         }
 
         $rv = array(
+            'id' => $item->id,
             'title' => $title,
             'description' => $description,
             'type' => $typename,
-            'id' => $item->id,
         );
         return $rv;
     }

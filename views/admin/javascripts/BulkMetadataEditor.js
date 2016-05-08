@@ -47,7 +47,7 @@ jQuery(document).ready(function () {
             var currentLast = $('.item-rule-box:last');
             var newLast = currentLast.clone(true);
             newLast.find('#bulk-metadata-editor-element-id').val('50');
-            newLast.find('#bulk-metadata-editor-compare').val('exact');
+            newLast.find('#bulk-metadata-editor-compare').val('is exactly');
             newLast.find('#bulk-metadata-editor-selector').val('');
             newLast.find('#bulk-metadata-editor-case').attr('checked', false);
             currentLast.parent().append(newLast);
@@ -140,14 +140,18 @@ jQuery(document).ready(function () {
                         var r = new Array(), j = 0;
 
                         r[j] = '<table><thead><tr><th scope="col">' + language.Title + '</th><th scope="col">' + language.Description + '</th><th scope="col">' + language.ItemType + '</th</tr></thead><tbody>';
-                        for (var key = 0, size = data.length; key < size; key++) {
-                            r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
-                            r[++j] = data[key]['title'];
-                            r[++j] = '</td><td>';
-                            r[++j] = data[key]['description'];
-                            r[++j] = '</td><td>';
-                            r[++j] = data[key]['type'];
-                            r[++j] = '</td></tr>';
+                        if (data.length > 0) {
+                            for (var key = 0, size = data.length; key < size; key++) {
+                                r[++j] ='<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
+                                r[++j] = data[key]['title'];
+                                r[++j] = '</td><td>';
+                                r[++j] = data[key]['description'];
+                                r[++j] = '</td><td>';
+                                r[++j] = data[key]['type'];
+                                r[++j] = '</td></tr>';
+                            }
+                        } else {
+                            r[++j] ='<tr class="odd"><td colspan="3">' + language.NoItemFound + '</td></tr>';
                         }
                         r[++j] = '</tbody></table>';
 
@@ -304,17 +308,17 @@ jQuery(document).ready(function () {
         $('.hiddenField').remove();
 
         $('.bulk-metadata-editor-element-id').each(function (index) {
-            var html = '<input class="hiddenField" type="hidden" name="item-rule-elements[]" value=' + $(this).val() + ' />';
+            var html = '<input class="hiddenField" type="hidden" name="item-rule-elements[]" value="' + $(this).val() + '" />';
             $('form').append(html);
         });
 
         $('.bulk-metadata-editor-compare').each(function (index) {
-            var html = '<input class="hiddenField" type="hidden" name="item-compare-types[]" value=' + $(this).val() + ' />';
+            var html = '<input class="hiddenField" type="hidden" name="item-compare-types[]" value="' + $(this).val() + '" />';
             $('form').append(html);
         });
 
         $('.bulk-metadata-editor-case').each(function (index) {
-            var html = '<input class="hiddenField" type="hidden" name="item-cases[]" value=' + $(this).prop('checked') + ' />';
+            var html = '<input class="hiddenField" type="hidden" name="item-cases[]" value="' + $(this).prop('checked') + '" />';
             $('form').append(html);
         });
 
