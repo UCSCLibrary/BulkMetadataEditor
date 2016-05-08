@@ -2,6 +2,7 @@ jQuery(document).ready(function () {
     var $ = jQuery;
     var language = Omeka.BulkMetadataEditor.language;
     var url = document.URL.split('?')[0];
+    var baseUrl = url.substr(0, url.length - url.split('/').pop().length);
 
     init();
 
@@ -240,7 +241,7 @@ jQuery(document).ready(function () {
                     if (data['items'].length > 0) {
                         for (var key = 0, size = data['items'].length; key < size; key++) {
                             r[++j] = '<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
-                            r[++j] = data['items'][key]['title'];
+                            r[++j] = '<a href="' + baseUrl + 'items/show/' + data['items'][key]['id'] + '">' + data['items'][key]['title'] + '</a>';
                             r[++j] = '</td><td>';
                             r[++j] = data['items'][key]['description'];
                             r[++j] = '</td><td>';
@@ -295,7 +296,7 @@ jQuery(document).ready(function () {
                             var title = value['title'];
                             delete value['title'];
                             r[++j] = '<tr class="even"><td colspan="2">';
-                            r[++j] = title;
+                            r[++j] = '<a href="' + baseUrl + 'items/show/' + key + '">' + title + '</a>';
                             r[++j] = '</td></tr>';
                             $.each(value, function (keyInner, valueInner) {
                                 r[++j] = '<tr class="odd"><td>';
@@ -351,7 +352,7 @@ jQuery(document).ready(function () {
                     if (data['changes'].length > 0) {
                         for (var key = 0, size = data['changes'].length; key < size; key++) {
                             r[++j] = '<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
-                            r[++j] = data['changes'][key]['item'];
+                            r[++j] = '<a href="' + baseUrl + 'items/show/' + data['changes'][key]['itemId'] + '">' + data['changes'][key]['item'] + '</a>';
                             r[++j] = '</td><td>';
                             r[++j] = data['changes'][key]['field'];
                             r[++j] = '</td><td>';

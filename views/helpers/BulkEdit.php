@@ -641,6 +641,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         // array.
                         if ($count > 0) {
                             $changes[] = array(
+                                'itemId' => $itemId,
                                 'item' => $itemTitle,
                                 'field' => $element->name,
                                 'old' => $eText->text,
@@ -674,6 +675,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
                         $new = '';
                         $changes[] = array(
+                            'itemId' => $itemId,
                             'item' => $itemTitle,
                             'field' => $element->name,
                             'old' => $eText->text,
@@ -709,6 +711,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         }
 
                         $changes[] = array(
+                            'itemId' => $itemId,
                             'item' => $itemTitle,
                             'field' => $element->name,
                             'old' => $eText->text,
@@ -741,6 +744,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         if (!in_array($field['element_id'], $made)) {
                             $new = $params['bmeAdd'];
                             $changes[] = array(
+                                'itemId' => $itemId,
                                 'item' => $itemTitle,
                                 'field' => $element->name,
                                 'old' => 'null',
@@ -774,6 +778,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         if (!isset($deduplicatedFieldsByElement[$element->id][$field['id']])) {
                             $new = '';
                             $changes[] = array(
+                                'itemId' => $itemId,
                                 'item' => $itemTitle,
                                 'field' => $element->name,
                                 'old' => $eText->text,
