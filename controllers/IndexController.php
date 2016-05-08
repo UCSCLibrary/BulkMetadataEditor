@@ -135,9 +135,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $max = $this->_getParam('max');
         try {
-            $items = $this->_bulkEdit->getItems();
-            $fields = $this->_bulkEdit->getFields($items);
-            $changes = $this->_bulkEdit->getChanges($items, $fields, $max, false);
+            $changes = $this->_bulkEdit->getChanges($max);
             $this->_helper->json($changes);
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(500);

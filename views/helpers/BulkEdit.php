@@ -25,6 +25,26 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     }
 
     /**
+     * Retrieve the edits specified by the form input.
+     *
+     * Retrieve metadata element texts according to the rules in the POST
+     * variables set by the input form.
+     *
+     * @param max change to get
+     */
+    public function getChanges($max = 0)
+    {
+        try {
+            $items = $this->getItems();
+            $fields = $this->getFields($items);
+            $changes = $this->_update($items, $fields, $max, false);
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return $changes;
+    }
+
+    /**
      * Perform the edits specified by the form input.
      *
      * This function calls the matching subroutines with no maximum number of
@@ -33,12 +53,10 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      */
     public function perform()
     {
-        $max = 0;
         try {
-            $this->view->items = $this->getItems($max);
             $items = $this->getItems();
             $fields = $this->getFields($items);
-            $this->getChanges($items, $fields, $max, true);
+            $this->_update($items, $fields, 0, true);
         } catch (Exception $e) {
             throw $e;
         }
@@ -344,7 +362,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * @return array $changes An array containing the old and new values of
      * element text records which will be updated in the database.
      */
-    public function getChanges($items, $fields, $max, $perform)
+    protected function _update($items, $fields, $max, $perform)
     {
         if (!isset($_REQUEST['changesRadio'])) {
             throw new Exception(__('Please select an action to perform.'));
