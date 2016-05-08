@@ -71,7 +71,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
                 array(
                     'ViewScript',
                     array(
-                        'viewScript' => 'FormRulebox.php',
+                        'viewScript' => 'form-rule-box.php',
                         'class' => 'field',
                     )
                 )
@@ -99,7 +99,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             'decorators' => array(array(
                 'ViewScript',
                 array(
-                    'viewScript' => 'FormPreviewDiv.php',
+                    'viewScript' => 'form-preview-div.php',
                     'class' => 'field',
                 )
             ))
@@ -135,7 +135,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             'decorators' => array(array(
                 'ViewScript',
                 array(
-                    'viewScript' => 'FormPreviewDiv.php',
+                    'viewScript' => 'form-preview-div.php',
                     'class' => 'field',
                 )
             ))
@@ -149,7 +149,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
                 array(
                     'ViewScript',
                     array(
-                        'viewScript' => 'FormRadio.php',
+                        'viewScript' => 'form-radio.php',
                         'class' => 'field',
                     )
                 )
@@ -186,7 +186,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
                 array(
                     'ViewScript',
                     array(
-                        'viewScript' => 'FormPreviewDiv.php',
+                        'viewScript' => 'form-preview-div.php',
                         'class' => 'field',
                     )
                 )
