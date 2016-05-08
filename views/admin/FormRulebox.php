@@ -51,7 +51,7 @@ $form_compare_options = array(
                     <?php echo $this->formCheckbox('bulk-metadata-editor-case', 'Match Case', array('class' => 'bulk-metadata-editor-case')); ?>
                 </div>
                 <div class="inputs one column omega">
-                    <div class="removeRule">[x]</div>
+                    <div class="removeRule" style="float:right;">[x]</div>
                 </div>
             </div>
         </div>
