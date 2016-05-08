@@ -132,61 +132,18 @@ jQuery(document).ready(function () {
             $('#items-waiting').css('display', 'inline');
         });
 
-        $('#hide-item-preview').click(function (event) {
-            event.preventDefault();
-            $('#itemPreviewDiv').html('<br />');
-            $('#hide-item-preview').hide();
-        });
-
         $('#preview-fields-button').click(function (event) {
             var max = 7;
             event.preventDefault();
             processItemRules();
-            $.ajax({
-                url: url + '/index/fields/max/' + max,
-                dataType: 'json',
-                data: $('#bulk-metadata-editor-form').serialize(),
-                timeout: 30000,
-                success: function (data) {
-                    if (!data) {
-                        alert(language.CouldNotGeneratePreview);
-                    } else {
-                        var r = new Array(), j = 0;
-
-                        r[j] = '<table><tbody>';
-                        $.each(data, function (key, value) {
-                            var title = value['title'];
-                            delete value['title'];
-                            r[++j] = '<tr class="even"><td colspan="2">';
-                            r[++j] = title;
-                            r[++j] = '</td></tr>';
-                            $.each(value, function (keyInner, valueInner) {
-                                r[++j] ='<tr class="odd"><td>';
-                                r[++j] = valueInner['field'];
-                                r[++j] = '</td><td>';
-                                r[++j] = valueInner['value'];
-                                r[++j] = '</td></tr>';
-                            });
-                        });
-                        r[++j] = '</tbody></table>';
-
-                        $('#fieldPreviewDiv').html(r.join(''));
-                        $('#show-more-fields').click(showMoreFields);
-                        $('#hide-field-preview').show();
-                    }
-                },
-                error: function (data, errorString, error) {
-                    if (errorString == 'timeout') {
-                        alert(language.FieldsPreviewRequestTooLong);
-                    } else {
-                        alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
-                    }
-                },
-                complete: function (data, status) {
-                    $('#fields-waiting').hide();
-                }
-            });
+            listFields(max);
             $('#fields-waiting').css('display', 'inline');
+        });
+
+        $('#hide-item-preview').click(function (event) {
+            event.preventDefault();
+            $('#itemPreviewDiv').html('<br />');
+            $('#hide-item-preview').hide();
         });
 
         $('#hide-field-preview').click(function (event) {
@@ -293,6 +250,13 @@ jQuery(document).ready(function () {
         listItems(max);
     }
 
+    function showMoreFields(event) {
+        var max = 100;
+        event.preventDefault();
+        processItemRules();
+        listFields(max);
+    }
+
     function listItems(max) {
         $.ajax({
             url: url + '/index/items/max/' + max,
@@ -346,10 +310,7 @@ jQuery(document).ready(function () {
         });
     }
 
-    function showMoreFields(event) {
-        var max = 100;
-        event.preventDefault();
-        processItemRules();
+    function listFields(max) {
         $.ajax({
             url: url + '/index/fields/max/' + max,
             dataType: 'json',
@@ -362,24 +323,47 @@ jQuery(document).ready(function () {
                     var r = new Array(), j = 0;
 
                     r[j] = '<table><tbody>';
-                    $.each(data, function (key, value) {
-                        var title = value['title'];
-                        delete value['title'];
-                        r[++j] = '<tr class="even"><td colspan="2">';
-                        r[++j] = title;
-                        r[++j] = '</td></tr>';
-                        $.each(value, function (keyInner, valueInner) {
-                            r[++j] ='<tr class="odd"><td>';
-                            r[++j] = valueInner['field'];
-                            r[++j] = '</td><td>';
-                            r[++j] = valueInner['value'];
+                    if (Object.keys(data['fields']).length > 0) {
+                        $.each(data['fields'], function (key, value) {
+                            var title = value['title'];
+                            delete value['title'];
+                            r[++j] = '<tr class="even"><td colspan="2">';
+                            r[++j] = title;
                             r[++j] = '</td></tr>';
+                            $.each(value, function (keyInner, valueInner) {
+                                r[++j] = '<tr class="odd"><td>';
+                                r[++j] = valueInner['field'];
+                                r[++j] = '</td><td>';
+                                r[++j] = valueInner['value'];
+                                r[++j] = '</td></tr>';
+                            });
                         });
-                    });
+                        if (data['total'] > max) {
+                            var title = language.PlusFields.replace('%s', data['total']);
+                            if (max < 100) {
+                                title += ' <a id="show-more-fields" href="#">' + language.ShowMore + '</a>';
+                            }
+                            r[++j] = '<tr class="even"><td colspan="3">' + title + '</td></tr>';
+                        }
+                    } else {
+                        r[++j] = '<tr class="even"><td colspan="3">' + language.NoFieldFound + '</td></tr>';
+                    }
                     r[++j] = '</tbody></table>';
 
                     $('#fieldPreviewDiv').html(r.join(''));
+                    $('#show-more-fields').click(showMoreFields);
+                    $('#hide-field-preview').show();
                 }
+            },
+            error: function (data, errorString, error) {
+                if (errorString == 'timeout') {
+                    alert(language.FieldsPreviewRequestTooLong);
+                } else {
+                    alert(language.ErrorGeneratingPreview + "\n" + data.responseJSON);
+                }
+            },
+            complete: function (data, status) {
+                $('#fields-waiting').hide();
             }
         });
     }

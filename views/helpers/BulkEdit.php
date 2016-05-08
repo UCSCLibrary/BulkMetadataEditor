@@ -387,7 +387,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * form).
      *
      * @param array $params
-     * @param array $items Array of items from whose metadata elements the
+     * @param array $itemIds Array of items from whose metadata elements the
      * fields will be selected.
      * @param int $max Maximum number of items to return. If set to zero, all
      * matching items will be returned.
@@ -395,8 +395,12 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      * Each element of this array is itself an array containing identifying
      * information for a single matched metadata element.
      */
-    public function getFields($params, $items, $max = 0)
+    public function getFields($params, $itemIds, $max = 0)
     {
+        if (empty($itemIds)) {
+            return array();
+        }
+
         $fields = array();
         $newfields = array();
 
@@ -408,22 +412,22 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
         $i = 0;
         $j = 1;
-        foreach ($items as $item) {
+        foreach ($itemIds as $itemId) {
             $i++;
-            if ($item['id'] == 0) {
-                break;
-            }
             if ($max > 0 && $j > $max) {
                 break;
             }
 
             try {
-                $itemObj = get_record_by_id('Item', $item['id']);
+                $itemObj = get_record_by_id('Item', $itemId);
             } catch (Exception $e) {
                 throw $e;
             }
-            $flag = false;
 
+            $titles = $itemObj->getElementTexts('Dublin Core', 'Title');
+            $itemTitle = $titles ? strip_formatting($titles[0]->text) : __('[Untitled]');
+
+            $flag = false;
             foreach ($fields as $field) {
                 try {
                     $element = get_record_by_id('Element', $field);
@@ -433,31 +437,18 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                     throw $e;
                 }
                 foreach ($elementTexts as $elementText) {
-                    $newfields[$item['id']][] = array(
+                    $newfields[$itemId][] = array(
+                        'id' => $elementText->id,
                         'field' => $fieldname,
                         'value' => $elementText->text,
-                        'elementID' => $element->id,
-                        'id' => $elementText->id,
+                        'element_id' => $element->id,
                     );
                     $flag = true;
                 }
             }
             if ($flag) {
-                $newfields[$item['id']]['title'] = $item['title'];
+                $newfields[$itemId]['title'] = $itemTitle;
                 $j++;
-            }
-        }
-
-        if ($max > 0 && $j > $max) {
-            $leftover = count($items) - $i;
-            if ($leftover > 0) {
-                $title = __('...and corresponding fields from %s more items.', $leftover);
-                if ($max < 40) {
-                    $title .= ' <a id="show-more-fields" href="">' . __('Show More') . '</a>';
-                }
-                $newfields[] = array(
-                    'title' => $title,
-                );
             }
         }
 
@@ -587,9 +578,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                 } else {
                     $fields = $params['selectFields'];
                 }
-                foreach ($fields as $elementID) {
+                foreach ($fields as $elementId) {
                     $fieldItem[] = array(
-                        'elementID' => $elementID
+                        'element_id' => $elementId,
                     );
                 }
             } else {
@@ -605,7 +596,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             if ($params['changesRadio'] == 'deduplicate') {
                 $fieldsByElement = array();
                 foreach ($fieldItem as $field) {
-                    $fieldsByElement[$field['elementID']][$field['id']] = $field['value'];
+                    $fieldsByElement[$field['element_id']][$field['id']] = $field['value'];
                 }
                 $deduplicatedFieldsByElement = array();
                 foreach ($fieldsByElement as $key => $element) {
@@ -634,7 +625,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                             throw new Exception(__("Please define search and replace terms"));
                         }
 
-                        $element = $itemObj->getElementById($field['elementID']);
+                        $element = $itemObj->getElementById($field['element_id']);
                         // $eText = $itemObj->getElementTextsByRecord($element);
                         $eText = get_record_by_id('ElementText', $field['id']);
 
@@ -674,7 +665,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                     case 'delete':
                         // update the return array
                         try {
-                            $element = $itemObj->getElementById($field['elementID']);
+                            $element = $itemObj->getElementById($field['element_id']);
                             $eText = get_record_by_id('ElementText', $field['id']);
                         } catch (Exception $e) {
                             throw $e;
@@ -712,7 +703,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         }
 
                         try {
-                            $element = $itemObj->getElementById($field['elementID']);
+                            $element = $itemObj->getElementById($field['element_id']);
                             $eText = get_record_by_id('ElementText', $field['id']);
 
                             $new = $eText->text . $params['delimiter'] . $params['bmeAppend'];
@@ -749,12 +740,12 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         }
 
                         try {
-                            $element = $itemObj->getElementById($field['elementID']);
+                            $element = $itemObj->getElementById($field['element_id']);
                         } catch (Exception $e) {
                             throw $e;
                         }
 
-                        if (!in_array($field['elementID'], $made)) {
+                        if (!in_array($field['element_id'], $made)) {
                             $new = $params['bmeAdd'];
                             $changes[] = array(
                                 'item' => $item['title'],
@@ -775,12 +766,12 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                             }
                             $j++;
                         }
-                        $made[] = $field['elementID'];
+                        $made[] = $field['element_id'];
                         break;
 
                     case 'deduplicate':
                         try {
-                            $element = $itemObj->getElementById($field['elementID']);
+                            $element = $itemObj->getElementById($field['element_id']);
                             $eText = get_record_by_id('ElementText', $field['id']);
                         } catch (Exception $e) {
                             throw $e;
