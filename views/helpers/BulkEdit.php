@@ -242,7 +242,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                 $field = $params['item-rule-elements'][$key];
 
                 $search = urldecode($params['item-selectors'][$key]);
-                $search = preg_quote($search);
+                $search = preg_quote($search, '/');
                 $search = str_replace('\*', '.*', $search);
 
                 $case = true;
