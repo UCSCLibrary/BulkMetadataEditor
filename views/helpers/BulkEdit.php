@@ -82,45 +82,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
      */
     public function getItems($params, $max = 0)
     {
-        $rules = array();
-
-        if (!empty($params['itemSelectMeta'])) {
-            for ($i = 0; $i < count($params['item-rule-elements']); $i++) {
-                $search = urldecode($params['item-selectors'][$i]);
-
-                $neg = false;
-                $exact = true;
-                $case = true;
-
-                $search = preg_quote($search);
-                $search = str_replace('\*', '.*', $search);
-
-                if (isset($params['item-cases'][$i]) && $params['item-cases'][$i] == "false") {
-                    $case = false;
-                    $search = strtolower($search);
-                }
-
-                switch ($params['item-compare-types'][$i]) {
-                    case '!exact':
-                        $neg = true;
-                    case 'exact':
-                        $search = "/^" . $search . "$/";
-                        break;
-                    case '!contains':
-                        $neg = true;
-                    case 'contains':
-                        $search = '/' . $search . '/';
-                        break;
-                }
-
-                $rules[] = array(
-                    'field' => $params['item-rule-elements'][$i],
-                    'search' => $search,
-                    'case' => $case,
-                    'neg' => $neg,
-                );
-            }
-        }
+        $rules = $this->_listItemRules($params);
 
         $itemsParams = array();
 
@@ -263,6 +225,60 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             );
 
         return $newitems;
+    }
+
+    /**
+     * Helper to prepare the list of rules to select items.
+     *
+     * @param array $params
+     * @return array List of rules.
+     */
+    private function _listItemRules($params)
+    {
+        $rules = array();
+
+        if (!empty($params['itemSelectMeta'])) {
+            foreach ($params['item-rule-elements'] as $key => $ruleElement) {
+                $field = $params['item-rule-elements'][$key];
+
+                $search = urldecode($params['item-selectors'][$key]);
+                $search = preg_quote($search);
+                $search = str_replace('\*', '.*', $search);
+
+                $case = true;
+                if (isset($params['item-cases'][$key]) && $params['item-cases'][$key] == "false") {
+                    $case = false;
+                    $search = strtolower($search);
+                }
+
+                $neg = false;
+                $exact = true;
+                switch ($params['item-compare-types'][$key]) {
+                    case '!exact':
+                        $neg = true;
+                    case 'exact':
+                        $search = "/^" . $search . "$/";
+                        break;
+                    case '!contains':
+                        $neg = true;
+                    case 'contains':
+                        $search = '/' . $search . '/';
+                        break;
+                    // The regular expression should be well formed.
+                    // case 'regexp':
+                    //     break;
+                }
+
+                $rules[] = array(
+                    'field' => $field,
+                    'search' => $search,
+                    'case' => $case,
+                    'neg' => $neg,
+                );
+            }
+        }
+
+        return $rules;
     }
 
     /**
