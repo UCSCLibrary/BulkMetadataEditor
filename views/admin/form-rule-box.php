@@ -25,7 +25,7 @@ foreach ($elements as $element) {
 
 $form_compare_options = array(
     'is exactly' => __('is exactly'),
-    'is not' => __('is not'),
+    'is not exactly' => __('is not exactly'),
     'contains' => __('contains'),
     'does not contain' => __('does not contain'),
     'is empty' => __('is empty'),
