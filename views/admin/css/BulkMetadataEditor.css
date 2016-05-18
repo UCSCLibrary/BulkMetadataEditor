@@ -51,3 +51,7 @@
     vertical-align: middle;
     cursor:pointer;
 }
+
+#fieldPreviewDiv table tr.even {
+    font-weight: bold;
+}

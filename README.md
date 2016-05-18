@@ -5,7 +5,9 @@ Bulk Metadata Editor (plugin for Omeka)
 editing metadata in Omeka collections of digital objects by providing tools for
 administrators to edit many items at once based on prespecified rules.
 
-If you use this plugin, please take a moment to submit feedback about your experience, so we can keep making Omeka better: [User Survey] (https://docs.google.com/forms/d/1sfct41zxTelXFlyBwtsT1u33nRl7GGofSTt06d1SDMQ/viewform?usp=send_form "User Survey")
+If you use this plugin, please take a moment to submit feedback about your
+experience, so we can keep making Omeka better: [User Survey].
+
 
 Installation
 ------------
@@ -18,12 +20,16 @@ Then install it like any other Omeka plugin.
 Notes
 -----
 
-- After a successful process, records may need to be reindexed in order to find
-them via the quick search field.
-
+- After a successful process, records must be reindexed in order to find them
+  via the quick search field.
 - The change "Append text to existing metadata in the selected fields" appends
-text only if there is already a metadata.
-- A space is automatically added with the change "Append text to existing metadata in the selected fields".
+  text only if there is already a metadata.
+- A space is automatically added with the change "Append text to existing
+  metadata in the selected fields".
+- The preview may fail when there is a lot of fields or changes to prepare.
+  Nevermind, the true process will work fine even with a huge number of items
+  and fields, because it is done in the background, without the limit set by the
+  server. Nevertheless, it's recommended to avoid too large updates.
 
 
 Warning
@@ -65,13 +71,14 @@ Copyright
 ---------
 
 * Copyright 2014 UCSC Library Digital Initiatives
-* Copyright Daniel Berthereau, 2015 (see [Daniel-KM] on GitHub)
+* Copyright Daniel Berthereau, 2015-2016 (see [Daniel-KM] on GitHub)
 * Copyright Julian Maurice for BibLibre, 2015 (see [jajm] on GitHub)
 
 
 [Bulk Metadata Editor]: https://github.com/UCSCLibrary/BulkMetadataEditor
 [Omeka]: http://omeka.org
-[plugin issues]: https://github.com/UCSCLibrary/BulkMetadataEditor/Issues
+[User Survey]: https://docs.google.com/forms/d/1sfct41zxTelXFlyBwtsT1u33nRl7GGofSTt06d1SDMQ/viewform?usp=send_form
+[plugin issues]: https://github.com/UCSCLibrary/BulkMetadataEditor/issues
 [GNU/GPL v3]: https://www.gnu.org/licenses/gpl-3.0.html
 [Daniel-KM]: https://github.com/Daniel-KM
 [jajm]: https://github.com/jajm

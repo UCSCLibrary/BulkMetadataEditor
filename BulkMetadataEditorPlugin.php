@@ -43,25 +43,41 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
      */
     public function hookAdminHead()
     {
-      $language = array(
-        'PleaseWait' => __('Please wait...'),
-        'Title' => __('Title'),
-        'Description' => __('Description'),
-        'ItemType' => __('Item Type'),
-        'Item' => __('Item'),
-        'Field' => __('Field'),
-        'OldValue' => __('Old Value'),
-        'NewValue' => __('New Value'),
-        'ErrorGeneratingPreview' => __('Error generating preview! :('),
-        'CouldNotGeneratePreview' => __('Apologies, but we could not generate a preview at this time. You may be asking for too many changes at once.'),
-        'ItemsPreviewRequestTooLong' => __("The items preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can't preview them all for you."),
-        'FieldsPreviewRequestTooLong' => __("The fields preview request is taking too long! You must be trying to select a ton of fields at once. Sorry we can't preview them all for you."),
-        'ChangesPreviewRequestTooLong' => __("The changes preview request is taking too long! You must be trying to make a ton of changes at once. Sorry we can't preview them all for you."),
-      );
-      $language = json_encode($language);
-      queue_js_string("Omeka.BulkMetadataEditor = {language: $language};");
-      queue_js_file('BulkMetadataEditor');
-      queue_css_file('BulkMetadataEditor');
+        $language = array(
+            'PleaseWait' => __('Please wait...'),
+            'Title' => __('Title'),
+            'Description' => __('Description'),
+            'ItemType' => __('Item Type'),
+            'Item' => __('Item'),
+            'Field' => __('Field'),
+            'OldValue' => __('Old Value'),
+            'NewValue' => __('New Value'),
+            'ErrorGeneratingPreview' => __('Error generating preview! :('),
+            'CouldNotGeneratePreview' => __('Apologies, but we could not generate a preview at this time.')
+                . ' ' . __('You may be asking for too many changes at once.')
+                . ' ' . __('Anyway, the bulk edition will be done in the background.'),
+            'ItemsPreviewRequestTooLong' => __('The items preview request is taking too long!')
+                . ' ' . __('You must be trying to select a ton of items at once.')
+                . ' ' . __('Preview is not possible, but the bulk edition will be done in the background.'),
+            'FieldsPreviewRequestTooLong' => __('The fields preview request is taking too long!')
+                . ' ' . __('You must be trying to select a ton of fields at once.')
+                . ' ' . __('Preview is not possible, but the bulk edition will be done in the background.'),
+            'ChangesPreviewRequestTooLong' => __('The changes preview request is taking too long!')
+                . ' ' . __('You must be trying to make a ton of changes at once.')
+                . ' ' . __('Preview is not possible, but the bulk edition will be done in the background.'),
+            'SelectActionPerform' => __('Please select an action to perform.'),
+            'NoItemFound' => __('No matching items found.'),
+            'NoFieldFound' => __('No matching field found.'),
+            'NoChange' => __('No change or no preview.'),
+            'PlusItems' => __('Plus %s more items.', '%s'),
+            'PlusFields' => __('...and corresponding fields from a total of %s items.', '%s'),
+            'PlusChanges' => __('...and changes for a total of %s items.', '%s'),
+            'ShowMore' => __('Show more.'),
+        );
+        $language = json_encode($language);
+        queue_js_string("Omeka.BulkMetadataEditor = {language: $language};");
+        queue_js_file('BulkMetadataEditor');
+        queue_css_file('BulkMetadataEditor');
     }
 
     /**

@@ -6,7 +6,7 @@
        <div class="inputs six columns omega">
         <p class="explanation"><?php echo $this->element->getDescription() ?></p>
 
-       <?php 
+       <?php
        $options = $this->element->getMultiOptions();
 
 foreach ($options as $option=>$value)
