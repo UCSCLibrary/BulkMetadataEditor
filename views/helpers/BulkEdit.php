@@ -243,7 +243,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                 case 'ends with':
                     $predicate = "COLLATE UTF8_BIN LIKE " . $db->quote('%'.$value);
                     break;
-                case 'is not':
+                case 'is not exactly':
                     $predicate = 'COLLATE UTF8_BIN != ' . $db->quote($value);
                     break;
                 default:
@@ -305,21 +305,20 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                 case 'ends with':
                     $predicate = "LIKE " . $db->quote('%'.$value);
                     break;
-                case 'is not':
+                case 'is not exactly':
                     $predicate = ' != ' . $db->quote($value);
                     break;
                 case 'matches':
-                    if (strlen($value)) {
-                        $predicate = 'REGEXP ' . $db->quote($value);
-                    } else {
-                        $inner = false;
-                        $predicate = 'IS NULL';
+                    if (!strlen($value)) {
+                        continue 2;
                     }
+                    $predicate = 'REGEXP ' . $db->quote($value);
                     break;
                 case 'does not match':
-                    $predicate = strlen($value)
-                        ? 'NOT REGEXP ' . $db->quote($value)
-                        : 'IS NOT NULL';
+                    if (!strlen($value)) {
+                        continue 2;
+                    }
+                    $predicate = 'NOT REGEXP ' . $db->quote($value);
                     break;
                 default:
                     throw new Omeka_Record_Exception(__('Invalid search type given!'));
