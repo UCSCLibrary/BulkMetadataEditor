@@ -38,268 +38,336 @@ msgid "Error generating preview! :("
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:56
-msgid ""
-"Apologies, but we could not generate a preview at this time. You may be "
-"asking for too many changes at once."
+msgid "Apologies, but we could not generate a preview at this time."
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:57
-msgid ""
-"The items preview request is taking too long! You must be trying to select a "
-"ton of fields at once. Sorry we can't preview them all for you."
+msgid "You may be asking for too many changes at once."
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:58
-msgid ""
-"The fields preview request is taking too long! You must be trying to select "
-"a ton of fields at once. Sorry we can't preview them all for you."
+msgid "Anyway, the bulk edition will be done in the background."
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:59
-msgid ""
-"The changes preview request is taking too long! You must be trying to make a "
-"ton of changes at once. Sorry we can't preview them all for you."
+msgid "The items preview request is taking too long!"
 msgstr ""
 
-#: BulkMetadataEditorPlugin.php:91
+#: BulkMetadataEditorPlugin.php:60
+msgid "You must be trying to select a ton of items at once."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:61 BulkMetadataEditorPlugin.php:64
+#: BulkMetadataEditorPlugin.php:67
+msgid ""
+"Preview is not possible, but the bulk edition will be done in the background."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:62
+msgid "The fields preview request is taking too long!"
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:63
+msgid "You must be trying to select a ton of fields at once."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:65
+msgid "The changes preview request is taking too long!"
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:66
+msgid "You must be trying to make a ton of changes at once."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:68 views/helpers/BulkEdit.php:549
+msgid "Please select an action to perform."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:69
+msgid "No matching items found."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:70
+msgid "No matching field found."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:71
+msgid "No change or no preview."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:72
+#, php-format
+msgid "Plus %s more items."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:73
+#, php-format
+msgid "...and corresponding fields from a total of %s items."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:74
+#, php-format
+msgid "...and changes for a total of %s items."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:75
+msgid "Show more."
+msgstr ""
+
+#: BulkMetadataEditorPlugin.php:107
 msgid "Bulk Editor"
 msgstr ""
 
-#: controllers/IndexController.php:38
-msgid "The requested changes have been applied to the database"
-msgstr ""
-
-#: controllers/IndexController.php:47
-msgid "Error loading metadata editing form: "
-msgstr ""
-
-#: controllers/IndexController.php:248 forms/Main.php:352
-msgid "All Collections"
-msgstr ""
-
-#: controllers/IndexController.php:276 views/admin/FormRulebox.php:34
-msgid "is not exactly"
-msgstr ""
-
-#: controllers/IndexController.php:278 views/admin/FormRulebox.php:36
-msgid "matches regular expression"
-msgstr ""
-
-#: controllers/IndexController.php:317
-msgid "Please select an action to perform"
-msgstr ""
-
-#: controllers/IndexController.php:390
-msgid "Please define search and replace terms"
-msgstr ""
-
-#: controllers/IndexController.php:442
-msgid "Error retrieving item data for deletion."
-msgstr ""
-
-#: controllers/IndexController.php:465
-msgid "Please input some text to append"
-msgstr ""
-
-#: controllers/IndexController.php:506
-msgid "Please input some text to add."
-msgstr ""
-
-#: controllers/IndexController.php:592
-#, php-format
-msgid "...and changes for %s more items"
-msgstr ""
-
-#: controllers/IndexController.php:594 controllers/IndexController.php:786
-#: controllers/IndexController.php:927
-msgid "Show More"
-msgstr ""
-
-#: controllers/IndexController.php:725
-msgid "Unable to parse regular expression"
-msgstr ""
-
-#: controllers/IndexController.php:798
-msgid "No matching items found"
-msgstr ""
-
-#: controllers/IndexController.php:817
-msgid "Cannot pull item data from a non-item"
-msgstr ""
-
-#: controllers/IndexController.php:818
-msgid "untitled"
-msgstr ""
-
-#: controllers/IndexController.php:819
-msgid "no description given"
-msgstr ""
-
-#: controllers/IndexController.php:820
-msgid "undefined"
-msgstr ""
-
-#: controllers/IndexController.php:925
-#, php-format
-msgid "...and corresponding fields from %s more items.  "
-msgstr ""
-
-#: forms/Main.php:55
+#: libraries/BulkMetadataEditor/Form/Main.php:52
 msgid "Edit items from this collection"
 msgstr ""
 
-#: forms/Main.php:65
+#: libraries/BulkMetadataEditor/Form/Main.php:60
 msgid "Select Items by Metadata"
 msgstr ""
 
-#: forms/Main.php:67
+#: libraries/BulkMetadataEditor/Form/Main.php:62
 msgid "Select items to edit based on their associated metadata elements"
 msgstr ""
 
-#: forms/Main.php:91
+#: libraries/BulkMetadataEditor/Form/Main.php:82
 msgid "Preview Selected Items"
 msgstr ""
 
-#: forms/Main.php:99
+#: libraries/BulkMetadataEditor/Form/Main.php:89
 msgid "Hide Item Preview"
 msgstr ""
 
-#: forms/Main.php:121
+#: libraries/BulkMetadataEditor/Form/Main.php:109
 msgid "Metadata elements"
 msgstr ""
 
-#: forms/Main.php:122
+#: libraries/BulkMetadataEditor/Form/Main.php:110
 msgid ""
 "Select the metadata elements you would like to edit. You can select multiple "
 "values. (default: all)"
 msgstr ""
 
-#: forms/Main.php:131
+#: libraries/BulkMetadataEditor/Form/Main.php:118
 msgid "Preview Selected Fields"
 msgstr ""
 
-#: forms/Main.php:139
+#: libraries/BulkMetadataEditor/Form/Main.php:125
 msgid "Hide Field Preview"
 msgstr ""
 
-#: forms/Main.php:161
+#: libraries/BulkMetadataEditor/Form/Main.php:145
 msgid "Edit Type"
 msgstr ""
 
-#: forms/Main.php:162
+#: libraries/BulkMetadataEditor/Form/Main.php:146
 msgid "Choose the type of edit you would like to perform"
 msgstr ""
 
-#: forms/Main.php:174
+#: libraries/BulkMetadataEditor/Form/Main.php:158
 msgid "Search and replace text"
 msgstr ""
 
-#: forms/Main.php:175
+#: libraries/BulkMetadataEditor/Form/Main.php:159
 msgid "Add a new metadatum in the selected field"
 msgstr ""
 
-#: forms/Main.php:176
+#: libraries/BulkMetadataEditor/Form/Main.php:160
 msgid "Append text to existing metadata in the selected fields"
 msgstr ""
 
-#: forms/Main.php:177
+#: libraries/BulkMetadataEditor/Form/Main.php:161
 msgid "Deduplicate and remove empty metadata in the selected fields"
 msgstr ""
 
-#: forms/Main.php:178
+#: libraries/BulkMetadataEditor/Form/Main.php:162
 msgid "Deduplicate files of selected items by hash"
 msgstr ""
 
-#: forms/Main.php:179
+#: libraries/BulkMetadataEditor/Form/Main.php:163
 msgid "Delete all existing metadata in the selected fields"
 msgstr ""
 
-#: forms/Main.php:186
+#: libraries/BulkMetadataEditor/Form/Main.php:168
 msgid "Preview Changes"
 msgstr ""
 
-#: forms/Main.php:194
+#: libraries/BulkMetadataEditor/Form/Main.php:175
 msgid "Hide Change Preview"
 msgstr ""
 
-#: forms/Main.php:221 views/admin/index/index_old.php:105
+#: libraries/BulkMetadataEditor/Form/Main.php:200
 msgid "Search for:"
 msgstr ""
 
-#: forms/Main.php:224 views/admin/index/index_old.php:109
+#: libraries/BulkMetadataEditor/Form/Main.php:203
 msgid "Input text you want to search for "
 msgstr ""
 
-#: forms/Main.php:227 views/admin/index/index_old.php:114
+#: libraries/BulkMetadataEditor/Form/Main.php:206
 msgid "Replace with:"
 msgstr ""
 
-#: forms/Main.php:230 views/admin/index/index_old.php:118
+#: libraries/BulkMetadataEditor/Form/Main.php:209
 msgid "Input text you want to replace with "
 msgstr ""
 
-#: forms/Main.php:233
+#: libraries/BulkMetadataEditor/Form/Main.php:212
 msgid "Use regular expressions"
 msgstr ""
 
-#: forms/Main.php:239
+#: libraries/BulkMetadataEditor/Form/Main.php:218
 msgid "Text to Add"
 msgstr ""
 
-#: forms/Main.php:242 views/admin/index/index_old.php:136
+#: libraries/BulkMetadataEditor/Form/Main.php:221
 msgid "Input text you want to add as metadata"
 msgstr ""
 
-#: forms/Main.php:245
+#: libraries/BulkMetadataEditor/Form/Main.php:224
 msgid "Text to Append"
 msgstr ""
 
-#: forms/Main.php:248 views/admin/index/index_old.php:151
+#: libraries/BulkMetadataEditor/Form/Main.php:227
 msgid "Input text you want to append to metadata"
 msgstr ""
 
-#: forms/Main.php:264
+#: libraries/BulkMetadataEditor/Form/Main.php:241
 msgid "Step 1: Select Items"
 msgstr ""
 
-#: forms/Main.php:275
+#: libraries/BulkMetadataEditor/Form/Main.php:254
 msgid "Step 2: Select Fields"
 msgstr ""
 
-#: forms/Main.php:291
+#: libraries/BulkMetadataEditor/Form/Main.php:272
 msgid "Step 3: Define Changes"
 msgstr ""
 
-#: forms/Main.php:292
+#: libraries/BulkMetadataEditor/Form/Main.php:273
 msgid "Define Edits to Apply"
 msgstr ""
 
-#: forms/Main.php:301
+#: libraries/BulkMetadataEditor/Form/Main.php:281
 msgid "Apply Edits Now"
 msgstr ""
 
-#: views/admin/index/index.php:4
+#: libraries/BulkMetadataEditor/Form/Main.php:329
+msgid "All Collections"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Job/Process.php:25
+msgid "An error occurred in background process."
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Job/Process.php:26
+#, php-format
+msgid "Bulk Metadata Editor: %s"
+msgstr ""
+
+#: controllers/IndexController.php:53
+msgid ""
+"The requested changes are applied to the database one by one in the "
+"background."
+msgstr ""
+
+#: controllers/IndexController.php:54
+msgid "Check logs for success and errors."
+msgstr ""
+
+#: controllers/IndexController.php:57
+#, php-format
+msgid "Bulk edition cannot be started: %s"
+msgstr ""
+
+#: views/admin/index/index.php:2
 msgid "Bulk Metadata Editor"
 msgstr ""
 
-#: views/admin/index/index_old.php:132
-msgid "Text to Add:"
+#: views/admin/form-rule-box.php:28
+msgid "is not exactly"
 msgstr ""
 
-#: views/admin/index/index_old.php:147
-msgid "Text to Append:"
+#: views/admin/form-rule-box.php:33
+msgid "starts with"
 msgstr ""
 
-#: views/admin/FormRulebox.php:43
-msgid ""
-"Only select items which also meet the following criteria: (use * as a "
-"wildcard character)"
+#: views/admin/form-rule-box.php:34
+msgid "ends with"
 msgstr ""
 
-#: views/admin/FormRulebox.php:58
+#: views/admin/form-rule-box.php:35
+msgid "matches"
+msgstr ""
+
+#: views/admin/form-rule-box.php:36
+msgid "does not matches"
+msgstr ""
+
+#: views/admin/form-rule-box.php:41
+msgid "Only select items which also meet the following criteria:"
+msgstr ""
+
+#: views/admin/form-rule-box.php:52
+msgid "Input search term here"
+msgstr ""
+
+#: views/admin/form-rule-box.php:55
 msgid "Match Case"
 msgstr ""
 
-#: views/admin/FormRulebox.php:65
+#: views/admin/form-rule-box.php:65
 msgid "Add Another Rule"
+msgstr ""
+
+#: views/helpers/BulkEdit.php:354
+msgid "Cannot pull item data from a non-item."
+msgstr ""
+
+#: views/helpers/BulkEdit.php:356
+msgid "[untitled]"
+msgstr ""
+
+#: views/helpers/BulkEdit.php:357
+msgid "[no description given]"
+msgstr ""
+
+#: views/helpers/BulkEdit.php:358
+msgid "[undefined]"
+msgstr ""
+
+#: views/helpers/BulkEdit.php:614
+#, php-format
+msgid "Bulk Metadata Editor #%d [%s]:"
+msgstr ""
+
+#: views/helpers/BulkEdit.php:625
+msgid "Please define search and replace terms."
+msgstr ""
+
+#: views/helpers/BulkEdit.php:658 views/helpers/BulkEdit.php:692
+#: views/helpers/BulkEdit.php:733 views/helpers/BulkEdit.php:766
+#: views/helpers/BulkEdit.php:801 views/helpers/BulkEdit.php:819
+#, php-format
+msgid "An error occurred: %s"
+msgstr ""
+
+#: views/helpers/BulkEdit.php:677
+msgid "Error retrieving item data for deletion."
+msgstr ""
+
+#: views/helpers/BulkEdit.php:703
+msgid "Please input some text to append"
+msgstr ""
+
+#: views/helpers/BulkEdit.php:743
+msgid "Please input some text to add."
+msgstr ""
+
+#: views/helpers/BulkEdit.php:785
+msgid "Error retrieving item data for deduplication."
+msgstr ""
+
+#: views/helpers/BulkEdit.php:824
+msgid "Success."
 msgstr ""
