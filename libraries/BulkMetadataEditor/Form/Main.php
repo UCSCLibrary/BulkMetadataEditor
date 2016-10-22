@@ -326,6 +326,10 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
     {
         $options = get_table_options('Collection');
         unset($options['']);
+        // Add the id of collections to simplify selection with similar names.
+        array_walk($options, function (&$value, $key) {
+            $value = '(#' . $key . ') ' . $value;
+        });
         return array('0' => __('All Collections')) + $options;
     }
 
