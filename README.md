@@ -76,7 +76,7 @@ Copyright
 
 
 [Bulk Metadata Editor]: https://github.com/UCSCLibrary/BulkMetadataEditor
-[Omeka]: http://omeka.org
+[Omeka]: https://omeka.org
 [User Survey]: https://docs.google.com/forms/d/1sfct41zxTelXFlyBwtsT1u33nRl7GGofSTt06d1SDMQ/viewform?usp=send_form
 [plugin issues]: https://github.com/UCSCLibrary/BulkMetadataEditor/issues
 [GNU/GPL v3]: https://www.gnu.org/licenses/gpl-3.0.html

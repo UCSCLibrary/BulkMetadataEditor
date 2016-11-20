@@ -698,6 +698,46 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         $j++;
                         break;
 
+                    case 'prepend':
+                        if (!isset($params['bmePrepend']) || !strlen($params['bmePrepend'])) {
+                            throw new Exception(__('Please input some text to prepend'));
+                        }
+
+                        if (!isset($params['delimiter'])) {
+                            $params['delimiter'] = ' ';
+                        }
+
+                        try {
+                            $element = $itemObj->getElementById($field['element_id']);
+                            $eText = get_record_by_id('ElementText', $field['id']);
+
+                            $new = $params['bmePrepend'] . $params['delimiter'] . $eText->text;
+                        } catch (Exception $e) {
+                            throw $e;
+                        }
+
+                        $changes[] = array(
+                            'itemId' => $itemId,
+                            'item' => $itemTitle,
+                            'field' => $element->name,
+                            'old' => $eText->text,
+                            'new' => $new,
+                        );
+
+                        if ($perform) {
+                            $html = $new != strip_tags($new);
+                            try {
+                                $eText->delete();
+                                $itemObj->addTextForElement($element, $new, $html);
+                            } catch (Exception $e) {
+                                $message .= __('An error occurred: %s', $e->getMessage());
+                                _log($message, Zend_Log::ERR);
+                                continue 2;
+                            }
+                        }
+                        $j++;
+                        break;
+
                     case 'append':
                         if (!isset($params['bmeAppend']) || !strlen($params['bmeAppend'])) {
                             throw new Exception(__('Please input some text to append'));
