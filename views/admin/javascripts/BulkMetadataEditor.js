@@ -12,6 +12,7 @@ jQuery(document).ready(function () {
         $('#changesRadio-replace-field').after($('#bulk-metadata-editor-search-field'));
         $('#changesRadio-add-field').after($('#bulk-metadata-editor-add-field'));
         $('#changesRadio-append-field').after($('#bulk-metadata-editor-append-field'));
+        $('#changesRadio-explode-field').after($('#bulk-metadata-editor-explode-field'));
         $('#changesRadio-deduplicate-field').after($('#bulk-metadata-editor-deduplicate-field'));
         $('#changesRadio-deduplicate-files-field').after($('#bulk-metadata-editor-deduplicate-files-field'));
 
@@ -61,6 +62,7 @@ jQuery(document).ready(function () {
                 $('#regexp-field').show(300);
                 $('#bulk-metadata-editor-add-field').hide(300);
                 $('#bulk-metadata-editor-append-field').hide(300);
+                $('#bulk-metadata-editor-explode-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-files-field').hide(300);
             }
@@ -73,6 +75,7 @@ jQuery(document).ready(function () {
                 $('#regexp-field').hide(300);
                 $('#bulk-metadata-editor-add-field').show(300);
                 $('#bulk-metadata-editor-append-field').hide(300);
+                $('#bulk-metadata-editor-explode-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-files-field').hide(300);
             }
@@ -85,6 +88,20 @@ jQuery(document).ready(function () {
                 $('#regexp-field').hide(300);
                 $('#bulk-metadata-editor-add-field').hide(300);
                 $('#bulk-metadata-editor-append-field').show(300);
+                $('#bulk-metadata-editor-explode-field').hide(300);
+                $('#bulk-metadata-editor-deduplicate-field').hide(300);
+                $('#bulk-metadata-editor-deduplicate-files-field').hide(300);
+            }
+        });
+
+        $('#changesRadio-explode').change(function () {
+            if (this.checked) {
+                $('#bulk-metadata-editor-search-field').hide(300);
+                $('#bulk-metadata-editor-replace-field').hide(300);
+                $('#regexp-field').hide(300);
+                $('#bulk-metadata-editor-add-field').hide(300);
+                $('#bulk-metadata-editor-append-field').hide(300);
+                $('#bulk-metadata-editor-explode-field').show(300);
                 $('#bulk-metadata-editor-deduplicate-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-files-field').hide(300);
             }
@@ -97,6 +114,7 @@ jQuery(document).ready(function () {
                 $('#regexp-field').hide(300);
                 $('#bulk-metadata-editor-add-field').hide(300);
                 $('#bulk-metadata-editor-append-field').hide(300);
+                $('#bulk-metadata-editor-explode-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-field').show(300);
                 $('#bulk-metadata-editor-deduplicate-files-field').hide(300);
             }
@@ -109,6 +127,7 @@ jQuery(document).ready(function () {
                 $('#regexp-field').hide(300);
                 $('#bulk-metadata-editor-add-field').hide(300);
                 $('#bulk-metadata-editor-append-field').hide(300);
+                $('#bulk-metadata-editor-explode-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-files-field').show(300);
             }
@@ -120,6 +139,7 @@ jQuery(document).ready(function () {
                 $('#bulk-metadata-editor-replace-field').hide(300);
                 $('#regexp-field').hide(300);
                 $('#bulk-metadata-editor-append-field').hide(300);
+                $('#bulk-metadata-editor-explode-field').hide(300);
                 $('#bulk-metadata-editor-add-field').hide(300);
                 $('#bulk-metadata-editor-deduplicate-field').hide(300);
             }

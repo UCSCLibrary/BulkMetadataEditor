@@ -738,6 +738,54 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                         $j++;
                         break;
 
+                        case 'explode':
+                            if (!isset($params['bmeExplode']) || !strlen(trim($params['bmeExplode']))) {
+                                throw new Exception(__('Please input a separator to explode texts'));
+                            }
+
+                            $separator = trim($params['bmeExplode']);
+
+                            try {
+                                $element = $itemObj->getElementById($field['element_id']);
+                                $eText = get_record_by_id('ElementText', $field['id']);
+                                $strippedString = $eText->html ? strip_tags($eText->text) : $eText->text;
+                                $strings = array_map('trim', explode($separator, $strippedString));
+                                $strings = array_filter($strings, function($v) { return (boolean) strlen($v); });
+                                $new = reset($strings);
+                                // No change if separator is not contained.
+                                $noChange = $new == $strippedString || count($strings) < 2;
+                                if ($noChange) {
+                                    $new = $eText->text;
+                                }
+                            } catch (Exception $e) {
+                                throw $e;
+                            }
+
+                            $changes[] = array(
+                                'itemId' => $itemId,
+                                'item' => $itemTitle,
+                                'field' => $element->name,
+                                'old' => $eText->text,
+                                'new' => $new,
+                            );
+
+                            if ($perform) {
+                                try {
+                                    if (!$noChange) {
+                                        $eText->delete();
+                                        foreach ($strings as $string) {
+                                            $itemObj->addTextForElement($element, $string, false);
+                                        }
+                                    }
+                                } catch (Exception $e) {
+                                    $message .= __('An error occurred: %s', $e->getMessage());
+                                    _log($message, Zend_Log::ERR);
+                                    continue 2;
+                                }
+                            }
+                            $j++;
+                            break;
+
                     case 'add':
                         if (!isset($params['bmeAdd']) || !strlen($params['bmeAdd'])) {
                             throw new Exception(__('Please input some text to add.'));

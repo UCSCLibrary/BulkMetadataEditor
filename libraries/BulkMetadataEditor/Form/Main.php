@@ -158,6 +158,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
                 'replace' => __('Search and replace text'),
                 'add' => __('Add a new metadatum in the selected field'),
                 'append' => __('Append text to existing metadata in the selected fields'),
+                'explode' => __('Explode metadata with a separator in multiple elements in the selected fields'),
                 'deduplicate' => __('Deduplicate and remove empty metadata in the selected fields'),
                 'deduplicate-files' => __('Deduplicate files of selected items by hash'),
                 'delete' => __('Delete all existing metadata in the selected fields')
@@ -226,6 +227,13 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             'class' => 'elementHidden',
             'description' => __('Input text you want to append to metadata'),
         ));
+        $this->addElement('text', 'bmeExplode', array(
+            'label' => __('Separator'),
+            'id' => 'bulk-metadata-editor-explode',
+            'class' => 'elementHidden',
+            'description' => __('The separator used to explode metadata (usually ",", ";" or "|", or any chain of characters).')
+                . ' ' . __('The html tags will be stripped before process.'),
+        ));
 
         $this->addDisplayGroup(
             array(
@@ -260,6 +268,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
                 'changesRadio',
                 'previewChangesButton',
                 'bmeAppend',
+                'bmeExplode',
                 'regexp',
                 'bmeAdd',
                 'bmeSearch',
