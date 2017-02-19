@@ -38,9 +38,10 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
      */
     public function indexAction()
     {
-        $this->view->form = new BulkMetadataEditor_Form_Main();
+        $form = new BulkMetadataEditor_Form_Main();
+        $this->view->form = apply_filters('bulk_metadata_editor_form', $form);
 
-        // if the form was submitted
+        // Check if the form was submitted.
         if ($this->getRequest()->isPost()
             && $this->view->form->isValid($this->getRequest()->getPost())) {
 
@@ -77,6 +78,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $params = $_REQUEST;
         $max = $this->_getParam('max');
+        unset($params['max']);
         try {
             $items = $this->_bulkEdit->getItems($params, $max);
             $total = $this->_bulkEdit->countItems($params);
@@ -103,6 +105,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $params = $_REQUEST;
         $max = $this->_getParam('max');
+        unset($params['max']);
         try {
             $items = $this->_bulkEdit->getItems($params);
             $fields = $this->_bulkEdit->getFields($params, $items, $max);
@@ -129,6 +132,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
     {
         $params = $_REQUEST;
         $max = $this->_getParam('max');
+        unset($params['max']);
         try {
             $items = $this->_bulkEdit->getItems($params);
             $changes = $this->_bulkEdit->getChanges($params, $max);
