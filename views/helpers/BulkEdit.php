@@ -42,6 +42,11 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     {
         $select = $this->_getSelect($params);
 
+        $select = apply_filters('bulk_metadata_editor_get_items', $select, array(
+            'params' => $params,
+            'max' => $max,
+        ));
+
         // Get only the item ids when there is no max.
         if (empty($max)) {
             $select
