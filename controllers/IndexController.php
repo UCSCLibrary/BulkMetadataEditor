@@ -43,24 +43,45 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
 
         // Check if the form was submitted.
         if ($this->getRequest()->isPost()
-            && $this->view->form->isValid($this->getRequest()->getPost())) {
+                && $this->view->form->isValid($this->getRequest()->getPost())
+            ) {
+            $this->_launchProcess();
+        }
+    }
 
-            $params = $_REQUEST;
+    /**
+     * Helper to launch the bulk edition.
+     */
+    protected function _launchProcess()
+    {
+        $params = $this->getAllParams();
+        $jobDispatcher = Zend_Registry::get('job_dispatcher');
+        $options = array('params' => $params);
+
+        if (empty($params['useBackgroundJob'])) {
             try {
-                $dispatcher = Zend_Registry::get('job_dispatcher');
-                $options = array('params' => $params);
-                $dispatcher->sendLongRunning('BulkMetadataEditor_Job_Process', $options);
-
-                $message = __('The requested changes are applied to the database one by one in the background.')
-                    . ' ' . __('Check logs for success and errors.');
+                $jobDispatcher->send('BulkMetadataEditor_Job_Process', $options);
+                $message = __('Bulk Metadata edition has been processed.');
                 $status = 'success';
             } catch (Exception $e) {
                 $message = __('Bulk edition cannot be started: %s', $e->getMessage());
                 $status = 'error';
+                _log('[BulkMetadataEditor] ' . $message, Zend_Log::ERR);
             }
-
-            $flashMessenger = $this->_helper->FlashMessenger->addMessage($message, $status);
+        } else {
+            try {
+                $jobDispatcher->setQueueName(BulkMetadataEditor_Job_Process::QUEUE_NAME);
+                $jobDispatcher->sendLongRunning('BulkMetadataEditor_Job_Process', $options);
+                $message = __('The requested changes are applied to the database one by one in the background.')
+                    . ' ' . __('Check logs for success and errors.');
+                $status = 'info';
+            } catch (Exception $e) {
+                $message = __('Bulk edition cannot be started: %s', $e->getMessage());
+                $status = 'error';
+            }
         }
+
+        $this->_helper->FlashMessenger->addMessage($message, $status);
     }
 
     ///// AJAX ACTIONS /////

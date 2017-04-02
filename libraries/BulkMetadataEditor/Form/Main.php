@@ -195,6 +195,14 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             )
         ));
 
+        $this->addElement('checkbox', 'useBackgroundJob', array(
+            'label' => __('Background Job'),
+            'id' => 'use-background-job',
+            'description' => __('If checked, the job will be processed in the background.'),
+            'value' => '1',
+            'order' => 15,
+        ));
+
         //The following elements will be re-ordered in javascript
         //gotta create a new element that can be hidden and shown and junk?
 
@@ -290,6 +298,13 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
                 'description' => __('Define Edits to Apply'),
                 'class' => 'bmeFieldset',
         ));
+
+        $this->addDisplayGroup(
+            array(
+                'useBackgroundJob',
+            ),
+            'bmeJob'
+        );
 
         if(version_compare(OMEKA_VERSION, '2.2.1') >= 0)
             $this->addElement('hash', 'bulk_editor_token');

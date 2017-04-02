@@ -23,9 +23,6 @@ according to your server if it is not automatically detected:
 background.php.path = "/usr/bin/php-cli"
 ```
 
-If the background process doesn’t work, you may have to try to set the parameter
-`jobs.dispatcher.longRunning` to "Omeka_Job_Dispatcher_Adapter_Synchronous".
-
 In order to get messages about the process, you may have to set the logger:
 
 ```
