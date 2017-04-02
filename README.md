@@ -16,6 +16,25 @@ Uncompress files and rename plugin folder "BulkMetadataEditor".
 
 Then install it like any other Omeka plugin.
 
+You may have to set the php cli path in `application/config/config.ini`,
+according to your server if it is not automatically detected:
+
+```
+background.php.path = "/usr/bin/php-cli"
+```
+
+If the background process doesn’t work, you may have to try to set the parameter
+`jobs.dispatcher.longRunning` to "Omeka_Job_Dispatcher_Adapter_Synchronous".
+
+In order to get messages about the process, you may have to set the logger:
+
+```
+log.errors = true
+log.priority = Zend_Log::INFO
+```
+
+The log file is `application/logs/errors.log`, that must be writeable.
+
 
 Notes
 -----
@@ -29,7 +48,7 @@ Notes
 - The preview may fail when there is a lot of fields or changes to prepare.
   Nevermind, the true process will work fine even with a huge number of items
   and fields, because it is done in the background, without the limit set by the
-  server. Nevertheless, it's recommended to avoid too large updates.
+  server. Nevertheless, it’s recommended to avoid too large updates.
 
 
 Warning
@@ -37,8 +56,8 @@ Warning
 
 Use it at your own risk.
 
-It's always recommended to backup your files and database regularly so you can
-roll back if needed.
+It’s always recommended to backup your files and your databases and to check
+your archives regularly so you can roll back if needed.
 
 
 Troubleshooting
@@ -71,7 +90,7 @@ Copyright
 ---------
 
 * Copyright 2014 UCSC Library Digital Initiatives
-* Copyright Daniel Berthereau, 2015-2016 (see [Daniel-KM] on GitHub)
+* Copyright Daniel Berthereau, 2015-2017 (see [Daniel-KM] on GitHub)
 * Copyright Julian Maurice for BibLibre, 2015 (see [jajm] on GitHub)
 
 

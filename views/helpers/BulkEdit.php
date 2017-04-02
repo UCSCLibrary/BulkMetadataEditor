@@ -616,7 +616,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             $itemHasTitle = (boolean) $titles;
             $itemTitle = $itemHasTitle ? strip_formatting($titles[0]->text) : __('[Untitled]');
             foreach ($fieldItem as $field) {
-                $message = __('Bulk Metadata Editor #%d [%s]:', $itemId, $params['changesRadio']) . ' ';
+                $message = __('[BulkMetadataEditor] [%s] item #%d:', $params['changesRadio'], $itemId) . ' ';
                 $replaceType = 'normal';
                 switch ($params['changesRadio']) {
                     case 'preg':
