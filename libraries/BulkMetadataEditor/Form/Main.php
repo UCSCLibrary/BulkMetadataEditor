@@ -157,6 +157,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             'multiOptions' => array(
                 'replace' => __('Search and replace text'),
                 'add' => __('Add a new metadatum in the selected field'),
+                'prepend' => __('Prepend text to existing metadata in the selected fields'),
                 'append' => __('Append text to existing metadata in the selected fields'),
                 'explode' => __('Explode metadata with a separator in multiple elements in the selected fields'),
                 'deduplicate' => __('Deduplicate and remove empty metadata in the selected fields'),
@@ -194,6 +195,14 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             )
         ));
 
+        $this->addElement('checkbox', 'useBackgroundJob', array(
+            'label' => __('Background Job'),
+            'id' => 'use-background-job',
+            'description' => __('If checked, the job will be processed in the background.'),
+            'value' => '1',
+            'order' => 15,
+        ));
+
         //The following elements will be re-ordered in javascript
         //gotta create a new element that can be hidden and shown and junk?
 
@@ -220,6 +229,12 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             'id' => 'bulk-metadata-editor-add',
             'class' => 'elementHidden',
             'description' => __('Input text you want to add as metadata'),
+        ));
+        $this->addElement('text', 'bmePrepend', array(
+            'label' => __('Text to Prepend'),
+            'id' => 'bulk-metadata-editor-prepend',
+            'class' => 'elementHidden',
+            'description' => __('Input text you want to prepend to metadata'),
         ));
         $this->addElement('text', 'bmeAppend', array(
             'label' => __('Text to Append'),
@@ -267,6 +282,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
             array(
                 'changesRadio',
                 'previewChangesButton',
+                'bmePrepend',
                 'bmeAppend',
                 'bmeExplode',
                 'regexp',
@@ -282,6 +298,13 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
                 'description' => __('Define Edits to Apply'),
                 'class' => 'bmeFieldset',
         ));
+
+        $this->addDisplayGroup(
+            array(
+                'useBackgroundJob',
+            ),
+            'bmeJob'
+        );
 
         if(version_compare(OMEKA_VERSION, '2.2.1') >= 0)
             $this->addElement('hash', 'bulk_editor_token');

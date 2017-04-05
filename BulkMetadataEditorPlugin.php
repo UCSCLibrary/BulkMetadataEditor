@@ -43,6 +43,14 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
      */
     public function hookAdminHead()
     {
+        $requestParams = Zend_Controller_Front::getInstance()->getRequest()->getParams();
+        $module = isset($requestParams['module']) ? $requestParams['module'] : 'default';
+        $controller = isset($requestParams['controller']) ? $requestParams['controller'] : 'index';
+        $action = isset($requestParams['action']) ? $requestParams['action'] : 'index';
+        if ($module != 'bulk-metadata-editor' || $controller != 'index' || $action != 'index') {
+            return;
+        }
+
         $language = array(
             'PleaseWait' => __('Please wait...'),
             'Title' => __('Title'),
@@ -94,10 +102,9 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
         $args['acl']->addResource('BulkMetadataEditor_Index');
     }
 
-   
     /**
      * Add the BulkMetadataEditor link to the admin main navigation.
-     * 
+     *
      * @param array $nav Navigation array.
      * @return array $nav Filtered navigation array.
      */
@@ -111,5 +118,5 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
         );
         return $nav;
     }
-    
+
 }

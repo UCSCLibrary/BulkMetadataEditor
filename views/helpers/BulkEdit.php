@@ -42,6 +42,11 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
     {
         $select = $this->_getSelect($params);
 
+        $select = apply_filters('bulk_metadata_editor_get_items', $select, array(
+            'params' => $params,
+            'max' => $max,
+        ));
+
         // Get only the item ids when there is no max.
         if (empty($max)) {
             $select
@@ -611,7 +616,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
             $itemHasTitle = (boolean) $titles;
             $itemTitle = $itemHasTitle ? strip_formatting($titles[0]->text) : __('[Untitled]');
             foreach ($fieldItem as $field) {
-                $message = __('Bulk Metadata Editor #%d [%s]:', $itemId, $params['changesRadio']) . ' ';
+                $message = __('[BulkMetadataEditor] [%s] item #%d:', $params['changesRadio'], $itemId) . ' ';
                 $replaceType = 'normal';
                 switch ($params['changesRadio']) {
                     case 'preg':
@@ -695,6 +700,46 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
                             }
                         }
 
+                        $j++;
+                        break;
+
+                    case 'prepend':
+                        if (!isset($params['bmePrepend']) || !strlen($params['bmePrepend'])) {
+                            throw new Exception(__('Please input some text to prepend'));
+                        }
+
+                        if (!isset($params['delimiter'])) {
+                            $params['delimiter'] = ' ';
+                        }
+
+                        try {
+                            $element = $itemObj->getElementById($field['element_id']);
+                            $eText = get_record_by_id('ElementText', $field['id']);
+
+                            $new = $params['bmePrepend'] . $params['delimiter'] . $eText->text;
+                        } catch (Exception $e) {
+                            throw $e;
+                        }
+
+                        $changes[] = array(
+                            'itemId' => $itemId,
+                            'item' => $itemTitle,
+                            'field' => $element->name,
+                            'old' => $eText->text,
+                            'new' => $new,
+                        );
+
+                        if ($perform) {
+                            $html = $new != strip_tags($new);
+                            try {
+                                $eText->delete();
+                                $itemObj->addTextForElement($element, $new, $html);
+                            } catch (Exception $e) {
+                                $message .= __('An error occurred: %s', $e->getMessage());
+                                _log($message, Zend_Log::ERR);
+                                continue 2;
+                            }
+                        }
                         $j++;
                         break;
 
