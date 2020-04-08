@@ -1,0 +1,393 @@
+# Translation for the BulkMetadataEditor plugin for Omeka.
+# Copyright (C) 2015 BibLibre
+# This file is distributed under the same license as the Omeka package.
+# Julian Maurice <julian.maurice@biblibre.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: BulkMetadataEditor\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-08 15:10+0200\n"
+"PO-Revision-Date: 2020-04-08 11:53+0200\n"
+"Last-Translator: Daniele Binaghi <admin@bitoteko.it>\n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: BulkMetadataEditorPlugin.php:47
+msgid "Please wait..."
+msgstr "Attendere prego..."
+
+#: BulkMetadataEditorPlugin.php:52
+msgid "Field"
+msgstr "Campo"
+
+#: BulkMetadataEditorPlugin.php:53
+msgid "Old Value"
+msgstr "Vecchio valore"
+
+#: BulkMetadataEditorPlugin.php:54
+msgid "New Value"
+msgstr "Nuovo valore"
+
+#: BulkMetadataEditorPlugin.php:55
+msgid "Error generating preview! :("
+msgstr "Errore durante la generazione dell'anteprima! :("
+
+#: BulkMetadataEditorPlugin.php:56
+msgid "Apologies, but we could not generate a preview at this time."
+msgstr "Spiacenti, ma non è stato possibile generare un'anteprima questa volta."
+
+#: BulkMetadataEditorPlugin.php:57
+msgid "You may be asking for too many changes at once."
+msgstr "Stai probabilmente richiedendo troppe modifiche in una volta sola."
+
+#: BulkMetadataEditorPlugin.php:58
+msgid "Anyway, the bulk edition will be done in the background."
+msgstr "Comunque, la modifica massiva verrà effettuata in background."
+
+#: BulkMetadataEditorPlugin.php:59
+msgid "The items preview request is taking too long!"
+msgstr "La richiesta d'anteprima del documento sta impiegando troppo tempo!"
+
+#: BulkMetadataEditorPlugin.php:60
+msgid "You must be trying to select a ton of items at once."
+msgstr "Stai probabilmente selezionando troppi documenti in una volta sola."
+
+#: BulkMetadataEditorPlugin.php:61 BulkMetadataEditorPlugin.php:64
+#: BulkMetadataEditorPlugin.php:67
+msgid ""
+"Preview is not possible, but the bulk edition will be done in the background."
+msgstr "L'anteprima non è possibile, ma la modifica massiva verrà effettuata in background."
+
+#: BulkMetadataEditorPlugin.php:62
+msgid "The fields preview request is taking too long!"
+msgstr "La richiesta di anteprima del campo sta impiegando troppo tempo!"
+
+#: BulkMetadataEditorPlugin.php:63
+msgid "You must be trying to select a ton of fields at once."
+msgstr "Stai probabilmente selezionando troppi campi in una volta sola."
+
+#: BulkMetadataEditorPlugin.php:65
+msgid "The changes preview request is taking too long!"
+msgstr "La richiesta d'anteprima delle modifiche sta impiegando troppo tempo!"
+
+#: BulkMetadataEditorPlugin.php:66
+msgid "You must be trying to make a ton of changes at once."
+msgstr "Stai probabilmente provando a fare troppe modifiche in una volta sola."
+
+#: BulkMetadataEditorPlugin.php:68 views/helpers/BulkEdit.php:549
+msgid "Please select an action to perform."
+msgstr "Seleziona un'azione da effettuare"
+
+#: BulkMetadataEditorPlugin.php:69
+msgid "No matching items found."
+msgstr "Nessun documento corrispondente trovato."
+
+#: BulkMetadataEditorPlugin.php:70
+msgid "No matching field found."
+msgstr "Nessun campo corrispondente trovato."
+
+#: BulkMetadataEditorPlugin.php:71
+msgid "No change or no preview."
+msgstr "Nessuna modifica o anteprima."
+
+#: BulkMetadataEditorPlugin.php:72
+#, php-format
+msgid "Plus %s more items."
+msgstr "%s altri documenti."
+
+#: BulkMetadataEditorPlugin.php:73
+#, php-format
+msgid "...and corresponding fields from a total of %s items."
+msgstr "...e campi corrispondenti da un totale di %s documenti."
+
+#: BulkMetadataEditorPlugin.php:74
+#, php-format
+msgid "...and changes for a total of %s items."
+msgstr "...e modifiche per un totale di %s documenti."
+
+#: BulkMetadataEditorPlugin.php:75
+msgid "Show more."
+msgstr "Mostra di più."
+
+#: BulkMetadataEditorPlugin.php:107
+msgid "Bulk Editor"
+msgstr "Bulk Editor"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:52
+msgid "Edit items from this collection"
+msgstr "Modifica i documenti da questa collezione"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:60
+msgid "Select Items by Metadata"
+msgstr "Seleziona documenti in base a metadati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:62
+msgid "Select items to edit based on their associated metadata elements"
+msgstr "Seleziona i documenti da modificare in base agli elementi metadati a loro associati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:82
+msgid "Preview Selected Items"
+msgstr "Anteprima documenti selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:89
+msgid "Hide Item Preview"
+msgstr "Nascondi anteprima documento"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:109
+msgid "Metadata elements"
+msgstr "Elementi metadati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:110
+msgid ""
+"Select the metadata elements you would like to edit. You can select multiple "
+"values. (default: all)"
+msgstr ""
+"Seleziona gli elementi metadati che vorresti modificare. Puoi selezionare valori multipli"
+"(predefinito: tutti)"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:118
+msgid "Preview Selected Fields"
+msgstr "Mostra anteprima campi selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:125
+msgid "Hide Field Preview"
+msgstr "Nascondi anteprima campo"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:145
+msgid "Edit Type"
+msgstr "Tipologia modifica"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:146
+msgid "Choose the type of edit you would like to perform"
+msgstr "Scegli la tipologia di modifica che vuoi apportare"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:158
+msgid "Search and replace text"
+msgstr "Cercare e sostituire testo"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:159
+msgid "Add a new metadatum in the selected field"
+msgstr "Aggiungere un nuovo metadato ai campi selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php
+msgid "Prepend text to existing metadata in the selected fields"
+msgstr "Prefissare con un testo metadati esistenti nei campi selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:160
+msgid "Append text to existing metadata in the selected fields"
+msgstr "Suffissare con un testo metadati esistenti nei campi selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php
+msgid "Explode metadata with a separator in multiple elements in the selected fields"
+msgstr "Separare metadati in elementi multipli nei campi selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:161
+msgid "Deduplicate and remove empty metadata in the selected fields"
+msgstr "Eliminare duplicati e rimuovere metadati vuoti dai campi selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:162
+msgid "Deduplicate files of selected items by hash"
+msgstr "Eliminare file duplicati dai documenti selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:163
+msgid "Delete all existing metadata in the selected fields"
+msgstr "Cancellare tutti i metadati esistenti nei campi selezionati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:168
+msgid "Preview Changes"
+msgstr "Anteprima modifiche"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:175
+msgid "Hide Change Preview"
+msgstr "Nascondi anteprima modifiche"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:200
+msgid "Search for:"
+msgstr "Cerca:"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:203
+msgid "Input text you want to search for "
+msgstr "Inserisci il testo che vuoi cercare "
+
+#: libraries/BulkMetadataEditor/Form/Main.php:206
+msgid "Replace with:"
+msgstr "Sostituisci con:"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:209
+msgid "Input text you want to replace with "
+msgstr "Inserisci il testo che vuoi utilizzare per la sostituzione "
+
+#: libraries/BulkMetadataEditor/Form/Main.php:212
+msgid "Use regular expressions"
+msgstr "Utilizza espressioni regolari"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:218
+msgid "Text to Add"
+msgstr "Testo da aggiungere"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:221
+msgid "Input text you want to add as metadata"
+msgstr "Inserisci il testo che vuoi aggiungere ai metadati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:224
+msgid "Text to Append"
+msgstr "Testo da attaccare"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:227
+msgid "Input text you want to append to metadata"
+msgstr "Inserisci il testo che vuoi attaccare ai metadati"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:241
+msgid "Step 1: Select Items"
+msgstr "Passo 1: Seleziona Documenti"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:254
+msgid "Step 2: Select Fields"
+msgstr "Passo 2: Seleziona campi"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:272
+msgid "Step 3: Define Changes"
+msgstr "Passo 3: Definisci le modifiche"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:273
+msgid "Define Edits to Apply"
+msgstr "Definisci le modifiche da applicare"
+
+#: libraries/BulkMetadataEditor/Form/Main.php
+msgid "Background Job"
+msgstr "Lavoro in background"
+
+#: libraries/BulkMetadataEditor/Form/Main.php
+msgid "If checked, the job will be processed in the background."
+msgstr "Se selezionata, il lavoro verrà effettuato in background."
+
+#: libraries/BulkMetadataEditor/Form/Main.php:281
+msgid "Apply Edits Now"
+msgstr "Applica le modifiche ora"
+
+#: libraries/BulkMetadataEditor/Form/Main.php:329
+msgid "All Collections"
+msgstr "Tutte le collezioni"
+
+#: libraries/BulkMetadataEditor/Job/Process.php:25
+msgid "An error occurred in background process."
+msgstr "Si è verificato un errore nel processo in background"
+
+#: libraries/BulkMetadataEditor/Job/Process.php:26
+#, php-format
+msgid "Bulk Metadata Editor: %s"
+msgstr "Bulk Metadata Editor: %s"
+
+#: controllers/IndexController.php:53
+msgid ""
+"The requested changes are applied to the database one by one in the "
+"background."
+msgstr ""
+"Le modifiche richieste sono applicate alla base dati una ad una in background."
+
+#: controllers/IndexController.php:54
+msgid "Check logs for success and errors."
+msgstr "Controlla i registri per successi ed errori."
+
+#: controllers/IndexController.php:57
+#, php-format
+msgid "Bulk edition cannot be started: %s"
+msgstr "La modifica massiva non ha potuto iniziare: %s"
+
+#: views/admin/index/index.php:2
+msgid "Bulk Metadata Editor"
+msgstr "Bulk Metadata Editor"
+
+#: views/admin/form-rule-box.php:28
+msgid "is not exactly"
+msgstr "non è esattamente"
+
+#: views/admin/form-rule-box.php:33
+msgid "starts with"
+msgstr "comincia con"
+
+#: views/admin/form-rule-box.php:34
+msgid "ends with"
+msgstr "finisce con"
+
+#: views/admin/form-rule-box.php:35
+msgid "matches"
+msgstr "corrisponde a"
+
+#: views/admin/form-rule-box.php:36
+msgid "does not matches"
+msgstr "non corrisponde a"
+
+#: views/admin/form-rule-box.php:41
+msgid "Only select items which also meet the following criteria:"
+msgstr ""
+"Seleziona solamente documenti che corrispondono anche ai seguenti criteri:"
+
+#: views/admin/form-rule-box.php:52
+msgid "Input search term here"
+msgstr "Inserisci qui il termine da ricercare"
+
+#: views/admin/form-rule-box.php:55
+msgid "Match Case"
+msgstr "Rispetta maiuscole/minuscole"
+
+#: views/admin/form-rule-box.php:65
+msgid "Add Another Rule"
+msgstr "Aggiungi un'altra regola"
+
+#: views/helpers/BulkEdit.php:354
+msgid "Cannot pull item data from a non-item."
+msgstr "Non si possono recuperare dati documento da un non-documento."
+
+#: views/helpers/BulkEdit.php:356
+msgid "[untitled]"
+msgstr "[senza titolo]"
+
+#: views/helpers/BulkEdit.php:357
+msgid "[no description given]"
+msgstr "[nessuna descrizione fornita]"
+
+#: views/helpers/BulkEdit.php:358
+msgid "[undefined]"
+msgstr "[indefinito]"
+
+#: views/helpers/BulkEdit.php:614
+#, php-format
+msgid "Bulk Metadata Editor #%d [%s]:"
+msgstr "Bulk Metadata Editor #%d [%s]:"
+
+#: views/helpers/BulkEdit.php:625
+msgid "Please define search and replace terms."
+msgstr "Si prega di indicare i termini da cercare e da sostituire."
+
+#: views/helpers/BulkEdit.php:658 views/helpers/BulkEdit.php:692
+#: views/helpers/BulkEdit.php:733 views/helpers/BulkEdit.php:766
+#: views/helpers/BulkEdit.php:801 views/helpers/BulkEdit.php:819
+#, php-format
+msgid "An error occurred: %s"
+msgstr "Si è verificato un errore: %s"
+
+#: views/helpers/BulkEdit.php:677
+msgid "Error retrieving item data for deletion."
+msgstr "Errore nel recupero dei dati documenti da cancellare."
+
+#: views/helpers/BulkEdit.php:703
+msgid "Please input some text to append"
+msgstr "Si prega di inserire del testo da attaccare"
+
+#: views/helpers/BulkEdit.php:743
+msgid "Please input some text to add."
+msgstr "Si prega di indicare del testo da aggiungere."
+
+#: views/helpers/BulkEdit.php:785
+msgid "Error retrieving item data for deduplication."
+msgstr "Errore nel recupero dei dati documento per l'elimazione di duplicati."
+
+#: views/helpers/BulkEdit.php:824
+msgid "Success."
+msgstr "Successo."
