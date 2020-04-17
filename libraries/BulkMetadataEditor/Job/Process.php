@@ -29,7 +29,7 @@ class BulkMetadataEditor_Job_Process extends Omeka_Job_AbstractJob
         }
 
         try {
-            $bulkEdit->perform($params);
+            $changes = $bulkEdit->perform($params);
         } catch (Exception $e) {
             $message = __('An error occurred in background process.');
             _log('[BulkMetadataEditor] ' . $message, Zend_Log::ERR);

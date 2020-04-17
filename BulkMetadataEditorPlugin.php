@@ -60,7 +60,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
             'Field' => __('Field'),
             'OldValue' => __('Old Value'),
             'NewValue' => __('New Value'),
-            'ErrorGeneratingPreview' => __('Error generating preview! :('),
+            'ErrorGeneratingPreview' => __('Error generating preview!'),
             'CouldNotGeneratePreview' => __('Apologies, but we could not generate a preview at this time.')
                 . ' ' . __('You may be asking for too many changes at once.')
                 . ' ' . __('Anyway, the bulk edition will be done in the background.'),
@@ -73,6 +73,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
             'ChangesPreviewRequestTooLong' => __('The changes preview request is taking too long!')
                 . ' ' . __('You must be trying to make a ton of changes at once.')
                 . ' ' . __('Preview is not possible, but the bulk edition will be done in the background.'),
+            'SelectField' => __('Please select at least one field.'),
             'SelectActionPerform' => __('Please select an action to perform.'),
             'NoItemFound' => __('No matching items found.'),
             'NoFieldFound' => __('No matching field found.'),
@@ -81,6 +82,12 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
             'PlusFields' => __('...and corresponding fields from a total of %s items.', '%s'),
             'PlusChanges' => __('...and changes for a total of %s items.', '%s'),
             'ShowMore' => __('Show more.'),
+            'PreviewSelectedItems' => __('Preview Selected Items'),
+            'HideItemsPreview' => __('Hide Items Preview'),
+            'PreviewSelectedFields' => __('Preview Selected Fields'),
+            'HideFieldsPreview' => __('Hide Fields Preview'),
+            'PreviewChanges' => __('Preview Changes'),
+            'HideChangesPreview' => __('Hide Changes Preview'),
         );
         $language = json_encode($language);
         queue_js_string("Omeka.BulkMetadataEditor = {language: $language};");

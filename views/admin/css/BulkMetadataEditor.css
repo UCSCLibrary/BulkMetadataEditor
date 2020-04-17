@@ -55,3 +55,43 @@
 #fieldPreviewDiv table tr.even {
     font-weight: bold;
 }
+
+fieldset .fieldsetRule {
+	border: 1px solid #ccc; 
+	background-color: #eee; 
+	padding: 5px; 
+	margin-bottom: .5em;
+}
+
+.removeRule {
+  position: relative;
+  right: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+  padding: 0;
+  border: 1px solid white;
+  padding: 2px;
+  border-radius: 4px;
+  background-color: red;
+  float: right;
+}
+.removeRule:hover {
+  opacity: 1;
+}
+.removeRule:before, .removeRule:after {
+  position: absolute;
+  left: 9px;
+  content: ' ';
+  height: 16px;
+  width: 2px;
+  background-color: white;
+  cursor: pointer;
+}
+.removeRule:before {
+  transform: rotate(45deg);
+}
+.removeRule:after {
+  transform: rotate(-45deg);
+}

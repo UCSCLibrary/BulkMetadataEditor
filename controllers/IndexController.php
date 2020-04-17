@@ -57,14 +57,20 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
         $params = $this->getAllParams();
         $jobDispatcher = Zend_Registry::get('job_dispatcher');
         $options = array('params' => $params);
-
-        if (empty($params['useBackgroundJob'])) {
+		
+		if (!isset($params['selectFields'])) {
+			$message = __('Bulk Metadata edition cannot be started because no field is selected for editing.');
+			$status = 'error';
+		} elseif (!isset($params['changesRadio'])) {
+			$message = __('Bulk Metadata edition cannot be started because no editing type is selected.');
+			$status = 'error';
+		} elseif (empty($params['useBackgroundJob'])) {
             try {
-                $jobDispatcher->send('BulkMetadataEditor_Job_Process', $options);
+                $changes = $jobDispatcher->send('BulkMetadataEditor_Job_Process', $options);
                 $message = __('Bulk Metadata edition has been processed.');
                 $status = 'success';
             } catch (Exception $e) {
-                $message = __('Bulk edition cannot be started: %s', $e->getMessage());
+                $message = __('Bulk Metadata edition cannot be started: %s', $e->getMessage());
                 $status = 'error';
                 _log('[BulkMetadataEditor] ' . $message, Zend_Log::ERR);
             }
@@ -76,7 +82,7 @@ class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractAction
                     . ' ' . __('Check logs for success and errors.');
                 $status = 'info';
             } catch (Exception $e) {
-                $message = __('Bulk edition cannot be started: %s', $e->getMessage());
+                $message = __('Bulk Metadata edition cannot be started: %s', $e->getMessage());
                 $status = 'error';
             }
         }
