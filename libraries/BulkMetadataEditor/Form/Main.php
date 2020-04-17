@@ -149,7 +149,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				'prepend' => __('Prepend text to existing metadata in the selected fields'),
 				'append' => __('Append text to existing metadata in the selected fields'),
 				'trim' => __('Remove text from ends of existing metadata in the selected fields'),
-				'caseconvert' => __('Convert to uppercase or lowercase metadata in the selected fields'),
+				'caseconvert' => __('Convert to uppercase or lowercase existing metadata in the selected fields'),
 				'explode' => __('Explode metadata with a separator in multiple elements in the selected fields'),
 				'deduplicate' => __('Deduplicate and remove empty metadata in the selected fields'),
 				'deduplicate-files' => __('Deduplicate files of selected items by hash'),
