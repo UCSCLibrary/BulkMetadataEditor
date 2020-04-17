@@ -1,5 +1,5 @@
 .preview-button {
-    margin:10px;
+    margin:10px 10px 10px 0;
 }
 
 .previewButtonDiv{
@@ -53,6 +53,14 @@
 }
 
 #fieldPreviewDiv table tr.even {
+    font-weight: bold;
+}
+
+#fieldset-bmeJob {
+	padding:15px 21px;
+}
+
+.bold {
     font-weight: bold;
 }
 
