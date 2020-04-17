@@ -285,10 +285,10 @@ jQuery(document).ready(function () {
 							if (max < 200) {
 								title += ' <a id="show-more-items" href="#">' + language.ShowMore + '</a>';
 							}
-							r[++j] = '<tr class="even"><td colspan="3">' + title + '</td></tr>';
+							r[++j] = '<tr class="even bold"><td colspan="3">' + title + '</td></tr>';
 						}
 					} else {
-						r[++j] = '<tr class="odd"><td colspan="3">' + language.NoItemFound + '</td></tr>';
+						r[++j] = '<tr class="odd bold"><td colspan="3">' + language.NoItemFound + '</td></tr>';
 					}
 					r[++j] = '</tbody></table>';
 
@@ -396,10 +396,10 @@ jQuery(document).ready(function () {
 							if (max < 50) {
 								title += ' <a id="show-more-changes" href="#">' + language.ShowMore + '</a>';
 							}
-							r[++j] = '<tr class="even"><td colspan="4">' + title + '</td></tr>';
+							r[++j] = '<tr class="even bold"><td colspan="4">' + title + '</td></tr>';
 						}
 					} else {
-						r[j] = '<table><tbody><tr class="even"><td colspan="4">' + language.NoChange + '</td></tr>';
+						r[j] = '<table><tbody><tr class="even bold"><td colspan="4">' + language.NoChange + '</td></tr>';
 					}
 					r[++j] = '</tbody></table>';
 
