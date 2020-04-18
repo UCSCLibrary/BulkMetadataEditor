@@ -52,7 +52,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
         }
 
         $language = array(
-            'PleaseWait' => __('Please wait...'),
+            'PleaseWait' => __('Please wait'),
             'Title' => __('Title'),
             'Description' => __('Description'),
             'ItemType' => __('Item Type'),
@@ -80,7 +80,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
             'NoChange' => __('No change or no preview.'),
             'PlusItems' => __('Plus %s more items.', '%s'),
             'PlusFields' => __('...and corresponding fields from a total of %s items.', '%s'),
-            'PlusChanges' => __('...and changes for a total of %s items.', '%s'),
+            'PlusChanges' => __('Only first %s changes shown.', '%s'),
             'ShowMore' => __('Show more.'),
             'PreviewSelectedItems' => __('Preview Selected Items'),
             'HideItemsPreview' => __('Hide Items Preview'),
@@ -99,7 +99,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
      * Define the plugin's access control list.
      *
      * Add a new resource to the access control list
-     * corresponding the the metadata editing page
+     * corresponding to the metadata editing page
      *
      *@param array $args Parameters sent to the plugin hook
      *@return void

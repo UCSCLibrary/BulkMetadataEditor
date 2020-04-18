@@ -593,7 +593,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 				unset($fieldItem['title']);
 			}
 
-			if ($max > 0 and $j > $max) {
+			if ($max > 0 and $j > ($max + 1)) {
 				break;
 			}
 
@@ -628,6 +628,8 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						if (!isset($params['bmeSearch']) || !isset($params['bmeReplace'])) {
 							// TODO:proper error handling
 							throw new Exception(__('Please define search and replace terms.'));
+						} elseif (strcmp($params['bmeSearch'], $params['bmeReplace']) == 0) {
+							throw new Exception(__('Search and replace terms coincide.'));
 						}
 
 						$element = $itemObj->getElementById($field['element_id']);
@@ -646,7 +648,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
-								'field' => $element->name,
+								'field' => __($element->name),
 								'old' => $eText->text,
 								'new' => $new,
 							);
@@ -683,7 +685,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
-								'field' => $element->name,
+								'field' => __($element->name),
 								'old' => 'null',
 								'new' => $new,
 							);
@@ -719,7 +721,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						$changes[] = array(
 							'itemId' => $itemId,
 							'item' => $itemTitle,
-							'field' => $element->name,
+							'field' => __($element->name),
 							'old' => $eText->text,
 							'new' => $new,
 						);
@@ -755,7 +757,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						$changes[] = array(
 							'itemId' => $itemId,
 							'item' => $itemTitle,
-							'field' => $element->name,
+							'field' => __($element->name),
 							'old' => $eText->text,
 							'new' => $new,
 						);
@@ -789,7 +791,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
-								'field' => $element->name,
+								'field' => __($element->name),
 								'old' => $eText->text,
 								'new' => $new,
 							);
@@ -845,7 +847,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
-								'field' => $element->name,
+								'field' => __($element->name),
 								'old' => $eText->text,
 								'new' => $new,
 							);
@@ -896,7 +898,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
-								'field' => $element->name,
+								'field' => __($element->name),
 								'old' => $eText->text,
 								'new' => implode($strings, '<br>'),
 							);
@@ -936,7 +938,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
-								'field' => $element->name,
+								'field' => __($element->name),
 								'old' => $eText->text,
 								'new' => 'null',
 							);
@@ -975,7 +977,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						$changes[] = array(
 							'itemId' => $itemId,
 							'item' => $itemTitle,
-							'field' => $element->name,
+							'field' => __($element->name),
 							'old' => $eText->text,
 							'new' => 'null',
 						);

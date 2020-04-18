@@ -19,7 +19,7 @@ msgstr ""
 
 
 #: BulkMetadataEditorPlugin.php:55
-msgid "Please wait..."
+msgid "Please wait"
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:56
@@ -81,6 +81,7 @@ msgstr ""
 msgid ""
 "Preview is not possible, but the bulk edition will be done in the background."
 msgstr ""
+""
 
 #: BulkMetadataEditorPlugin.php:70
 msgid "The fields preview request is taking too long!"
@@ -129,7 +130,7 @@ msgid "...and corresponding fields from a total of %s items."
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:83
-msgid "...and changes for a total of %s items."
+msgid "Only first %s changes shown."
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:84
@@ -168,7 +169,7 @@ msgid "Bulk Editor"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:52
-msgid "Edit items from this collection"
+msgid "Select items to edit based on the collection they are a part of"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:59
@@ -250,7 +251,7 @@ msgid "Search for"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:197
-msgid "Input text you want to search for"
+msgid "Input text you want to search for:"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:200
@@ -261,14 +262,14 @@ msgstr ""
 msgid "Use regular expressions (always enclose search pattern between delimiters; "
 "visit %s for more info)"
 msgstr ""
-"delimitatori; visita %s per maggiori informazioni)"
+""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:207
 msgid "Replace with"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:210
-msgid "Input text you want to replace with"
+msgid "Input text you want to replace with:"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:213
@@ -364,7 +365,7 @@ msgid "Apply Edits Now"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:374
-msgid "All Collections"
+msgid "All Items"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Job/Process.php:16
@@ -479,47 +480,51 @@ msgstr ""
 msgid "Please define search and replace terms."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:661 
-#: views/helpers/BulkEdit.php:695
-#: views/helpers/BulkEdit.php:733 
-#: views/helpers/BulkEdit.php:769
-#: views/helpers/BulkEdit.php:804 
-#: views/helpers/BulkEdit.php:860
-#: views/helpers/BulkEdit.php:913
-#: views/helpers/BulkEdit.php:947
-#: views/helpers/BulkEdit.php:986
-#: views/helpers/BulkEdit.php:999
+#: views/helpers/BulkEdit.php:632
+msgid "Search and replace terms coincide."
+msgstr ""
+
+#: views/helpers/BulkEdit.php:663 
+#: views/helpers/BulkEdit.php:697
+#: views/helpers/BulkEdit.php:735 
+#: views/helpers/BulkEdit.php:771
+#: views/helpers/BulkEdit.php:806 
+#: views/helpers/BulkEdit.php:862
+#: views/helpers/BulkEdit.php:915
+#: views/helpers/BulkEdit.php:949
+#: views/helpers/BulkEdit.php:988
+#: views/helpers/BulkEdit.php:1001
 msgid "An error occurred: %s"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:672
+#: views/helpers/BulkEdit.php:674
 msgid "Please input some text to add."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:707
+#: views/helpers/BulkEdit.php:709
 msgid "Please input some text to prepend."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:743
+#: views/helpers/BulkEdit.php:745
 msgid "Please input some text to append"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:743
+#: views/helpers/BulkEdit.php:745
 msgid "Please choose a case conversion type"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:871
+#: views/helpers/BulkEdit.php:873
 msgid "Please input a separator to explode texts."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:937
+#: views/helpers/BulkEdit.php:939
 msgid "Error retrieving item data for deduplication."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:971
+#: views/helpers/BulkEdit.php:973
 msgid "Error retrieving item data for deletion."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:1004
+#: views/helpers/BulkEdit.php:1006
 msgid "Success."
 msgstr ""

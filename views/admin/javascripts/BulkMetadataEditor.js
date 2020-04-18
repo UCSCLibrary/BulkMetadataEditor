@@ -380,7 +380,9 @@ jQuery(document).ready(function () {
 
 					if (data['changes'].length > 0) {
 						r[j] = '<table><thead><tr><th scope="col">' + language.Item + '</th><th>' + language.Field + '</th><th>' + language.OldValue + '</th><th>' + language.NewValue + '</th</tr></thead><tbody>';
-						for (var key = 0, size = data['changes'].length; key < size; key++) {
+						var size = data['changes'].length;
+						var limit = Math.min(size, max);
+						for (var key = 0; key < limit; key++) {
 							r[++j] = '<tr class="' + (key % 2 == 0 ? 'odd' : 'even') + '"><td>';
 							r[++j] = '<a href="' + baseUrl + 'items/show/' + data['changes'][key]['itemId'] + '">' + data['changes'][key]['item'] + '</a>';
 							r[++j] = '</td><td>';
@@ -391,8 +393,9 @@ jQuery(document).ready(function () {
 							r[++j] = data['changes'][key]['new'];
 							r[++j] = '</td></tr>';
 						}
-						if (data['changes'].length > max) {
-							var title = language.PlusChanges.replace('%s', data['changes'].length);
+
+						if (size > max) {
+							var title = language.PlusChanges.replace('%s', max);
 							if (max < 50) {
 								title += ' <a id="show-more-changes" href="#">' + language.ShowMore + '</a>';
 							}

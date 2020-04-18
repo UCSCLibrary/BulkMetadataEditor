@@ -18,8 +18,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: BulkMetadataEditorPlugin.php:55
-msgid "Please wait..."
-msgstr "Attendere prego..."
+msgid "Please wait"
+msgstr "Attendere prego"
 
 #: BulkMetadataEditorPlugin.php:56
 msgid "Title"
@@ -128,8 +128,8 @@ msgid "...and corresponding fields from a total of %s items."
 msgstr "...e campi corrispondenti da un totale di %s documenti."
 
 #: BulkMetadataEditorPlugin.php:83
-msgid "...and changes for a total of %s items."
-msgstr "...e modifiche per un totale di %s documenti."
+msgid "Only first %s changes shown."
+msgstr "Solo le prime %s modifiche sono mostrate."
 
 #: BulkMetadataEditorPlugin.php:84
 msgid "Show more."
@@ -167,8 +167,8 @@ msgid "Bulk Editor"
 msgstr "Bulk Editor"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:52
-msgid "Edit items from this collection"
-msgstr "Modifica i documenti da questa collezione"
+msgid "Select items to edit based on the collection they are a part of"
+msgstr "Seleziona i documenti da modificare in base alla collezione di cui fanno parte"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:59
 msgid "Select Items by Metadata"
@@ -176,7 +176,7 @@ msgstr "Seleziona per metadati"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:61
 msgid "Select items to edit based on their associated metadata elements"
-msgstr "Seleziona i documenti da modificare in base agli elementi metadati a loro associati"
+msgstr "Seleziona i documenti da modificare in base ai metadati a loro associati"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:103
 msgid "Metadata elements"
@@ -249,7 +249,7 @@ msgid "Search for"
 msgstr "Cerca"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:197
-msgid "Input text you want to search for"
+msgid "Input text you want to search for:"
 msgstr "Inserisci il testo che vuoi cercare:"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:200
@@ -267,7 +267,7 @@ msgid "Replace with"
 msgstr "Sostituisci con"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:210
-msgid "Input text you want to replace with"
+msgid "Input text you want to replace with:"
 msgstr "Inserisci il testo che vuoi utilizzare per la sostituzione:"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:213
@@ -363,8 +363,8 @@ msgid "Apply Edits Now"
 msgstr "Applica modifiche ora"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:374
-msgid "All Collections"
-msgstr "Tutte le collezioni"
+msgid "All Items"
+msgstr "Tutti i documenti"
 
 #: libraries/BulkMetadataEditor/Job/Process.php:16
 msgid "Process started"
@@ -478,47 +478,51 @@ msgstr "[BulkMetadataEditor] [%s] documento #%d:"
 msgid "Please define search and replace terms."
 msgstr "Si prega di indicare i termini da cercare e da sostituire."
 
-#: views/helpers/BulkEdit.php:661 
-#: views/helpers/BulkEdit.php:695
-#: views/helpers/BulkEdit.php:733 
-#: views/helpers/BulkEdit.php:769
-#: views/helpers/BulkEdit.php:804 
-#: views/helpers/BulkEdit.php:860
-#: views/helpers/BulkEdit.php:913
-#: views/helpers/BulkEdit.php:947
-#: views/helpers/BulkEdit.php:986
-#: views/helpers/BulkEdit.php:999
+#: views/helpers/BulkEdit.php:632
+msgid "Search and replace terms coincide."
+msgstr "I termini da cercare e da sostituire coincidono."
+
+#: views/helpers/BulkEdit.php:663 
+#: views/helpers/BulkEdit.php:697
+#: views/helpers/BulkEdit.php:735 
+#: views/helpers/BulkEdit.php:771
+#: views/helpers/BulkEdit.php:806 
+#: views/helpers/BulkEdit.php:862
+#: views/helpers/BulkEdit.php:915
+#: views/helpers/BulkEdit.php:949
+#: views/helpers/BulkEdit.php:988
+#: views/helpers/BulkEdit.php:1001
 msgid "An error occurred: %s"
 msgstr "Si è verificato un errore: %s"
 
-#: views/helpers/BulkEdit.php:672
+#: views/helpers/BulkEdit.php:674
 msgid "Please input some text to add."
 msgstr "Si prega di indicare del testo da aggiungere."
 
-#: views/helpers/BulkEdit.php:707
+#: views/helpers/BulkEdit.php:709
 msgid "Please input some text to prepend."
 msgstr "Si prega di indicare del testo da anteporre."
 
-#: views/helpers/BulkEdit.php:743
+#: views/helpers/BulkEdit.php:745
 msgid "Please input some text to append"
 msgstr "Si prega di inserire del testo da posporre"
 
-#: views/helpers/BulkEdit.php:743
+#: views/helpers/BulkEdit.php:745
 msgid "Please choose a case conversion type"
 msgstr "Si prega di scegliere una tipologia di conversione"
 
-#: views/helpers/BulkEdit.php:871
+#: views/helpers/BulkEdit.php:873
 msgid "Please input a separator to explode texts."
 msgstr "Si prega di indicare un separatore per separare i testi."
 
-#: views/helpers/BulkEdit.php:937
+#: views/helpers/BulkEdit.php:939
 msgid "Error retrieving item data for deduplication."
 msgstr "Errore nel recupero dei dati documento per l'elimazione di duplicati."
 
-#: views/helpers/BulkEdit.php:971
+#: views/helpers/BulkEdit.php:973
 msgid "Error retrieving item data for deletion."
 msgstr "Errore nel recupero dei dati documenti da cancellare."
 
-#: views/helpers/BulkEdit.php:1004
+#: views/helpers/BulkEdit.php:1006
 msgid "Success."
 msgstr "Successo."

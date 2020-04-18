@@ -49,7 +49,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 
 		$this->addElement('select', 'bmeCollectionId', array(
 			'label' => __('Collection'),
-			'description' => __('Edit items from this collection'),
+			'description' => __('Select items to edit based on the collection they are a part of'),
 			'value' => '0',
 			'multiOptions' => $this->_getCollectionOptions(),
 			'order' => 1,
@@ -336,7 +336,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 
 			if ($element instanceof Zend_Form_Element_Submit) {
 				// All submit form elements should be wrapped in a div with
-				// class "field".
+				// class 'field'.
 				$element->setDecorators(array(
 					'ViewHelper',
 					array('HtmlTag', array('tag' => 'div'))
@@ -371,7 +371,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		array_walk($options, function (&$value, $key) {
 			$value = '(#' . $key . ') ' . $value;
 		});
-		return array('0' => __('All Collections')) + $options;
+		return array('0' => __('All Items')) + $options;
 	}
 
 	/**
