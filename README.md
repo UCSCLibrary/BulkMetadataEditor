@@ -16,6 +16,7 @@ The editing options available are:
 - Remove text from ends of existing metadata in the selected fields
 - Convert to uppercase or lowercase existing metadata in the selected fields
 - Explode metadata with a separator in multiple elements in the selected fields
+- Deduplicate and join metadata with a separator in the selected fields
 - Deduplicate and remove empty metadata in the selected fields
 - Deduplicate files of selected items by hash
 - Delete all existing metadata in the selected fields
