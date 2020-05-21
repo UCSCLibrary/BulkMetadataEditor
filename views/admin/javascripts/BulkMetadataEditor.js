@@ -17,6 +17,7 @@ jQuery(document).ready(function () {
 		$('#changesRadio-trim-field').after($('#bulk-metadata-editor-ltrim-field'));
 		$('#changesRadio-caseconvert-field').after($('#bulk-metadata-editor-caseconvert-field'));
 		$('#changesRadio-explode-field').after($('#bulk-metadata-editor-explode-field'));
+		$('#changesRadio-implode-field').after($('#bulk-metadata-editor-implode-field'));
 		$('#changesRadio-deduplicate-field').after($('#bulk-metadata-editor-deduplicate-field'));
 		$('#changesRadio-deduplicate-files-field').after($('#bulk-metadata-editor-deduplicate-files-field'));
 
@@ -85,6 +86,10 @@ jQuery(document).ready(function () {
 
 		$('#changesRadio-explode').change(function () {
 			if (this.checked) toggleRadioOption('explode');
+		});
+		
+		$('#changesRadio-implode').change(function () {
+			if (this.checked) toggleRadioOption('implode');
 		});
 
 		$('#changesRadio-deduplicate').change(function () {
@@ -209,6 +214,11 @@ jQuery(document).ready(function () {
 			$('#bulk-metadata-editor-explode-field').show(time);
 		} else {
 			$('#bulk-metadata-editor-explode-field').hide(time);
+		}
+		if (optionName == 'implode') {
+			$('#bulk-metadata-editor-implode-field').show(time);
+		} else {
+			$('#bulk-metadata-editor-implode-field').hide(time);
 		}
 	}
 

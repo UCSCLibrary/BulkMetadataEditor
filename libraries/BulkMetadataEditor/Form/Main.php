@@ -151,6 +151,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				'trim' => __('Remove text from ends of existing metadata in the selected fields'),
 				'caseconvert' => __('Convert to uppercase or lowercase existing metadata in the selected fields'),
 				'explode' => __('Explode metadata with a separator in multiple elements in the selected fields'),
+				'implode' => __('Deduplicate and join metadata with a separator in the selected fields'),
 				'deduplicate' => __('Deduplicate and remove empty metadata in the selected fields'),
 				'deduplicate-files' => __('Deduplicate files of selected items by hash'),
 				'delete' => __('Delete all existing metadata in the selected fields')
@@ -259,6 +260,13 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'description' => __('The separator used to explode metadata (usually \',\' or \';\' or \'|\' or any chain of characters);')
 				. ' ' . __('HTML tags will be stripped before process'),
 		));
+		$this->addElement('text', 'bmeImplode', array(
+			'label' => __('Separator'),
+			'id' => 'bulk-metadata-editor-implode',
+			'class' => 'elementHidden',
+			'description' => __('The separator used to join metadata (usually \',\' or \';\' or \'|\' or any chain of characters);')
+				. ' ' . __('HTML tags will be stripped before process'),
+		));
 
 		$this->addDisplayGroup(
 			array(
@@ -300,6 +308,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				'bmeRtrim',
 				'bmeCaseconvert',
 				'bmeExplode',
+				'bmeImplode',
 				'changesPreviewDiv',
 			),
 			'bmeChangesSet',

@@ -598,7 +598,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 			}
 
 			// Regroup fields by element and deduplicate them before processing.
-			if ($params['changesRadio'] == 'deduplicate') {
+			if ($params['changesRadio'] == 'implode' || $params['changesRadio'] == 'deduplicate') {
 				$fieldsByElement = array();
 				foreach ($fieldItem as $field) {
 					$fieldsByElement[$field['element_id']][$field['id']] = $field['value'];
@@ -621,6 +621,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 			$itemTitle = $itemHasTitle ? strip_formatting($titles[0]->text) : __('[untitled]');
 
 			$replaceType = ((isset($params['bmeRegexp']) && $params['bmeRegexp'])? $replaceType = 'regexp' : $replaceType = 'normal');
+			$firstField = true;
 			foreach ($fieldItem as $field) {
 				$message = __('[BulkMetadataEditor] [%s] item #%d:', $params['changesRadio'], $itemId) . ' ';
 				switch ($params['changesRadio']) {
@@ -876,8 +877,6 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						$element = $itemObj->getElementById($field['element_id']);
 						$eText = get_record_by_id('ElementText', $field['id']);
 
-						$count = 0;
-
 						try {
 							$strippedString = $eText->html ? strip_tags($eText->text) : $eText->text;
 							$strings = array_map('trim', explode($params['bmeExplode'], $strippedString));
@@ -892,7 +891,6 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							throw $e;
 						}
 
-
 						// if exploded string is different from original one, update the return array.
 						if (!$noChange) {
 							$changes[] = array(
@@ -905,11 +903,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 							if ($perform) {
 								try {
-									if (!$noChange) {
-										$eText->delete();
-										foreach ($strings as $string) {
-											$itemObj->addTextForElement($element, $string, false);
-										}
+									$eText->delete();
+									foreach ($strings as $string) {
+										$itemObj->addTextForElement($element, $string, false);
 									}
 								} catch (Exception $e) {
 									$message .= __('An error occurred: %s', $e->getMessage());
@@ -920,7 +916,59 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$j++;
 						}
 						break;
+						
+					case 'implode': // Join metadata with a separator from multiple elements in the selected fields
+						if (!isset($params['bmeImplode']) || !strlen($params['bmeImplode'])) {
+							throw new Exception(__('Please input a separator to join texts.'));
+						}
 
+						try {
+							$element = $itemObj->getElementById($field['element_id']);
+							$eText = get_record_by_id('ElementText', $field['id']);
+						} catch (Exception $e) {
+							throw $e;
+						}
+
+						if (empty($element) || empty($eText)) {
+							throw new Exception(__('Error retrieving item data for joining.'));
+						}
+
+						if (count($deduplicatedFieldsByElement[$element->id]) > 1 && isset($deduplicatedFieldsByElement[$element->id][$field['id']])) {
+							if ($firstField) {
+								$new = implode($params['bmeImplode'], $deduplicatedFieldsByElement[$element->id]);
+								$firstField = false;
+							} else {
+								$new = null;
+							}
+
+							// if new string is different from original one, update the return array.
+							if ($deduplicatedFieldsByElement[$element->id][$field['id']] != $new) {
+								$changes[] = array(
+									'itemId' => $itemId,
+									'item' => $itemTitle,
+									'field' => __($element->name),
+									'old' => $eText->text,
+									'new' => $new
+								);
+
+								if ($perform) {
+									try {
+										if (!is_null($new)) {
+											$eText->delete();
+											$itemObj->addTextForElement($element, $new, false);
+										} else {
+											$eText->delete();
+										}
+									} catch (Exception $e) {
+										$message .= __('An error occurred: %s', $e->getMessage());
+										_log($message, Zend_Log::ERR);
+										continue 2;
+									}
+								}
+								$j++;
+							}
+						}
+						break;
 					case 'deduplicate': // Deduplicate and remove empty metadata in the selected fields
 						try {
 							$element = $itemObj->getElementById($field['element_id']);
@@ -934,7 +982,6 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						}
 
 						if (!isset($deduplicatedFieldsByElement[$element->id][$field['id']])) {
-							$new = '';
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
