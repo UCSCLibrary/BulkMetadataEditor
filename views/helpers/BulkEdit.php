@@ -444,7 +444,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 				foreach ($elementTexts as $elementText) {
 					$newfields[$itemId][] = array(
 						'id' => $elementText->id,
-						'field' => $fieldname,
+						'field' => __($fieldname),
 						'value' => $elementText->text,
 						'element_id' => $element->id,
 					);
