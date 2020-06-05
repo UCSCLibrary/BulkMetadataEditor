@@ -59,6 +59,27 @@ jQuery(document).ready(function () {
 			newLast.find('#bulk-metadata-editor-case').attr('checked', false);
 			currentLast.parent().append(newLast);
 		});
+		
+		$('#bmeCollectionId').change(function () {
+			// hide items preview
+			$('#preview-items-button').html(language.PreviewSelectedItems);
+			$('#itemPreviewDiv').html('');
+			// hide fields preview
+			$('#preview-fields-button').html(language.PreviewSelectedFields);
+			$('#fieldPreviewDiv').html('');
+			// hide changes preview
+			$('#preview-changes-button').html(language.PreviewChanges);
+			$('#changesPreviewDiv').html('');
+		});
+
+		$('#selectFields').change(function () {
+			// hide fields preview
+			$('#preview-fields-button').html(language.PreviewSelectedFields);
+			$('#fieldPreviewDiv').html('');
+			// hide changes preview
+			$('#preview-changes-button').html(language.PreviewChanges);
+			$('#changesPreviewDiv').html('');
+		});
 
 		$('#changesRadio-replace').change(function () {
 			if (this.checked) toggleRadioOption('replace');
