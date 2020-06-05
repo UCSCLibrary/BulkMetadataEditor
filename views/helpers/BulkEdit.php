@@ -564,7 +564,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 		foreach ($itemIds as $itemId) {
 			$i++;
-			$made = array();
+			$edited = array();
 			if (!isset($fields[$itemId]) && $params['changesRadio'] != 'add') {
 				continue;
 			}
@@ -597,7 +597,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 				break;
 			}
 
-			// Regroup fields by element and deduplicate them before processing.
+			// Regroup fields by element and deduplicate them before processing
 			if ($params['changesRadio'] == 'implode' || $params['changesRadio'] == 'deduplicate') {
 				$fieldsByElement = array();
 				foreach ($fieldItem as $field) {
@@ -609,7 +609,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 				}
 			}
 
-			// Deduplicate files.
+			// Deduplicate files
 			if ($params['changesRadio'] == 'deduplicate-files') {
 				$this->_deduplicateFiles($itemObj);
 				// No field to change, so process the next item.
@@ -627,7 +627,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 				switch ($params['changesRadio']) {
 					case 'replace': // Search and replace text
 						if (!isset($params['bmeSearch']) || !isset($params['bmeReplace'])) {
-							// TODO:proper error handling
+							// TODO: proper error handling
 							throw new Exception(__('Please define search and replace terms.'));
 						} elseif (strcmp($params['bmeSearch'], $params['bmeReplace']) == 0) {
 							throw new Exception(__('Search and replace terms coincide.'));
@@ -644,7 +644,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							$new = str_replace($params['bmeSearch'], $params['bmeReplace'], $eText->text, $count);
 						}
 
-						// if str_replace/preg_replace matches anything, update the return array.
+						// if str_replace/preg_replace matches anything, update the return array
 						if ($count > 0) {
 							$changes[] = array(
 								'itemId' => $itemId,
@@ -677,17 +677,17 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 						try {
 							$element = $itemObj->getElementById($field['element_id']);
+							$new = $params['bmeAdd'];
 						} catch (Exception $e) {
 							throw $e;
 						}
 
-						if (!in_array($field['element_id'], $made)) {
-							$new = $params['bmeAdd'];
+						if (!in_array($field['element_id'], $edited)) {
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
 								'field' => __($element->name),
-								'old' => 'null',
+								'old' => '[ null ]',
 								'new' => $new,
 							);
 							if ($perform) {
@@ -702,7 +702,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							}
 							$j++;
 						}
-						$made[] = $field['element_id'];
+						$edited[] = $field['element_id'];
 						break;
 
 					case 'prepend': // Prepend text to existing metadata in the selected fields
@@ -713,7 +713,6 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						try {
 							$element = $itemObj->getElementById($field['element_id']);
 							$eText = get_record_by_id('ElementText', $field['id']);
-
 							$new = $params['bmePrepend'] . $eText->text;
 						} catch (Exception $e) {
 							throw $e;
@@ -987,7 +986,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 								'item' => $itemTitle,
 								'field' => __($element->name),
 								'old' => $eText->text,
-								'new' => 'null',
+								'new' => '[ null ]',
 							);
 							if ($perform) {
 								try {
@@ -1026,7 +1025,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							'item' => $itemTitle,
 							'field' => __($element->name),
 							'old' => $eText->text,
-							'new' => 'null',
+							'new' => '[ null ]',
 						);
 						if ($perform) {
 							try {
