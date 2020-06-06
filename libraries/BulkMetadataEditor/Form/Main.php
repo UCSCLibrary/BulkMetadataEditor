@@ -55,17 +55,29 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'order' => 1,
 		));
 
+		$this->addElement('select', 'bmeIsPublic', array(
+			'label' => __('Status'),
+			'description' => __('Select items to edit based on whether they are public or not'),
+			'value' => '',
+			'multiOptions' => array(
+				'' => __('Both public and private items'),
+				'true' => __('Only public items'),
+				'false' => __('Only private items')
+			),
+			'order' => 2,
+		));
+
 		$this->addElement('checkbox', 'itemSelectMeta', array(
 			'label' => __('Select Items by Metadata'),
 			'id' => 'item-select-meta',
 			'description' => __('Select items to edit based on their associated metadata elements'),
-			'order' => 2,
+			'order' => 3,
 		));
 
 		//not actually a text element, but
 		//rendered with its own viewscript so it doesn't matter
 		$this->addElement('text', 'rulebox', array(
-			'order' => 3,
+			'order' => 4,
 			'decorators' => array(
 				array(
 					'ViewScript',
@@ -81,13 +93,13 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'label' => __('Preview Selected Items'),
 			'class' => 'preview-button',
 			'id' => 'preview-items-button',
-			'order' => 4,
+			'order' => 5,
 		));
 
 		//not actually a text element, but
 		//rendered with its own viewscript so it doesn't matter
 		$this->addElement('text', 'itemPreviewDiv', array(
-			'order' => 6,
+			'order' => 7,
 			'decorators' => array(
 				array(
 					'ViewScript',
@@ -105,20 +117,20 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'size' => 10,
 			'multiple' => 'multiple',
 			'multiOptions' => $this->_getElementOptions(),
-			'order' => 7,
+			'order' => 8,
 		));
 		
 		$this->addElement('button', 'previewFieldsButton', array(
 			'label' => __('Preview Selected Fields'),
 			'class' => 'preview-button',
 			'id' => 'preview-fields-button',
-			'order' => 8,
+			'order' => 9,
 		));
 
 		//not actually a text element, but
 		//rendered with its own viewscript so it doesn't matter
 		$this->addElement('text', 'fieldPreviewDiv', array(
-			'order' => 10,
+			'order' => 11,
 			'decorators' => array(
 				array(
 					'ViewScript',
@@ -133,7 +145,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		$this->addElement('radio', 'changesRadio', array(
 			'label' => __('Edit Type'),
 			'description' => __('Choose the type of edit you would like to perform'),
-			'order' => 11,
+			'order' => 12,
 			'decorators' => array(
 				array(
 					'ViewScript',
@@ -162,13 +174,13 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'label' => __('Preview Changes'),
 			'id' => 'preview-changes-button',
 			'class' => 'preview-button',
-			'order' => 12,
+			'order' => 13,
 		));
 
 		//not actually a text element, but
 		//rendered with its own viewscript so it doesn't matter
 		$this->addElement('text', 'changesPreviewDiv', array(
-			'order' => 14,
+			'order' => 15,
 			'decorators' => array(
 				array(
 					'ViewScript',
@@ -185,7 +197,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'id' => 'use-background-job',
 			'description' => __('If checked, the job will be processed in the background'),
 			'value' => '1',
-			'order' => 15,
+			'order' => 16,
 		));
 
 		//The following elements will be re-ordered in javascript
@@ -271,6 +283,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		$this->addDisplayGroup(
 			array(
 				'bmeCollectionId',
+				'bmeIsPublic',
 				'itemSelectMeta',
 				'rulebox',
 				'previewItemsButton',
@@ -380,7 +393,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		array_walk($options, function (&$value, $key) {
 			$value = '(#' . $key . ') ' . $value;
 		});
-		return array('0' => __('All Items')) + $options;
+		return array('0' => __('All Items'), 'null' => __('No Collection')) + $options;
 	}
 
 	/**
