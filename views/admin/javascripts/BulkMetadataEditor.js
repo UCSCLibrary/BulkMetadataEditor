@@ -72,6 +72,18 @@ jQuery(document).ready(function () {
 			$('#changesPreviewDiv').html('');
 		});
 
+		$('#bmeIsPublic').change(function () {
+			// hide items preview
+			$('#preview-items-button').html(language.PreviewSelectedItems);
+			$('#itemPreviewDiv').html('');
+			// hide fields preview
+			$('#preview-fields-button').html(language.PreviewSelectedFields);
+			$('#fieldPreviewDiv').html('');
+			// hide changes preview
+			$('#preview-changes-button').html(language.PreviewChanges);
+			$('#changesPreviewDiv').html('');
+		});
+
 		$('#selectFields').change(function () {
 			// hide fields preview
 			$('#preview-fields-button').html(language.PreviewSelectedFields);
