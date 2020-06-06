@@ -10,6 +10,7 @@ jQuery(document).ready(function () {
 		$('#changesRadio-replace-field').after($('#bulk-metadata-editor-replace-field'));
 		$('#changesRadio-replace-field').after($('#bulk-metadata-editor-regexp-field'));
 		$('#changesRadio-replace-field').after($('#bulk-metadata-editor-search-field'));
+		$('#changesRadio-add-field').after($('#bulk-metadata-editor-addunique-field'));
 		$('#changesRadio-add-field').after($('#bulk-metadata-editor-add-field'));
 		$('#changesRadio-prepend-field').after($('#bulk-metadata-editor-prepend-field'));
 		$('#changesRadio-append-field').after($('#bulk-metadata-editor-append-field'));
@@ -218,8 +219,10 @@ jQuery(document).ready(function () {
 		}
 		if (optionName == 'add') {
 			$('#bulk-metadata-editor-add-field').show(time);
+			$('#bulk-metadata-editor-addunique-field').show(time);
 		} else {
 			$('#bulk-metadata-editor-add-field').hide(time);
+			$('#bulk-metadata-editor-addunique-field').hide(time);
 		}
 		if (optionName == 'prepend') {
 			$('#bulk-metadata-editor-prepend-field').show(time);
