@@ -36,12 +36,11 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 	 * @param array $items Array of items matching the selection rules. Each
 	 * element of this array is itself an array containing identifying
 	 * information for a single matched item.
-	 * If max is empty, only ids are returned (max is used only for display).
+	 * If max is empty, only ids are returned (max is used only for previews).
 	 */
 	public function getItems($params, $max = 0)
 	{
 		$select = $this->_getSelect($params);
-
 		$select = apply_filters('bulk_metadata_editor_get_items', $select, array(
 			'params' => $params,
 			'max' => $max,
@@ -116,7 +115,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 	{
 		$rules = $this->_listItemRules($params);
 
-		// All rules can be applied via the Omeaka core, except the case.
+		// All rules can be applied via the Omeka core, except the case.
 		// Consequently, get_records() is not used directly.
 		$rulesWithoutCase = array();
 		$rulesWithCase = array();
@@ -129,7 +128,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 			}
 		}
 
-		// Workaround to make the plugin runs with old Omeka releases.
+		// Workaround to make the plugin run with old Omeka releases.
 		$rulesOmekaNew = array();
 		if ($rulesWithoutCase && version_compare(OMEKA_VERSION, '2.5', '<')) {
 			$oldRules = array(
@@ -154,6 +153,11 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 		// set up query parameters to select items from a given collection
 		if (!empty($params['bmeCollectionId'])) {
 			$itemsParams['collection'] = $params['bmeCollectionId'];
+		}
+		
+		// set up query parameters to select public or private items
+		if (!empty($params['bmeIsPublic'])) {
+			$itemsParams['public'] = $params['bmeIsPublic'];
 		}
 
 		$table = $this->_db->getTable('Item');
@@ -474,12 +478,13 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 	{
 		$db = $this->_db;
 		$sql = "
-		SELECT DISTINCT(e.id) as id
-		FROM {$db->ElementSet} es
-		JOIN {$db->Element} e ON es.id = e.element_set_id
-		LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id
-		LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id
-		WHERE es.record_type IS NULL OR es.record_type = 'Item' ";
+			SELECT DISTINCT(e.id) as id
+			FROM {$db->ElementSet} es
+			JOIN {$db->Element} e ON es.id = e.element_set_id
+			LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id
+			LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id
+			WHERE es.record_type IS NULL OR es.record_type = 'Item'
+		";
 		return $db->fetchCol($sql);
 	}
 
@@ -1067,7 +1072,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 	{
 		// TODO Use a main sql to avoid to load each file.
 
-		// Create the list of hashs.
+		// Create the list of hashes.
 		$hashs = array();
 		$toDelete = array();
 		$files = $item->Files;
