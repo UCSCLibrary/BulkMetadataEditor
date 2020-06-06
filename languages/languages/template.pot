@@ -100,12 +100,12 @@ msgid "You must be trying to make a ton of changes at once."
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:76
-#: views/helpers/BulkEdit.php:582
+#: views/helpers/BulkEdit.php:589
 msgid "Please select at least one field."
 msgstr ""
 
 #: BulkMetadataEditorPlugin.php:77
-#: views/helpers/BulkEdit.php:557
+#: views/helpers/BulkEdit.php:561
 msgid "Please select an action to perform."
 msgstr ""
 
@@ -173,209 +173,234 @@ msgid "Select items to edit based on the collection they are a part of"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Form/Main.php:59
+msgid "Status"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Form/Main.php:60
+msgid "Select Items to edit based on whether they are public or not"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Form/Main.php:63
+#: libraries/BulkMetadataEditor/Form/Main.php:401
+msgid "All Items"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Form/Main.php:64
+msgid "Only public Items"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Form/Main.php:65
+msgid "Only private Items"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Form/Main.php:71
 msgid "Select Items by Metadata"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:61
+#: libraries/BulkMetadataEditor/Form/Main.php:73
 msgid "Select items to edit based on their associated metadata elements"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:103
+#: libraries/BulkMetadataEditor/Form/Main.php:115
 msgid "Metadata elements"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:104
+#: libraries/BulkMetadataEditor/Form/Main.php:116
 msgid ""
 "Select the metadata elements you would like to edit; you can select multiple elements"
 msgstr ""
 ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:134
+#: libraries/BulkMetadataEditor/Form/Main.php:146
 msgid "Edit Type"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:135
+#: libraries/BulkMetadataEditor/Form/Main.php:147
 msgid "Choose the type of edit you would like to perform"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:147
-msgid "Search and replace text"
+#: libraries/BulkMetadataEditor/Form/Main.php:159
+msgid "Search and replace text in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:148
-msgid "Add a new metadatum in the selected field"
+#: libraries/BulkMetadataEditor/Form/Main.php:160
+msgid "Add a new metadatum in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:149
+#: libraries/BulkMetadataEditor/Form/Main.php:161
 msgid "Prepend text to existing metadata in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:150
+#: libraries/BulkMetadataEditor/Form/Main.php:162
 msgid "Append text to existing metadata in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:151
+#: libraries/BulkMetadataEditor/Form/Main.php:163
 msgid "Remove text from ends of existing metadata in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:152
+#: libraries/BulkMetadataEditor/Form/Main.php:164
 msgid "Convert to uppercase or lowercase existing metadata in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:153
+#: libraries/BulkMetadataEditor/Form/Main.php:165
 msgid "Explode metadata with a separator in multiple elements in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:154
-msgid "Deduplicate and join metadata in the selected fields"
+#: libraries/BulkMetadataEditor/Form/Main.php:166
+msgid "Deduplicate and join metadata with a separator in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:155
+#: libraries/BulkMetadataEditor/Form/Main.php:167
 msgid "Deduplicate and remove empty metadata in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:156
+#: libraries/BulkMetadataEditor/Form/Main.php:168
 msgid "Deduplicate files of selected items by hash"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:157
+#: libraries/BulkMetadataEditor/Form/Main.php:169
 msgid "Delete all existing metadata in the selected fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:184
+#: libraries/BulkMetadataEditor/Form/Main.php:196
 msgid "Background Job"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:186
+#: libraries/BulkMetadataEditor/Form/Main.php:198
 msgid "If checked, the job will be processed in the background"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:195
+#: libraries/BulkMetadataEditor/Form/Main.php:207
 msgid "Search for"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:198
+#: libraries/BulkMetadataEditor/Form/Main.php:210
 msgid "Input text you want to search for:"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:201
+#: libraries/BulkMetadataEditor/Form/Main.php:213
 msgid "Type of search"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:205
+#: libraries/BulkMetadataEditor/Form/Main.php:217
 msgid "Use regular expressions (always enclose search pattern between delimiters; "
 "visit %s for more info)"
 msgstr ""
 ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:208
+#: libraries/BulkMetadataEditor/Form/Main.php:220
 msgid "Replace with"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:211
+#: libraries/BulkMetadataEditor/Form/Main.php:223
 msgid "Input text you want to replace with:"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:214
+#: libraries/BulkMetadataEditor/Form/Main.php:226
 msgid "Text to Add"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:217
+#: libraries/BulkMetadataEditor/Form/Main.php:229
 msgid "Input text you want to add as new metadatum:"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:220
+#: libraries/BulkMetadataEditor/Form/Main.php:232
+msgid "Avoid duplication"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Form/Main.php:236
+msgid "Add metadatum only if it does not already exist"
+msgstr ""
+
+#: libraries/BulkMetadataEditor/Form/Main.php:239
 msgid "Text to Prepend"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:223
+#: libraries/BulkMetadataEditor/Form/Main.php:242
 msgid "Input text you want to prepend to metadata:"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:226
+#: libraries/BulkMetadataEditor/Form/Main.php:245
 msgid "Text to Append"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:229
+#: libraries/BulkMetadataEditor/Form/Main.php:248
 msgid "Input text you want to append to metadata:"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:232
+#: libraries/BulkMetadataEditor/Form/Main.php:251
 msgid "Text to Remove from left"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:235
+#: libraries/BulkMetadataEditor/Form/Main.php:254
 msgid "Input text you want to remove from the beginning of metadata (if empty, will remove white spaces and tabs)"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:238
+#: libraries/BulkMetadataEditor/Form/Main.php:257
 msgid "Text to Remove from right"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:241
+#: libraries/BulkMetadataEditor/Form/Main.php:260
 msgid "Input text you want to remove from the end of metadata (if empty, will remove white spaces and tabs)"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:244
+#: libraries/BulkMetadataEditor/Form/Main.php:263
 msgid "Case conversion type"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:247
+#: libraries/BulkMetadataEditor/Form/Main.php:266
 msgid "Choose the type of case conversion for the metadata"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:250
+#: libraries/BulkMetadataEditor/Form/Main.php:269
 msgid "all characters lowercase"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:251
+#: libraries/BulkMetadataEditor/Form/Main.php:270
 msgid "ALL CHARACTERS UPPERCASE"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:252
+#: libraries/BulkMetadataEditor/Form/Main.php:271
 msgid "First character of every sentence uppercase"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:253
+#: libraries/BulkMetadataEditor/Form/Main.php:272
 msgid "First Character Of Every Word Uppercase"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:257
-#: libraries/BulkMetadataEditor/Form/Main.php:264
+#: libraries/BulkMetadataEditor/Form/Main.php:276
+#: libraries/BulkMetadataEditor/Form/Main.php:283
 msgid "Separator"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:260
+#: libraries/BulkMetadataEditor/Form/Main.php:279
 msgid "The separator used to explode metadata (usually ',' or ';' or '|' or any chain of characters);"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:261
-#: libraries/BulkMetadataEditor/Form/Main.php:268
+#: libraries/BulkMetadataEditor/Form/Main.php:280
+#: libraries/BulkMetadataEditor/Form/Main.php:287
 msgid "HTML tags will be stripped before process"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:267
+#: libraries/BulkMetadataEditor/Form/Main.php:286
 msgid "The separator used to join metadata (usually ',' or ';' or '|' or any chain of characters);"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:281
+#: libraries/BulkMetadataEditor/Form/Main.php:290
 msgid "Step 1: Select Items"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:293
+#: libraries/BulkMetadataEditor/Form/Main.php:312
 msgid "Step 2: Select Fields"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:315
+#: libraries/BulkMetadataEditor/Form/Main.php:334
 msgid "Step 3: Define Changes"
 msgstr ""
 
-#: libraries/BulkMetadataEditor/Form/Main.php:330
+#: libraries/BulkMetadataEditor/Form/Main.php:349
 msgid "Apply Edits Now"
-msgstr ""
-
-#: libraries/BulkMetadataEditor/Form/Main.php:382
-msgid "All Items"
 msgstr ""
 
 #: libraries/BulkMetadataEditor/Job/Process.php:16
@@ -459,91 +484,91 @@ msgstr ""
 msgid "Add Another Rule"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:255
-#: views/helpers/BulkEdit.php:329
+#: views/helpers/BulkEdit.php:259
+#: views/helpers/BulkEdit.php:333
 msgid "Invalid search type given!"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:359
+#: views/helpers/BulkEdit.php:363
 msgid "Cannot pull item data from a non-item."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:361
-#: views/helpers/BulkEdit.php:433
-#: views/helpers/BulkEdit.php:621
+#: views/helpers/BulkEdit.php:365
+#: views/helpers/BulkEdit.php:437
+#: views/helpers/BulkEdit.php:636
 msgid "[untitled]"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:362
+#: views/helpers/BulkEdit.php:366
 msgid "[no description given]"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:363
+#: views/helpers/BulkEdit.php:367
 msgid "[undefined]"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:626
+#: views/helpers/BulkEdit.php:641
 msgid "[BulkMetadataEditor] [%s] item #%d:"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:631
+#: views/helpers/BulkEdit.php:646
 msgid "Please define search and replace terms."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:633
+#: views/helpers/BulkEdit.php:648
 msgid "Search and replace terms coincide."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:664 
-#: views/helpers/BulkEdit.php:698
-#: views/helpers/BulkEdit.php:736 
-#: views/helpers/BulkEdit.php:772
-#: views/helpers/BulkEdit.php:807 
-#: views/helpers/BulkEdit.php:863
-#: views/helpers/BulkEdit.php:916
-#: views/helpers/BulkEdit.php:963
-#: views/helpers/BulkEdit.php:996
-#: views/helpers/BulkEdit.php:1035
-#: views/helpers/BulkEdit.php:1048
+#: views/helpers/BulkEdit.php:679 
+#: views/helpers/BulkEdit.php:719
+#: views/helpers/BulkEdit.php:756 
+#: views/helpers/BulkEdit.php:792
+#: views/helpers/BulkEdit.php:827 
+#: views/helpers/BulkEdit.php:883
+#: views/helpers/BulkEdit.php:931
+#: views/helpers/BulkEdit.php:983
+#: views/helpers/BulkEdit.php:1016
+#: views/helpers/BulkEdit.php:1055
+#: views/helpers/BulkEdit.php:1068
 msgid "An error occurred: %s"
 msgstr ""
 
-#: views/helpers/BulkEdit.php:675
+#: views/helpers/BulkEdit.php:690
 msgid "Please input some text to add."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:710
+#: views/helpers/BulkEdit.php:731
 msgid "Please input some text to prepend."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:746
-msgid "Please input some text to append"
+#: views/helpers/BulkEdit.php:766
+msgid "Please input some text to append."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:818
-msgid "Please choose a case conversion type"
+#: views/helpers/BulkEdit.php:838
+msgid "Please choose a case conversion type."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:874
+#: views/helpers/BulkEdit.php:894
 msgid "Please input a separator to explode texts."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:922
+#: views/helpers/BulkEdit.php:942
 msgid "Please input a separator to join texts."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:933
+#: views/helpers/BulkEdit.php:953
 msgid "Error retrieving item data for joining."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:981
+#: views/helpers/BulkEdit.php:1001
 msgid "Error retrieving item data for deduplication."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:1020
+#: views/helpers/BulkEdit.php:1040
 msgid "Error retrieving item data for deletion."
 msgstr ""
 
-#: views/helpers/BulkEdit.php:1053
+#: views/helpers/BulkEdit.php:1073
 msgid "Success."
 msgstr ""
