@@ -156,8 +156,8 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				)
 			),
 			'multiOptions' => array(
-				'replace' => __('Search and replace text'),
-				'add' => __('Add a new metadatum in the selected field'),
+				'replace' => __('Search and replace text in the selected fields'),
+				'add' => __('Add a new metadatum in the selected fields'),
 				'prepend' => __('Prepend text to existing metadata in the selected fields'),
 				'append' => __('Append text to existing metadata in the selected fields'),
 				'trim' => __('Remove text from ends of existing metadata in the selected fields'),
@@ -227,6 +227,13 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'id' => 'bulk-metadata-editor-add',
 			'class' => 'elementHidden',
 			'description' => __('Input text you want to add as new metadatum:'),
+		));
+		$this->addElement('checkbox', 'bmeAddUnique', array(
+			'label' => __('Avoid duplication'),
+			'id' => 'bulk-metadata-editor-addunique',
+			'class' => 'elementHidden',
+			'value' => 'true',
+			'description' => __('Add metadatum only if it does not already exist'),
 		));
 		$this->addElement('text', 'bmePrepend', array(
 			'label' => __('Text to Prepend'),
@@ -315,6 +322,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				'bmeRegexp',
 				'bmeReplace',
 				'bmeAdd',
+				'bmeAddUnique',
 				'bmePrepend',
 				'bmeAppend',
 				'bmeLtrim',
