@@ -557,7 +557,6 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 	 */
 	private function _update($params, $itemIds, $fields, $max, $perform)
 	{
-
 		if (!isset($params['changesRadio'])) {
 			throw new Exception(__('Please select an action to perform.'));
 		}
@@ -567,9 +566,13 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 		$i = 0;
 		$j = 1;
 
+		if ($params['changesRadio'] == 'replace') {
+			$replaceType = ((isset($params['bmeRegexp']) && $params['bmeRegexp']) ? $replaceType = 'regexp' : $replaceType = 'normal');
+		}
+
 		foreach ($itemIds as $itemId) {
 			$i++;
-			$edited = array();
+
 			if (!isset($fields[$itemId]) && $params['changesRadio'] != 'add') {
 				continue;
 			}
@@ -579,9 +582,8 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 				continue;
 			}
 
-			if ($params['changesRadio'] == 'add') {
+			if (!isset($fields[$itemId]) && $params['changesRadio'] == 'add') {
 				$fieldItem = array();
-
 				if (!isset($params['selectFields'])) {
 					//$fields = $this->_getElementIds();
 					throw new Exception(__('Please select at least one field.'));
@@ -600,6 +602,14 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 			if ($max > 0 and $j > ($max + 1)) {
 				break;
+			}
+
+			// Create array with existing values, to be used when editing
+			if ($params['changesRadio'] == 'add' && (isset($params['bmeAddUnique']) && $params['bmeAddUnique'])) {
+				$fieldsByElement = array();
+				foreach ($fieldItem as $field) {
+					$fieldsByElement[$field['element_id']][$field['id']] = $field['value'];
+				}
 			}
 
 			// Regroup fields by element and deduplicate them before processing
@@ -624,9 +634,9 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 			$titles = $itemObj->getElementTexts('Dublin Core', 'Title');
 			$itemHasTitle = (boolean) $titles;
 			$itemTitle = $itemHasTitle ? strip_formatting($titles[0]->text) : __('[untitled]');
-
-			$replaceType = ((isset($params['bmeRegexp']) && $params['bmeRegexp'])? $replaceType = 'regexp' : $replaceType = 'normal');
 			$firstField = true;
+			$edited = array();
+
 			foreach ($fieldItem as $field) {
 				$message = __('[BulkMetadataEditor] [%s] item #%d:', $params['changesRadio'], $itemId) . ' ';
 				switch ($params['changesRadio']) {
@@ -680,6 +690,8 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							throw new Exception(__('Please input some text to add.'));
 						}
 
+						$noChange = false;
+						
 						try {
 							$element = $itemObj->getElementById($field['element_id']);
 							$new = $params['bmeAdd'];
@@ -687,7 +699,11 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							throw $e;
 						}
 
-						if (!in_array($field['element_id'], $edited)) {
+						if (isset($fieldsByElement[$element->id])) {
+							$noChange = in_array($new, $fieldsByElement[$element->id]);
+						}	
+
+						if (!$noChange && !in_array($field['element_id'], $edited)) {
 							$changes[] = array(
 								'itemId' => $itemId,
 								'item' => $itemTitle,
@@ -712,7 +728,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 					case 'prepend': // Prepend text to existing metadata in the selected fields
 						if (!isset($params['bmePrepend']) || !strlen($params['bmePrepend'])) {
-							throw new Exception(__('Please input some text to prepend'));
+							throw new Exception(__('Please input some text to prepend.'));
 						}
 
 						try {
@@ -747,7 +763,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 					case 'append': // Append text to existing metadata in the selected fields
 						if (!isset($params['bmeAppend']) || !strlen($params['bmeAppend'])) {
-							throw new Exception(__('Please input some text to append'));
+							throw new Exception(__('Please input some text to append.'));
 						}
 
 						try {
@@ -819,7 +835,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 					case 'caseconvert': // Converts to uppercase or lowercase metadata in the selected fields
 						if (!isset($params['bmeCaseconvert']) || !strlen(trim($params['bmeCaseconvert']))) {
-							throw new Exception(__('Please choose a case conversion type'));
+							throw new Exception(__('Please choose a case conversion type.'));
 						}
 
 						$element = $itemObj->getElementById($field['element_id']);
@@ -875,7 +891,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 						
 					case 'explode': // Explode metadata with a separator in multiple elements in the selected fields
 						if (!isset($params['bmeExplode']) || !strlen($params['bmeExplode'])) {
-							throw new Exception(__('Please input a separator to explode texts'));
+							throw new Exception(__('Please input a separator to explode texts.'));
 						}
 
 						$element = $itemObj->getElementById($field['element_id']);
