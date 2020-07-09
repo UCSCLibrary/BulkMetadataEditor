@@ -24,7 +24,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
     /**
      * @var array Hooks for the plugin.
      */
-    protected $_hooks = array('define_acl','admin_head','initialize');
+    protected $_hooks = array('define_acl', 'admin_head', 'initialize');
 
     /**
      * @var array Filters for the plugin.
@@ -118,7 +118,7 @@ class BulkMetadataEditorPlugin extends Omeka_Plugin_AbstractPlugin
     public function filterAdminNavigationMain($nav)
     {
         $nav[] = array(
-            'label' => __('Bulk Editor'),
+            'label' => __('Bulk Metadata Editor'),
             'uri' => url('bulk-metadata-editor'),
             'resource' => 'BulkMetadataEditor_Index',
             'privilege' => 'index'

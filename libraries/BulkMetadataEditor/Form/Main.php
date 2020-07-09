@@ -57,12 +57,12 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 
 		$this->addElement('select', 'bmeIsPublic', array(
 			'label' => __('Status'),
-			'description' => __('Select items to edit based on whether they are public or not'),
+			'description' => __('Select Items to edit based on whether they are public or not'),
 			'value' => '',
 			'multiOptions' => array(
 				'' => __('All Items'),
-				'true' => __('Only public items'),
-				'false' => __('Only private items')
+				'true' => __('Only public Items'),
+				'false' => __('Only private Items')
 			),
 			'order' => 2,
 		));
