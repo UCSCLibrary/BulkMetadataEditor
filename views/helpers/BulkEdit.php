@@ -803,8 +803,8 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 						$count = 0;
 
-						$new = ltrim($eText->text, $params['bmeLtrim']);
-						$new = rtrim($new, $params['bmeRtrim']);
+						$new = ($params['bmeRtrim'] != '' ? ltrim($eText->text, $params['bmeLtrim']) : ltrim($eText->text));
+						$new = ($params['bmeRtrim'] != '' ? rtrim($new, $params['bmeRtrim']) : rtrim($new));
 						$count = strcmp($eText->text, $new);
 
 						// if trimmed string is different from original one, update the return array.
