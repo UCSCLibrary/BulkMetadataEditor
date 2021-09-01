@@ -91,7 +91,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 
 		$this->addElement('button', 'previewItemsButton', array(
 			'label' => __('Preview Selected Items'),
-			'class' => 'preview-button',
+			'class' => 'preview-button full-width-mobile button blue',
 			'id' => 'preview-items-button',
 			'order' => 5,
 		));
@@ -122,7 +122,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		
 		$this->addElement('button', 'previewFieldsButton', array(
 			'label' => __('Preview Selected Fields'),
-			'class' => 'preview-button',
+			'class' => 'preview-button full-width-mobile button blue',
 			'id' => 'preview-fields-button',
 			'order' => 9,
 		));
@@ -173,7 +173,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		$this->addElement('button', 'previewChangesButton', array(
 			'label' => __('Preview Changes'),
 			'id' => 'preview-changes-button',
-			'class' => 'preview-button',
+			'class' => 'preview-button full-width-mobile button blue',
 			'order' => 13,
 		));
 
@@ -269,7 +269,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				'lower' => __('all characters lowercase'),
 				'upper' => __('ALL CHARACTERS UPPERCASE'),
 				'first' => __('First character of every sentence uppercase'),
-				'words' => __('First Character Of Every Word Uppercase'),
+				'words' => __('First Character Of Every Word Uppercase')
 			),
 		));
 		$this->addElement('text', 'bmeExplode', array(
@@ -350,6 +350,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 
 		$this->addElement('submit', 'performButton', array(
 			'label' => __('Apply Edits Now'),
+			'class' => 'full-width-mobile button green',
 			'order' => 99,
 		));
 	}
@@ -422,18 +423,17 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		*/
 
 		$db = get_db();
-		$sql = "
-		SELECT es.name AS element_set_name, e.id AS element_id,
-		e.name AS element_name, it.name AS item_type_name
-		FROM {$db->ElementSet} es
-		JOIN {$db->Element} e ON es.id = e.element_set_id
-		LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id
-		LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id
-		WHERE es.record_type IS NULL OR es.record_type = 'Item'
-		ORDER BY es.name, it.name, e.name";
+		$sql = "SELECT es.name AS element_set_name, e.id AS element_id,
+			e.name AS element_name, it.name AS item_type_name
+			FROM {$db->ElementSet} es
+			JOIN {$db->Element} e ON es.id = e.element_set_id
+			LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id
+			LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id
+			WHERE es.record_type IS NULL OR es.record_type = 'Item'
+			ORDER BY es.name, it.name, e.name";
 		$elements = $db->fetchAll($sql);
 		$options = array();
-		//		$options = array('' => __('Select Below'));
+		
 		foreach ($elements as $element) {
 			$optGroup = $element['item_type_name']
 				? __('Item Type') . ': ' . __($element['item_type_name'])
