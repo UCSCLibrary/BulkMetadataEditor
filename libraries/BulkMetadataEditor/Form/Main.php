@@ -117,7 +117,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'size' => 10,
 			'multiple' => 'multiple',
 			'multiOptions' => $this->_getElementOptions(),
-			'order' => 8,
+			'order' => 8
 		));
 		
 		$this->addElement('button', 'previewFieldsButton', array(
@@ -202,7 +202,6 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 
 		//The following elements will be re-ordered in javascript
 		//gotta create a new element that can be hidden and shown and junk?
-
 		$this->addElement('text', 'bmeSearch', array(
 			'label' => __('Search for'),
 			'id' => 'bulk-metadata-editor-search',
@@ -364,23 +363,23 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 	public function applyOmekaStyles()
 	{
 		foreach ($this->getElements() as $element) {
-
 			if ($element instanceof Zend_Form_Element_Submit) {
 				// All submit form elements should be wrapped in a div with
 				// class 'field'.
-				$element->setDecorators(array(
-					'ViewHelper',
-					array('HtmlTag', array('tag' => 'div'))
-				)
+				$element->setDecorators(
+					array(
+						'ViewHelper',
+						array(
+							'HtmlTag', 
+							array('tag' => 'div')
+						)
+					)
 				);
-
 			} elseif ($element->getAttrib('class') == 'elementHidden') {
 				$element->getDecorator('FieldTag')->setOption('class', 'field bmeHidden');
 				$id = $element->getAttrib('id');
 
 				$element->getDecorator('FieldTag')->setOption('id', $id . '-field');
-
-
 			} elseif ($element instanceof Zend_Form_Element_Hidden
 					|| $element instanceof Zend_Form_Element_Hash) {
 				$element->setDecorators(array('ViewHelper'));
@@ -400,7 +399,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 		unset($options['']);
 		// Add the id of collections to simplify selection with similar names.
 		array_walk($options, function (&$value, $key) {
-			$value = '(#' . $key . ') ' . $value;
+			$value = $key . ') ' . $value;
 		});
 		return array('0' => __('All Items'), 'null' => __('No Collection')) + $options;
 	}
@@ -413,35 +412,31 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 	 */
 	private function _getElementOptions()
 	{
-		/*
-		$options = get_table_options('Element', null, array(
-			'record_types' => array('Item', 'All'),
-			'sort' => 'alphaBySet')
-		);
-		unset($options['']);
-		return $options;
-		*/
-
 		$db = get_db();
-		$sql = "SELECT es.name AS element_set_name, e.id AS element_id,
-			e.name AS element_name, it.name AS item_type_name
-			FROM {$db->ElementSet} es
-			JOIN {$db->Element} e ON es.id = e.element_set_id
-			LEFT JOIN {$db->ItemTypesElements} ite ON e.id = ite.element_id
-			LEFT JOIN {$db->ItemType} it ON ite.item_type_id = it.id
-			WHERE es.record_type IS NULL OR es.record_type = 'Item'
-			ORDER BY es.name, it.name, e.name";
+        $sql = "
+            SELECT es.name AS element_set_name,
+                e.id AS element_id,
+                e.name AS element_name
+            FROM {$db->ElementSet} es
+            JOIN {$db->Element} e ON es.id = e.element_set_id
+            WHERE es.record_type IS NULL OR es.record_type = 'Item'
+            ORDER BY es.name, e.name
+        ";
 		$elements = $db->fetchAll($sql);
 		$options = array();
 		
+		// create groups of elements by element set
 		foreach ($elements as $element) {
-			$optGroup = $element['item_type_name']
-				? __('Item Type') . ': ' . __($element['item_type_name'])
-				: __($element['element_set_name']);
+			$optGroup = __($element['element_set_name']);
 			$value = __($element['element_name']);
-
-			$options[$optGroup][$element['element_id']] = $value;
+			if ($value != '') $options[$optGroup][$element['element_id']] = $value;
 		}
+
+		// sort alphabetically element names in each element set
+		foreach ($options as &$option) {
+			asort($option);
+		}
+		
 		return $options;
 	}
 }
