@@ -33,31 +33,31 @@ $form_compare_options = array(
     'starts with' => __('starts with'),
     'ends with' => __('ends with'),
     'matches' => __('matches'),
-    'does not match' => __('does not matches'),
+    'does not match' => __('does not match'),
 );
 ?>
 <div id="item-meta-selects" style="display: none;">
     <div class="field" id="item-meta-select">
         <p class="explanation"><?php echo __('Only select items which also meet the following criteria:'); ?></p>
         <div id="item-rule-boxes">
-            <div id="item-rule-box" class="item-rule-box" style="clear: left;">
-                <div class="inputs two columns alpha">
+            <div id="item-rule-box" class="item-rule-box" style="clear: left">
+			<fieldset class="fieldsetRule">
+                <div class="inputs two columns alpha" style="margin-bottom: 0">
                     <?php echo $this->formSelect('bulk-metadata-editor-element-id', '50', array('class' => 'bulk-metadata-editor-element-id'), $form_element_options); ?>
                 </div>
-                <div class="inputs two columns">
+                <div class="inputs two columns" style="margin-bottom: 0">
                     <?php echo $this->formSelect('bulk-metadata-editor-compare', null, array('class' => 'bulk-metadata-editor-compare'), $form_compare_options); ?>
                 </div>
-                <div class="inputs three columns">
+                <div class="inputs three columns" style="margin-bottom: 0">
                     <?php echo $this->formText('bulk-metadata-editor-selector', '',
                         array('class'=>'bulk-metadata-editor-selector', 'placeholder' => __('Input search term here'))); ?>
                 </div>
-                <div class="inputs one column">
+                <div class="inputs one column" style="margin-bottom: 0">
                     <label for="bulk-metadata-editor-case"><?php echo __('Match Case'); ?></label>
                     <?php echo $this->formCheckbox('bulk-metadata-editor-case', 'Match Case', array('class' => 'bulk-metadata-editor-case')); ?>
                 </div>
-                <div class="inputs one column omega">
-                    <div class="removeRule" style="float:right;">[x]</div>
-                </div>
+				<a href="#" alt="[x]" class="removeRule"></a>
+			</fieldset>
             </div>
         </div>
     </div>

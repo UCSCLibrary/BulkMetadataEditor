@@ -1,5 +1,5 @@
 .preview-button {
-    margin:10px;
+    margin:10px 10px 10px 0;
 }
 
 .previewButtonDiv{
@@ -34,8 +34,7 @@
 }
 
 #performButton {    
-    font-size: 1.3em;
-    margin-left: 35px;
+    margin-left: 21px;
     margin-top: 15px;
 }
 
@@ -55,3 +54,77 @@
 #fieldPreviewDiv table tr.even {
     font-weight: bold;
 }
+
+#fieldset-bmeJob {
+	padding:15px 21px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+fieldset .fieldsetRule {
+	border: 1px solid #ccc; 
+	background-color: #eee; 
+	padding: 5px; 
+	margin-bottom: .5em;
+}
+
+.removeRule {
+  position: relative;
+  right: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+  padding: 0;
+  border: 1px solid white;
+  padding: 2px;
+  border-radius: 4px;
+  background-color: red;
+  float: right;
+}
+.removeRule:hover {
+  opacity: 1;
+}
+.removeRule:before, .removeRule:after {
+  position: absolute;
+  left: 9px;
+  content: ' ';
+  height: 16px;
+  width: 2px;
+  background-color: white;
+  cursor: pointer;
+}
+.removeRule:before {
+  transform: rotate(45deg);
+}
+.removeRule:after {
+  transform: rotate(-45deg);
+}
+
+.bulk-metadata-editor-waiting:after {
+  content: ' .';
+  animation: dots 1s steps(5, end) infinite;
+}
+@keyframes dots {
+  0%, 20% {
+    color: #F6F7F2;
+    text-shadow:
+     .75 0 0 black,
+       .25em 0 0 black,
+      .5em 0 0 black;}
+  40% {
+    color: black;
+    text-shadow:
+      .25em 0 0 #F6F7F2,
+      .5em 0 0 #F6F7F2;}
+  60% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 #F6F7F2;}
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 black;}}
+  
