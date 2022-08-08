@@ -278,8 +278,8 @@ msgid "Input text you want to search for:"
 msgstr "Inserisci il testo che vuoi cercare:"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:213
-msgid "Type of search"
-msgstr "Tipologia di ricerca"
+msgid "Regular Expression"
+msgstr "Espressione regolare"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:217
 msgid "Use regular expressions (always enclose search pattern between delimiters; "
@@ -305,11 +305,11 @@ msgstr "Inserisci il testo che vuoi aggiungere come nuovo metadato:"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:232
 msgid "Avoid duplication"
-msgstr ""
+msgstr "Evita duplicati"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:236
 msgid "Add metadatum only if it does not already exist"
-msgstr ""
+msgstr "Aggiunge il metadato solo se già non esiste"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:239					 
 msgid "Text to Prepend"
