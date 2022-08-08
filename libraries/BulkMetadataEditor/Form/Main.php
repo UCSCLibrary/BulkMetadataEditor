@@ -209,7 +209,7 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'description' => __('Input text you want to search for:'),
 		));
 		$this->addElement('checkbox', 'bmeRegexp', array(
-			'label' => __('Type of search'),
+			'label' => __('Regular Expression'),
 			'id' => 'bulk-metadata-editor-regexp',
 			'class' => 'elementHidden',
 			'value' => 'true',
