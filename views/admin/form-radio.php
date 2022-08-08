@@ -1,5 +1,5 @@
 <div class="<?php echo $this->class ?>">
-	<div id="<?php echo $this->element->getName()->label ?>" class="two columns alpha">
+	<div id="<?php echo $this->element->getName() ?>" class="two columns alpha">
 	<?php echo $this->formLabel($this->element->getName(),
 				$this->element->getLabel(),
 				array("class"=>'optional')) ?>
