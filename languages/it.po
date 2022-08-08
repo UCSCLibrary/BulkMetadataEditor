@@ -172,24 +172,24 @@ msgstr "Seleziona i documenti da modificare in base alla collezione di cui fanno
 
 #: libraries/BulkMetadataEditor/Form/Main.php:59
 msgid "Status"
-msgstr ""
+msgstr "Stato"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:60
 msgid "Select Items to edit based on whether they are public or not"
-msgstr ""
+msgstr "Seleziona i documenti da modificare in base al fatto che siano pubblici o no"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:63
 #: libraries/BulkMetadataEditor/Form/Main.php:401
 msgid "All Items"
-msgstr ""
+msgstr "Tutti i documenti"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:64
 msgid "Only public Items"
-msgstr ""
+msgstr "Solo documenti pubblici"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:65
 msgid "Only private Items"
-msgstr ""
+msgstr "Solo documenti non pubblici"
 
 #: libraries/BulkMetadataEditor/Form/Main.php:71			
 msgid "Select Items by Metadata"
