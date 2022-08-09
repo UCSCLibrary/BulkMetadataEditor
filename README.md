@@ -50,10 +50,10 @@ Notes
 
 - After a successful process, records must be reindexed in order to find them
   via the quick search field.
-- The change "Append text to existing metadata in the selected fields" appends
+- The change "*Append text to existing metadata in the selected fields*" appends
   text only if there is already a metadata.
 - The preview may fail when there is a lot of fields or changes to prepare.
-  Never mind, the true process will work fine even with a huge number of items
+  The true process will still work fine even with a huge number of items
   and fields, because it is done in the background, without the limit set by the
   server. Nevertheless, it's recommended to avoid too large updates.
 
