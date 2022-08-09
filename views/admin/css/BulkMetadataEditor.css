@@ -1,66 +1,66 @@
 .preview-button {
-    margin:10px 10px 10px 0;
+	margin: 10px 10px 10px 0;
 }
 
 .previewButtonDiv{
-    display:block;
-    clear:left;
+	display: block;
+	clear: left;
 }
 
 .hide-preview {
-    display:none;
+	display:none;
 }
 
 .bmeFieldset {
-    border:1px solid black;
-    padding:15px;
-    margin:7px;
+	border: 1px solid #d8d8d8;
+	padding: 10px 15px;
+	margin: 5px;
 }
 
 .bmeHidden {
-    display:none;
-    margin:20px;
+	display: none;
+	margin: 20px;
 }
 
 .inputs field {
-    display:block;
-    clear:left;
+	display: block;
+	clear: left;
 }
 
 #bulk-metadata-editor-form legend {
-    padding: 0 10px;
-    position: relative;
-    top: 5px;
+	padding: 0 10px;
+	position: relative;
+	top: 5px;
 }
 
-#performButton {    
-    margin-left: 21px;
-    margin-top: 15px;
+#performButton {	
+	margin-left: 21px;
+	margin-top: 15px;
 }
 
 .bulk-metadata-editor-waiting {
-    display:none;
+	display: none;
 }
 
 .removeRule {
-    color: #FF0000;
-    float: left;
-    margin-left: 10px;
-    padding-top: 5px;
-    vertical-align: middle;
-    cursor:pointer;
+	color: #FF0000;
+	float: left;
+	margin-left: 10px;
+	padding-top: 5px;
+	vertical-align: middle;
+	cursor: pointer;
 }
 
 #fieldPreviewDiv table tr.even {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 #fieldset-bmeJob {
-	padding:15px 21px;
+	padding: 15px 21px;
 }
 
 .bold {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 fieldset .fieldsetRule {
@@ -71,60 +71,65 @@ fieldset .fieldsetRule {
 }
 
 .removeRule {
-  position: relative;
-  right: 0;
-  top: 0;
-  width: 16px;
-  height: 16px;
-  opacity: 0.5;
-  padding: 0;
-  border: 1px solid white;
-  padding: 2px;
-  border-radius: 4px;
-  background-color: red;
-  float: right;
+	position: relative;
+	right: 0;
+	top: 0;
+	width: 16px;
+	height: 16px;
+	opacity: 0.5;
+	padding: 0;
+	border: 1px solid white;
+	padding: 2px;
+	border-radius: 4px;
+	background-color: red;
+	float: right;
 }
 .removeRule:hover {
-  opacity: 1;
+	opacity: 1;
 }
 .removeRule:before, .removeRule:after {
-  position: absolute;
-  left: 9px;
-  content: ' ';
-  height: 16px;
-  width: 2px;
-  background-color: white;
-  cursor: pointer;
+	position: absolute;
+	left: 9px;
+	content: ' ';
+	height: 16px;
+	width: 2px;
+	background-color: white;
+	cursor: pointer;
 }
 .removeRule:before {
-  transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 .removeRule:after {
-  transform: rotate(-45deg);
+	transform: rotate(-45deg);
 }
 
 .bulk-metadata-editor-waiting:after {
-  content: ' .';
-  animation: dots 1s steps(5, end) infinite;
+	content: ' .';
+	animation: dots 1s steps(5, end) infinite;
 }
+
 @keyframes dots {
-  0%, 20% {
-    color: #F6F7F2;
-    text-shadow:
-     .75 0 0 black,
-       .25em 0 0 black,
-      .5em 0 0 black;}
-  40% {
-    color: black;
-    text-shadow:
-      .25em 0 0 #F6F7F2,
-      .5em 0 0 #F6F7F2;}
-  60% {
-    text-shadow:
-      .25em 0 0 black,
-      .5em 0 0 #F6F7F2;}
-  80%, 100% {
-    text-shadow:
-      .25em 0 0 black,
-      .5em 0 0 black;}}
-  
+	0%, 20% {
+	color: #F6F7F2;
+	text-shadow:
+		.75 0 0 black,
+		.25em 0 0 black,
+		.5em 0 0 black;
+	}
+	40% {
+	color: black;
+	text-shadow:
+		.25em 0 0 #F6F7F2,
+		.5em 0 0 #F6F7F2;
+	}
+	60% {
+	text-shadow:
+		.25em 0 0 black,
+		.5em 0 0 #F6F7F2;
+	}
+	80%, 100% {
+	text-shadow:
+		.25em 0 0 black,
+		.5em 0 0 black;
+	}
+}
