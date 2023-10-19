@@ -166,7 +166,8 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				'implode' => __('Deduplicate and join metadata with a separator in the selected fields'),
 				'deduplicate' => __('Deduplicate and remove empty metadata in the selected fields'),
 				'deduplicate-files' => __('Deduplicate files of selected items by hash'),
-				'delete' => __('Delete all existing metadata in the selected fields')
+				'delete' => __('Delete all existing metadata in the selected fields'),
+				'copy-move' => __('Copy/Move content from the selected field to another'),
 			)
 		));
 
@@ -276,14 +277,29 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 			'id' => 'bulk-metadata-editor-explode',
 			'class' => 'elementHidden',
 			'description' => __('The separator used to explode metadata (usually \',\' or \';\' or \'|\' or any chain of characters);')
-				. ' ' . __('HTML tags will be stripped before process'),
+							. ' ' . __('HTML tags will be stripped before process'),
 		));
 		$this->addElement('text', 'bmeImplode', array(
 			'label' => __('Separator'),
 			'id' => 'bulk-metadata-editor-implode',
 			'class' => 'elementHidden',
 			'description' => __('The separator used to join metadata (usually \',\' or \';\' or \'|\' or any chain of characters);')
-				. ' ' . __('HTML tags will be stripped before process'),
+							. ' ' . __('HTML tags will be stripped before process'),
+		));
+		$this->addElement('select', 'bmeFieldCopyMove', array(
+			'label' => __('Metadata element'),
+			'id' => 'bulk-metadata-editor-field-copy-move',
+			'class' => 'elementHidden',
+			'description' => __('Select the element you would like to copy/move the metadata to'),
+			'multiOptions' => $this->_getElementOptions(),
+			'size' => 1
+		));
+		$this->addElement('checkbox', 'bmeRemoveSource', array(
+			'label' => __('Source'),
+			'id' => 'bulk-metadata-editor-remove-source',
+			'class' => 'elementHidden',
+			'value' => 'true',
+			'description' => __('Remove metadata from source field'),
 		));
 
 		$this->addDisplayGroup(
@@ -329,6 +345,8 @@ class BulkMetadataEditor_Form_Main extends Omeka_Form
 				'bmeCaseconvert',
 				'bmeExplode',
 				'bmeImplode',
+				'bmeFieldCopyMove',
+				'bmeRemoveSource',
 				'changesPreviewDiv',
 			),
 			'bmeChangesSet',
