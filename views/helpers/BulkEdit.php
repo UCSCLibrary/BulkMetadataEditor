@@ -989,6 +989,7 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 							}
 						}
 						break;
+
 					case 'deduplicate': // Deduplicate and remove empty metadata in the selected fields
 						try {
 							$element = $itemObj->getElementById($field['element_id']);
@@ -1060,6 +1061,47 @@ class BulkMetadataEditor_View_Helper_BulkEdit extends Zend_View_Helper_Abstract
 
 						$j++;
 						break;
+						
+					case 'copy-move': // Copy/Move content from one field to another
+						if (!isset($params['bmeFieldCopyMove']) || !strlen($params['bmeFieldCopyMove'])) {
+							throw new Exception(__('Please choose a target element.'));
+						}
+						$newFieldId = $params['bmeFieldCopyMove'];
+						$newElement = $itemObj->getElementById($newFieldId);
+					
+						try {
+							$element = $itemObj->getElementById($field['element_id']);
+							$eText = get_record_by_id('ElementText', $field['id']);
+							$new = $eText->text;
+						} catch (Exception $e) {
+							throw $e;
+						}
+
+						$changes[] = array(
+							'itemId' => $itemId,
+							'item' => $itemTitle,
+							'field' => __($element->name),
+							'old' => $eText->text,
+							'new' => '<i>' . (isset($params['bmeRemoveSource']) ? __('copy to') : __('move to')) . '</i> [' . __($newElement->name) . ']'
+						);
+						
+						if ($perform) {
+							$html = $new != strip_tags($new);
+							try {
+								if (strlen($new)) {
+									if (isset($params['bmeRemoveSource']) && $params['bmeRemoveSource']) $eText->delete();
+									$itemObj->addTextForElement($newElement, $new, $html);
+								}
+							} catch (Exception $e) {
+								$message .= __('An error occurred: %s', $e->getMessage());
+								_log($message, Zend_Log::ERR);
+								continue 2;
+							}
+						}
+						$j++;
+
+						break;
+
 				} // end switch
 			} // end field item loop
 			try {
