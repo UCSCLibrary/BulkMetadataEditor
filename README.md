@@ -20,6 +20,7 @@ The editing options available are:
 - Deduplicate and remove empty metadata in the selected fields
 - Deduplicate files of selected items by hash
 - Delete all existing metadata in the selected fields
+- Copy/Move content from the selected field to another
 
 Installation
 ------------
@@ -99,7 +100,7 @@ Copyright
 * Copyright 2014 UCSC Library Digital Initiatives
 * Copyright Daniel Berthereau, 2015-2017 (see [Daniel-KM] on GitHub)
 * Copyright Julian Maurice for BibLibre, 2015 (see [jajm] on GitHub)
-* Copyright Daniele Binaghi, 2020-2022 (see [DBinaghi] on GitHub)
+* Copyright Daniele Binaghi, 2020-2023 (see [DBinaghi] on GitHub)
 
 [Bulk Metadata Editor]: https://github.com/UCSCLibrary/BulkMetadataEditor
 [Omeka]: https://omeka.org
