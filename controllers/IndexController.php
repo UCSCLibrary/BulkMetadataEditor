@@ -20,7 +20,7 @@
 class BulkMetadataEditor_IndexController extends Omeka_Controller_AbstractActionController
 {
 
-    protected $bulkEdit;
+    protected $_bulkEdit;
 
     public function init()
     {
